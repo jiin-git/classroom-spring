@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<head th:replace="fragments/bodyContainer :: bodyContainerCss"/>
+<body>
+<div>
+    <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
+    <div class="member-container" th:object="${instructor}">
+        <div class="btn-group-vertical">
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures/{id}(id=${instructor.id})}">내 강의</a>
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture/{id}(id=${instructor.id})}">강의 등록</a>
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage/{id}(id=${instructor.id})}">My Page</a>
+        </div>
+
+        <div class="container body-container">
+            <div class="p-3 border-bottom-lightgray">
+                <nav aria-label="breadcrumb"  class="d-flex align-items-center">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">강의 등록</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="container p-3 h-100 ">
+                <form th:action method="post"
+                      class="container-fluid bg-white border-lightgray h-75" th:object="${createLectureForm}">
+                    <div class="mb-3 mt-3">
+                        <label for="lectureName" class="form-label gmarketSansFont">강의명</label>
+                        <input type="text" class="form-control" id="lectureName" placeholder="강의명을 입력해주세요."
+                               th:errorclass="field-error" th:field="*{name}">
+                        <div class="field-error" th:errors="*{name}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="personnel" class="form-label gmarketSansFont">정원</label>
+                        <input type="text" class="form-control" id="personnel" placeholder="정원을 입력해주세요."
+                               th:errorclass="field-error" th:field="*{personnel}">
+                        <div class="field-error" th:errors="*{personnel}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
+                        <select id="lectureStatus" class="form-select" th:field="*{lectureStatus}" th:errorclass="field-error">
+                            <option th:each="LectureStatus : ${lectureStatusList}"
+                                    th:value="${LectureStatus}" th:text="${LectureStatus}"></option>
+                        </select>
+                        <div class="field-error" th:errors="*{lectureStatus}"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">강의 등록</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>

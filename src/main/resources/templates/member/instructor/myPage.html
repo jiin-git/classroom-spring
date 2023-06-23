@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<head th:replace="fragments/bodyContainer :: bodyContainerCss"/>
+<body>
+<div>
+    <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
+
+    <div class="member-container" th:object="${instructor}">
+        <div class="btn-group-vertical">
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures/{id}(id=${instructor.id})}">내 강의</a>
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture/{id}(id=${instructor.id})}">강의 등록</a>
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage/{id}(id=${instructor.id})}">My Page</a>
+        </div>
+
+        <div class="container body-container">
+            <div class="p-3 border-bottom-lightgray">
+                <nav aria-label="breadcrumb"  class="d-flex align-items-center">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">My Page</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="container p-3 h-100">
+                <div class="card justify-content-center mb-3 h-25 w-100">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="..." class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h4 class="card-title gmarketSansFont" th:text="'이름: ' + *{member.name}">이름</h4>
+                                <p class="card-text gmarketSansFont mb-1" th:text="'아이디: ' + *{member.loginId}">id</p>
+                                <p class="card-text gmarketSansFont mb-1" th:text="'이메일: ' + *{member.email}">email</p>
+                                <a class="btn btn-primary" th:href="@{'/instructor/update/mypage/' + ${instructor.id}}">회원정보 변경</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<head th:replace="fragments/bodyContainer :: bodyContainerCss"/>
+
+<body>
+<div>
+    <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
+    <div class="member-container">
+        <div class="btn-group-vertical">
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/lectures/{id}(id=${id})}">내 강의</a>
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/find/lecture/{id}(id=${id})}">강의 찾기</a>
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/mypage/{id}(id=${id})}">My Page</a>
+        </div>
+
+        <div class="container body-container">
+            <div class="p-3 border-bottom-lightgray">
+                <nav aria-label="breadcrumb"  class="d-flex align-items-center">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">My Lecture</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="container p-3 h-100">
+                <form class="card mb-3 h-50 justify-content-center w-100" method="post"
+                      th:action="@{'/student/update/mypage/' + ${id}}">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="..." class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body" th:object="${student}">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label gmarketSansFont">이름</label>
+                                    <input type="text" class="form-control readonly" id="name" placeholder="이름을 입력해주세요."
+                                           th:field="*{name}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginId" class="form-label gmarketSansFont">아이디</label>
+                                    <input type="text" class="form-control readonly" id="loginId" placeholder="아이디를 입력해주세요."
+                                           th:errorclass="field-error" th:field="*{loginId}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPw" class="form-label gmarketSansFont">비밀번호</label>
+                                    <input type="password" class="form-control readonly" id="loginPw"
+                                           th:errorclass="field-error" th:field="*{password}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label gmarketSansFont">이메일</label>
+                                    <input type="text" class="form-control" id="email" placeholder="이메일을 입력해주세요."
+                                           th:errorclass="field-error" th:field="*{email}">
+                                    <div class="field-error" th:errors="*{email}"></div>
+                                </div>
+
+                                <input type="submit" class="btn btn-primary" value="회원정보 변경">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>

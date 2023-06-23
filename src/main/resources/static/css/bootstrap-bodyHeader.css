@@ -1,0 +1,44 @@
+.navbar {
+    background-color: #374785;
+    height: 80px;
+}
+
+.navbar-brand {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.navbar-brand:hover {
+    cursor: pointer;
+}
+
+.login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    width: 150px;
+    height: 40px;
+    border: 1px solid #20294c;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    background-color: #2a3766;
+}
+
+.login-btn:hover {
+    color: white;
+    background-color: #20294c;
+    transition-duration: 0.2s;
+}
+
+@media (max-width: 1200px) {
+    .navbar {
+        width: 1200px;
+    }
+}

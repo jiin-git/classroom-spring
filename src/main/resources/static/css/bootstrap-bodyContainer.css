@@ -1,0 +1,17 @@
+.body-container {
+    background-color: #f8f8f8;
+}
+
+.border-bottom-lightgray {
+    border-bottom: 1px solid lightgray;
+}
+
+.border-lightgray {
+    border: 1px solid lightgray;
+}
+
+@media (max-width: 1200px) {
+    .body-container {
+        width: 1200px;
+    }
+}

@@ -1,0 +1,15 @@
+.footer {
+    border: 1px solid black;
+    padding: 10px;
+    height: 200px;
+    color: darkgray;
+    background-color: #2b3035;
+}
+.footer-p {
+    margin: 5px;
+}
+@media (max-width: 1200px) {
+    .footer {
+        width: 1200px;
+    }
+}

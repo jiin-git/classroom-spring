@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="bodyContainerCss">
+    <link rel="stylesheet" href="/css/bootstrap-bodySidebar.css">
+    <link rel="stylesheet" href="/css/bootstrap-bodyContainer.css">
+</head>
+<body>
+    <div class="btn-group-vertical" th:fragment="studentSideBar">
+        <a class="btn btn-lg flex-grow-0 sidebar-btn" th:href="@{/student/lectures/{id}(id=${student.id})}">내 강의</a>
+        <a class="btn btn-lg flex-grow-0 sidebar-btn" th:href="@{/student/find/lecture/{id}(id=${student.id})}">강의 찾기</a>
+        <a class="btn btn-lg flex-grow-0 sidebar-btn" th:href="@{/student/mypage/{id}(id=${student.id})}">My Page</a>
+    </div>
+
+    <div class="btn-group-vertical" th:fragment="instructorSideBar">
+        <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures/{id}(id=${instructor.id})}">내 강의</a>
+        <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture/{id}(id=${instructor.id})}">강의 등록</a>
+        <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage/{id}(id=${instructor.id})}">My Page</a>
+    </div>
+</body>
+</html>

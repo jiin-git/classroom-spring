@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<head><link rel="stylesheet" href="/css/login.css"></head>
+
+<body>
+<div>
+    <div th:replace="fragments/bodyHeader :: bodyLoginHeader"/>
+
+    <div class="container login-container">
+        <h3 class="login-header kohiFont">아이디 찾기</h3>
+        <br/>
+        <form th:object="${findIdForm}" method="post">
+            <div class="mb-3">
+                <label class="form-label">이름</label>
+                <input type="text" class="form-control" th:errorclass="field-error"
+                       id="name" name="name" th:field="*{name}" placeholder="본인의 이름을 입력하세요.">
+                <div class="field-error" th:errors="*{name}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">이메일</label>
+                <input type="email" class="form-control" th:errorclass="field-error"
+                       id="email" name="email" th:field="*{email}" placeholder="가입시 사용한 이메일을 입력하세요.">
+                <div class="field-error" th:errors="*{email}"></div>
+            </div>
+            <label class="form-label">가입 계정</label>
+            <div class="row mb-3">
+                <div class="col form-check">
+                    <input type="radio" class="form-check-input" id="student" name="member-status"
+                           th:value="${student}" th:field="*{memberStatus}">
+                    <label class="form-check-label" for="student">학생</label>
+                </div>
+                <div class="col form-check">
+                    <input type="radio" class="form-check-input" id="instructor" name="member-status"
+                           th:value="${instructor}" th:field="*{memberStatus}">
+                    <label class="form-check-label" for="instructor">강사</label>
+                </div>
+                <div class="field-error" th:errors="*{memberStatus}"></div>
+            </div>
+            <div class="text-center">
+                <input class="btn btn-primary login-submit-btn" type="submit" value="아이디 찾기">
+            </div>
+        </form>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<head th:replace="fragments/bodyContainer :: bodyContainerCss"/>
+<body>
+<div>
+    <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
+    <div class="member-container" th:object="${student}">
+        <div class="btn-group-vertical">
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/lectures/{id}(id=${student.id})}">내 강의</a>
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/find/lecture/{id}(id=${student.id})}">강의 찾기</a>
+            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/mypage/{id}(id=${student.id})}">My Page</a>
+        </div>
+
+        <div class="container body-container">
+            <div class="p-3 border-bottom-lightgray">
+                <nav aria-label="breadcrumb"  class="d-flex align-items-center">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">My Lecture</li>
+                    </ol>
+                </nav>
+            </div>
+
+
+            <div class="container p-3 h-100">
+                <div class="container-fluid bg-white border-lightgray h-75 p-0">
+                    <form class="card mb-3 w-100" method="post"
+                          th:each="lecture: ${lectures}" th:action="@{'/student/cancel/lecture/' + ${student.id} + '/' + ${lecture.id}}">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="..." class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title gmarketSansFont" th:text="${lecture.name}"></h5>
+                                    <p class="card-text"><small class="text-body-secondary" th:text="${lecture.instructor.member.name}"></small></p>
+                                    <input type="submit" class="btn btn-danger" th:value="강의취소">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>
