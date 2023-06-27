@@ -5,11 +5,7 @@
 <body>
   <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
   <div class="member-container" th:object="${lecture}">
-    <div class="btn-group-vertical">
-      <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures/{id}(id=${lecture.instructorId})}">내 강의</a>
-      <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture/{id}(id=${lecture.instructorId})}">강의 등록</a>
-      <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage/{id}(id=${lecture.instructorId})}">My Page</a>
-    </div>
+    <div th:replace="fragments/bodyContainer :: instructorSideBar"/>
 
     <div class="container body-container">
       <div class="p-3 border-bottom-lightgray">
@@ -35,8 +31,8 @@
                    th:field="*{lectureName}" readonly>
           </div>
           <div class="mb-3">
-            <label for="instructorId" class="form-label gmarketSansFont">강사</label>
-            <input type="text" class="form-control readonly" id="instructorId" placeholder="강사번호를 입력해주세요."
+            <label for="instructorId" class="form-label gmarketSansFont">강사 ID</label>
+            <input type="text" class="form-control readonly" id="instructorId" placeholder="강사ID를 입력해주세요."
                    th:field="*{instructorId}" readonly>
           </div>
           <div class="mb-3">

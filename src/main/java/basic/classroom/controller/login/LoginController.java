@@ -55,7 +55,7 @@ public class LoginController {
             }
 
             createSession(request, instructor.getId(), MemberStatus.INSTRUCTOR);
-            return "redirect:/instructor/lectures/" + instructor.getId();
+            return "redirect:/instructor/lectures";
         }
 
         // MemberStatus == STUDENT
@@ -66,7 +66,7 @@ public class LoginController {
         }
 
         createSession(request, student.getId(), MemberStatus.STUDENT);
-        return "redirect:/student/lectures/" + student.getId();
+        return "redirect:/student/lectures";
     }
 
     private static String goToLoginForm(Model model) {
@@ -80,7 +80,7 @@ public class LoginController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_ID, id);
         session.setAttribute(SessionConst.MEMBER_STATUS, memberStatus);
-        session.setMaxInactiveInterval(600);
+        session.setMaxInactiveInterval(60);
     }
 
     // logout
@@ -93,7 +93,9 @@ public class LoginController {
     private void expireCookie(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         Cookie sessionCookie = new Cookie("JSESSIONID", null);
-        session.invalidate();
+        if (session != null) {
+            session.invalidate();
+        }
         sessionCookie.setMaxAge(0);
         response.addCookie(sessionCookie);
     }

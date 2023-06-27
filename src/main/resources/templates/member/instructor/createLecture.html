@@ -6,11 +6,7 @@
 <div>
     <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
     <div class="member-container" th:object="${instructor}">
-        <div class="btn-group-vertical">
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures/{id}(id=${instructor.id})}">내 강의</a>
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture/{id}(id=${instructor.id})}">강의 등록</a>
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage/{id}(id=${instructor.id})}">My Page</a>
-        </div>
+        <div th:replace="fragments/bodyContainer :: instructorSideBar"/>
 
         <div class="container body-container">
             <div class="p-3 border-bottom-lightgray">

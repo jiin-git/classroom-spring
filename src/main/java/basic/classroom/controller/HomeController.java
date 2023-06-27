@@ -21,8 +21,7 @@ public class HomeController {
             return "home";
         }
 
-        Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
         String memberStatus = String.valueOf(session.getAttribute(SessionConst.MEMBER_STATUS));
-        return "redirect:/" + memberStatus.toLowerCase() + "/lectures/" + memberId;
+        return "redirect:/" + memberStatus.toLowerCase() + "/lectures";
     }
 }

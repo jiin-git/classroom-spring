@@ -6,11 +6,7 @@
 <div>
     <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
     <div class="member-container" th:object="${student}">
-        <div class="btn-group-vertical">
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/lectures/{id}(id=${student.id})}">내 강의</a>
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/find/lecture/{id}(id=${student.id})}">강의 찾기</a>
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/mypage/{id}(id=${student.id})}">My Page</a>
-        </div>
+        <div th:replace="fragments/bodyContainer :: studentSideBar"/>
 
         <div class="container body-container">
             <div class="p-3 border-bottom-lightgray">
@@ -25,7 +21,7 @@
             <div class="container p-3 h-100 ">
                 <div class="container-fluid bg-white border-lightgray h-75 p-0">
                     <form class="card mb-3 w-100" method="post"
-                          th:each="lecture: ${lectures}" th:action="@{'/student/find/lecture/' + ${student.id} + '/' + ${lecture.id}}">
+                          th:each="lecture: ${lectures}" th:action="@{'/student/add/lecture/' + ${lecture.id}}">
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <img src="..." class="img-fluid rounded-start" alt="...">
@@ -36,7 +32,10 @@
                                     <p class="card-text gmarketSansFont" th:text="'강사: ' + ${lecture.instructor.member.name}"></p>
                                     <p class="card-text gmarketSansFont" th:text="'남은 정원: ' + ${lecture.personnel}"></p>
                                     <p class="card-text"><small class="text-body-secondary" th:text="${lecture.lectureStatus}"></small></p>
-                                    <input type="submit" class="btn btn-primary" th:value="강의신청">
+                                    <form method="post">
+                                        <input type="submit" class="btn btn-primary" th:value="'강의 신청'" th:action="@{'/student/add/lecture/' + ${lecture.id}}">
+                                        <input type="submit" class="btn btn-danger" th:value="'강의 취소'" th:action="@{'/student/cancel/lecture/' + ${lecture.id}}">
+                                    </form>
                                 </div>
                             </div>
                         </div>

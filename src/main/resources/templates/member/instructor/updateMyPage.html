@@ -7,11 +7,7 @@
     <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
 
     <div class="member-container">
-        <div class="btn-group-vertical">
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures/{id}(id=${id})}">내 강의</a>
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture/{id}(id=${id})}">강의 등록</a>
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage/{id}(id=${id})}">My Page</a>
-        </div>
+        <div th:replace="fragments/bodyContainer :: instructorSideBar"/>
 
         <div class="container body-container">
             <div class="p-3 border-bottom-lightgray">
@@ -25,7 +21,7 @@
 
             <div class="container p-3 h-100">
                 <form class="card justify-content-center mb-3 w-100 h-50" method="post"
-                      th:action="@{'/instructor/update/mypage/' + ${id}}">
+                      th:action="@{/instructor/update/mypage}">
                     <div class="row g-0">
                         <div class="col-md-4">
                             <img src="..." class="img-fluid rounded-start" alt="...">

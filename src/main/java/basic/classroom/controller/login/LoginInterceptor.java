@@ -10,16 +10,17 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         String requestURI = request.getRequestURI();
         log.info("Request URI = {}", requestURI);
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(SessionConst.LOGIN_ID) == null) {
-            response.sendRedirect("/login");
+            response.sendRedirect("/");
             return false;
         }
 
         return true;
     }
+
+
 }

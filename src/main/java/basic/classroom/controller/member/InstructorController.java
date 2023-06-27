@@ -7,7 +7,6 @@ import basic.classroom.dto.UpdateLectureDto;
 import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.service.InstructorService;
 import basic.classroom.service.LectureService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,25 +26,20 @@ public class InstructorController {
     private final InstructorService instructorService;
     private final LectureService lectureService;
 
-    @GetMapping("/instructor/lectures/{id}")
-    public String myLecture(@PathVariable Long id, HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession(false);
-        Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
-
-        Instructor instructor = instructorService.findOne(id);
+    @GetMapping("/instructor/lectures")
+    public String myLecture(HttpSession session, Model model) {
+        Instructor instructor = findInstructor(session);
         List<Lecture> lectures = instructorService.findLectures(instructor.getId());
 
         model.addAttribute("instructor", instructor);
         model.addAttribute("lectures", lectures);
 
-        log.info("session={}", session.getAttribute(SessionConst.LOGIN_ID));
-
         return "member/instructor/lectureList";
     }
 
-    @GetMapping("/instructor/create/lecture/{id}")
-    public String createLectureForm(@PathVariable Long id, Model model) {
-        Instructor instructor = instructorService.findOne(id);
+    @GetMapping("/instructor/create/lecture")
+    public String createLectureForm(HttpSession session, Model model) {
+        Instructor instructor = findInstructor(session);
         LectureStatus[] lectureStatusList = LectureStatus.values();
 
         model.addAttribute("instructor", instructor);
@@ -55,14 +49,13 @@ public class InstructorController {
         return "member/instructor/createLecture";
     }
 
-    @PostMapping("/instructor/create/lecture/{id}")
-    public String createLecture(@PathVariable Long id,
-                                @Validated @ModelAttribute("createLectureForm") AddLectureDto lectureDto, BindingResult bindingResult, Model model) {
+    @PostMapping("/instructor/create/lecture")
+    public String createLecture(@Validated @ModelAttribute("createLectureForm") AddLectureDto lectureDto, BindingResult bindingResult,
+                                HttpSession session, Model model) {
+        Instructor instructor = findInstructor(session);
 
         // 검증 로직
         if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            Instructor instructor = instructorService.findOne(id);
             LectureStatus[] lectureStatusList = LectureStatus.values();
 
             model.addAttribute("instructor", instructor);
@@ -71,15 +64,13 @@ public class InstructorController {
         }
 
         // 성공 로직
-        Long lectureId = instructorService.addLecture(id, lectureDto);
-        log.info("lectureDto.lectureStatus={}", lectureDto.getLectureStatus());
-
-        return "redirect:/instructor/lectures/{id}";
+        instructorService.addLecture(instructor.getId(), lectureDto);
+        return "redirect:/instructor/lectures";
     }
 
-    @GetMapping("/instructor/edit/lectures/{id}")
-    public String editLectureForm(@PathVariable Long id, Model model) {
-        Lecture lecture = lectureService.findOne(id);
+    @GetMapping("/instructor/edit/lecture/{lectureId}")
+    public String editLectureForm(@PathVariable Long lectureId, Model model) {
+        Lecture lecture = lectureService.findOne(lectureId);
         UpdateLectureDto lectureDto = new UpdateLectureDto(lecture);
         LectureStatus[] lectureStatusList = LectureStatus.values();
 
@@ -89,10 +80,10 @@ public class InstructorController {
         return "member/instructor/editLectureForm";
     }
 
-    @PostMapping("/instructor/edit/lectures/{id}")
-    public String editLecture(@PathVariable Long id,
-                              @Validated @ModelAttribute("lecture") UpdateLectureDto lectureDto,
-                              BindingResult bindingResult, Model model) {
+    @PostMapping("/instructor/edit/lecture/{lectureId}")
+    public String editLecture(@PathVariable Long lectureId,
+                              @Validated @ModelAttribute("lecture") UpdateLectureDto lectureDto, BindingResult bindingResult,
+                              Model model) {
 
         // 검증 로직
         if (bindingResult.hasErrors()) {
@@ -104,40 +95,46 @@ public class InstructorController {
 
         // 성공 로직
         instructorService.updateLecture(lectureDto.getInstructorId(), lectureDto);
-        return "redirect:/instructor/lectures/" + lectureDto.getInstructorId();
+        return "redirect:/instructor/lectures";
     }
 
-    @GetMapping("/instructor/mypage/{id}")
-    public String myPage(@PathVariable Long id, Model model) {
-        Instructor instructor = instructorService.findOne(id);
+    @GetMapping("/instructor/mypage")
+    public String myPage(HttpSession session, Model model) {
+        Instructor instructor = findInstructor(session);
         model.addAttribute("instructor", instructor);
 
         return "member/instructor/myPage";
     }
 
-    @GetMapping("/instructor/update/mypage/{id}")
-    public String updateMyPageForm(@PathVariable Long id, Model model) {
-        Instructor instructor = instructorService.findOne(id);
+    @GetMapping("/instructor/update/mypage")
+    public String updateMyPageForm(HttpSession session, Model model) {
+        Instructor instructor = findInstructor(session);
         UpdateMemberDto memberDto = new UpdateMemberDto(instructor);
 
-        model.addAttribute("id", id);
         model.addAttribute("instructor", memberDto);
 
         return "member/instructor/updateMyPage";
     }
 
-    @PostMapping("/instructor/update/mypage/{id}")
-    public String updateMyPage(@PathVariable Long id,
-                               @Validated @ModelAttribute("instructor") UpdateMemberDto updateParam,
-                               BindingResult bindingResult, Model model) {
+    @PostMapping("/instructor/update/mypage")
+    public String updateMyPage(@Validated @ModelAttribute("instructor") UpdateMemberDto updateParam, BindingResult bindingResult,
+                               HttpSession session) {
+        Instructor instructor = findInstructor(session);
+
         // 검증 로직
         if (bindingResult.hasErrors()) {
-            model.addAttribute("id", id);
             return "member/instructor/updateMyPage";
         }
 
         // 성공 로직
-        instructorService.update(id, updateParam);
-        return "redirect:/instructor/mypage/" + id;
+        instructorService.update(instructor.getId(), updateParam);
+        return "redirect:/instructor/mypage";
+    }
+
+    private Instructor findInstructor(HttpSession session) {
+        Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
+        Instructor instructor = instructorService.findOne(memberId);
+
+        return instructor;
     }
 }

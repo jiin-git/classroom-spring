@@ -7,11 +7,7 @@
     <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
 
     <div class="member-container" th:object="${instructor}">
-        <div class="btn-group-vertical">
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures/{id}(id=${instructor.id})}">내 강의</a>
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture/{id}(id=${instructor.id})}">강의 등록</a>
-            <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage/{id}(id=${instructor.id})}">My Page</a>
-        </div>
+        <div th:replace="fragments/bodyContainer :: instructorSideBar"/>
 
         <div class="container body-container">
             <div class="p-3 border-bottom-lightgray">
@@ -34,7 +30,7 @@
                                 <h4 class="card-title gmarketSansFont" th:text="'이름: ' + *{member.name}">이름</h4>
                                 <p class="card-text gmarketSansFont mb-1" th:text="'아이디: ' + *{member.loginId}">id</p>
                                 <p class="card-text gmarketSansFont mb-1" th:text="'이메일: ' + *{member.email}">email</p>
-                                <a class="btn btn-primary" th:href="@{'/instructor/update/mypage/' + ${instructor.id}}">회원정보 변경</a>
+                                <a class="btn btn-primary" th:href="@{/instructor/update/mypage}">회원정보 변경</a>
                             </div>
                         </div>
                     </div>
