@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header"></head>
+<head th:replace="~{fragments/header :: header}"></head>
 <head>
     <style>
         .home-container {
@@ -8,14 +8,6 @@
             /*margin: 0px 50px 0px 50px;*/
             width: 100%;
             height: 600px;
-        }
-        @media (max-width: 1200px) {
-            .home-container {
-                width: 1200px;
-            }
-            .home-img, .home-intro {
-                width: 1200px;
-            }
         }
         .home-img {
             width: 100%;
@@ -33,15 +25,20 @@
             padding: 10px 0px 10px 0px;
             opacity: 50%;
         }
+        @media (max-width: 1200px) {
+            .home-container, .home-img, .home-intro {
+                width: 1200px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div th:replace="fragments/bodyHeader :: bodyHomeHeader"/>
+    <div th:replace="~{fragments/bodyHeader :: bodyHomeHeader}"/>
     <div class="home-container">
         <h2 class="home-intro gmarketSansFont">통합 강의 사이트 ClassRoom.</h2>
         <img class="home-img" th:src="@{img/education.jpg}">
 <!-- <a href="https://www.freepik.com/free-vector/happy-women-learning-language-online-isolated-flat-vector-illustration-cartoon-female-characters-taking-individual-lessons-through-messenger-education-digital-technology-concept_10613101.htm#query=education&position=20&from_view=search&track=sph">Image by pch.vector</a> on Freepik-->
     </div>
-    <div th:replace="fragments/footer :: footer"/>
+    <div th:replace="~{fragments/footer :: footer}"/>
 </body>
 </html>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header"/>
+<head th:replace="~{fragments/header :: header}"/>
 <head><link rel="stylesheet" href="/css/login.css"></head>
 
 <body>
 <div>
-    <div th:replace="fragments/bodyHeader :: bodyLoginHeader"/>
+    <div th:replace="~{fragments/bodyHeader :: bodyLoginHeader}"/>
 
     <div class="container login-container">
         <h3 class="login-header kohiFont">회원가입</h3>
@@ -54,7 +54,7 @@
         </form>
     </div>
 
-    <div th:replace="fragments/footer :: footer"/>
+    <div th:replace="~{fragments/footer :: footer}"/>
 </div>
 </body>
 </html>

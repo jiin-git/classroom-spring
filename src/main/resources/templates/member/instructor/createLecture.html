@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header"/>
-<head th:replace="fragments/bodyContainer :: bodyContainerCss"/>
+<head th:replace="~{~{fragments/header :: header}}"/>
+<head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
 <body>
 <div>
-    <div th:replace="fragments/bodyHeader :: bodyLoginHomeHeader"/>
+    <div th:replace="~{fragments/bodyHeader :: bodyLoginHomeHeader}"/>
     <div class="member-container" th:object="${instructor}">
-        <div th:replace="fragments/bodyContainer :: instructorSideBar"/>
+        <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
 
         <div class="container body-container">
             <div class="p-3 border-bottom-lightgray">
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <div th:replace="fragments/footer :: footer"/>
+    <div th:replace="~{fragments/footer :: footer}"/>
 </div>
 </body>
 </html>
