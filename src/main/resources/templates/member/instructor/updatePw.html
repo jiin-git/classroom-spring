@@ -33,7 +33,24 @@
                             <div class="field-error" th:errors="*{checkPassword}"></div>
                             <div th:if="${#fields.hasGlobalErrors()}" class="field-error" th:text="${#fields.globalErrors()}"></div>
                         </div>
-                        <input type="submit" class="btn btn-primary" value="비밀번호 변경">
+
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">비밀번호 변경</button>
+                        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="changePasswordModalLabel">비밀번호 변경</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" th:text="'정말로 비밀번호를 변경하시겠습니까?'"></div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                        <input type="submit" class="btn btn-primary" value="비밀번호 변경">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </form>
             </div>

@@ -33,8 +33,40 @@
                                     <p class="card-text gmarketSansFont" th:text="'남은 정원: ' + ${lecture.personnel}"></p>
                                     <p class="card-text"><small class="text-body-secondary" th:text="${lecture.lectureStatus}"></small></p>
                                     <form method="post">
-                                        <input type="submit" class="btn btn-primary" th:value="'강의 신청'" th:action="@{'/student/add/lecture/' + ${lecture.id}}">
-                                        <input type="submit" class="btn btn-danger" th:value="'강의 취소'" th:action="@{'/student/cancel/lecture/' + ${lecture.id}}">
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelLectureModal">강의 취소</button>
+                                        <div class="modal fade" id="cancelLectureModal" tabindex="-1" aria-labelledby="cancelLectureModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="cancelLectureModalLabel">강의 취소</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body" th:text="'정말로 강의를 취소하시겠습니까?'"></div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                        <input type="submit" class="btn btn-danger" th:value="'강의 취소'" th:action="@{'/student/cancel/lecture/' + ${lecture.id}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLectureModal">강의 신청</button>
+                                        <div class="modal fade" id="addLectureModal" tabindex="-1" aria-labelledby="addLectureModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="addLectureModalLabel">강의 신청</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body" th:text="'정말로 강의를 신청하시겠습니까?'"></div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                        <input type="submit" class="btn btn-primary" th:value="'강의 신청'" th:action="@{'/student/add/lecture/' + ${lecture.id}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </form>
                                 </div>
                             </div>

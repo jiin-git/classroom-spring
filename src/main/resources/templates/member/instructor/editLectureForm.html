@@ -54,7 +54,24 @@
             </select>
             <div class="field-error" th:errors="*{lectureStatus}"></div>
           </div>
-          <button type="submit" class="btn btn-primary">강의 수정</button>
+
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeLectureModal">강의 수정</button>
+          <div class="modal fade" id="changeLectureModal" tabindex="-1" aria-labelledby="changeLectureModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="changeLectureModalLabel">강의 수정</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" th:text="'정말로 강의를 수정하시겠습니까?'"></div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                  <input type="submit" class="btn btn-primary" value="강의 수정">
+                </div>
+              </div>
+            </div>
+          </div>
+
         </form>
       </div>
     </div>
