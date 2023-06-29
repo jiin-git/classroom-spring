@@ -21,7 +21,7 @@
 
             <div class="container p-3 h-100">
                 <form class="card mb-3 h-50 justify-content-center w-100" method="post"
-                      th:action="@{'/student/update/mypage'}">
+                      th:action="@{/student/update/mypage}">
                     <div class="row g-0">
                         <div class="col-md-4">
                             <img src="..." class="img-fluid rounded-start" alt="...">
@@ -39,9 +39,11 @@
                                            th:errorclass="field-error" th:field="*{loginId}" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="loginPw" class="form-label gmarketSansFont">비밀번호</label>
-                                    <input type="password" class="form-control readonly" id="loginPw"
-                                           th:errorclass="field-error" th:field="*{password}" readonly>
+                                    <label for="loginPwBtn" class="form-label gmarketSansFont">비밀번호</label>
+                                    <br/>
+                                    <a id="loginPwBtn" class="btn btn-secondary" type="button" th:href="@{/student/update/pw}">
+                                        비밀번호 변경
+                                    </a>
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label gmarketSansFont">이메일</label>

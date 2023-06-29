@@ -15,7 +15,9 @@ public class UpdateMemberDto {
 
     private String name;
     private String loginId;
+
     private String password;
+    private String checkPassword;
 
     @Email(message = "이메일을 입력하세요.")
     @NotBlank(message = "이메일을 입력하세요.")

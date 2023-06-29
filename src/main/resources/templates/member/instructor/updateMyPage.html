@@ -39,9 +39,11 @@
                                            th:errorclass="field-error" th:field="*{loginId}" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="loginPw" class="form-label gmarketSansFont">비밀번호</label>
-                                    <input type="password" class="form-control readonly" id="loginPw"
-                                           th:errorclass="field-error" th:field="*{password}" readonly>
+                                    <label for="loginPwBtn" class="form-label gmarketSansFont">비밀번호</label>
+                                    <br/>
+                                    <a id="loginPwBtn" class="btn btn-secondary" type="button" th:href="@{/instructor/update/pw}">
+                                        비밀번호 변경
+                                    </a>
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label gmarketSansFont">이메일</label>
