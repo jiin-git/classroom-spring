@@ -4,6 +4,7 @@ import basic.classroom.controller.login.SessionConst;
 import basic.classroom.domain.Lecture;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.UpdateMemberDto;
+import basic.classroom.dto.UpdatePwDto;
 import basic.classroom.service.LectureService;
 import basic.classroom.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -86,8 +87,7 @@ public class StudentController {
     }
 
     @PostMapping("/student/update/mypage")
-    public String updateMyPage(@Validated @ModelAttribute("student") UpdateMemberDto updateParam,
-                               BindingResult bindingResult, HttpSession session) {
+    public String updateMyPage(@Validated @ModelAttribute("student") UpdateMemberDto updateParam, BindingResult bindingResult, HttpSession session) {
         Student student = findStudent(session);
 
         // 검증 로직
@@ -97,6 +97,31 @@ public class StudentController {
 
         // 성공 로직
         studentService.update(student.getId(), updateParam);
+        return "redirect:/student/mypage";
+    }
+
+    @GetMapping("/student/update/pw")
+    public String updatePwForm(Model model) {
+        model.addAttribute("pwForm", new UpdatePwDto());
+        return "member/student/updatePw";
+    }
+
+    @PostMapping("/student/update/pw")
+    public String updatePw(@Validated @ModelAttribute("pwForm") UpdatePwDto updateParam, BindingResult bindingResult, HttpSession session) {
+        Student student = findStudent(session);
+
+        // 검증 로직
+        if (bindingResult.hasErrors()) {
+            return "member/student/updatePw";
+        }
+
+        if (!updateParam.getPassword().equals(updateParam.getCheckPassword())) {
+            bindingResult.reject("notMatchPassword", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+            return "member/student/updatePw";
+        }
+
+        // 성공 로직
+        studentService.updatePassword(student.getId(), updateParam.getPassword());
         return "redirect:/student/mypage";
     }
 

@@ -52,6 +52,12 @@ public class StudentService {
         student.getMember().setEmail(updateMemberDto.getEmail());
     }
 
+    @Transactional
+    public void updatePassword(Long id, String password) {
+        Student student = studentRepository.findOne(id);
+        student.getMember().setPassword(password);
+    }
+
     public List<Student> findByName(String name) {
         return studentRepository.findByName(name);
     }

@@ -1,10 +1,7 @@
 package basic.classroom.service;
 
-import basic.classroom.dto.AddLectureDto;
-import basic.classroom.dto.LoginDto;
+import basic.classroom.dto.*;
 import basic.classroom.domain.*;
-import basic.classroom.dto.UpdateLectureDto;
-import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.repository.InstructorRepository;
 import basic.classroom.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
@@ -82,6 +79,11 @@ public class InstructorService {
     public void update(Long id, UpdateMemberDto updateMemberDto) {
         Instructor instructor = instructorRepository.findOne(id);
         instructor.getMember().setEmail(updateMemberDto.getEmail());
+    }
+    @Transactional
+    public void updatePassword(Long id, String password) {
+        Instructor instructor = instructorRepository.findOne(id);
+        instructor.getMember().setPassword(password);
     }
 
     @Transactional

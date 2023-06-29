@@ -5,6 +5,7 @@ import basic.classroom.domain.*;
 import basic.classroom.dto.AddLectureDto;
 import basic.classroom.dto.UpdateLectureDto;
 import basic.classroom.dto.UpdateMemberDto;
+import basic.classroom.dto.UpdatePwDto;
 import basic.classroom.service.InstructorService;
 import basic.classroom.service.LectureService;
 import jakarta.servlet.http.HttpSession;
@@ -50,8 +51,7 @@ public class InstructorController {
     }
 
     @PostMapping("/instructor/create/lecture")
-    public String createLecture(@Validated @ModelAttribute("createLectureForm") AddLectureDto lectureDto, BindingResult bindingResult,
-                                HttpSession session, Model model) {
+    public String createLecture(@Validated @ModelAttribute("createLectureForm") AddLectureDto lectureDto, BindingResult bindingResult, HttpSession session, Model model) {
         Instructor instructor = findInstructor(session);
 
         // 검증 로직
@@ -82,8 +82,7 @@ public class InstructorController {
 
     @PostMapping("/instructor/edit/lecture/{lectureId}")
     public String editLecture(@PathVariable Long lectureId,
-                              @Validated @ModelAttribute("lecture") UpdateLectureDto lectureDto, BindingResult bindingResult,
-                              Model model) {
+                              @Validated @ModelAttribute("lecture") UpdateLectureDto lectureDto, BindingResult bindingResult, Model model) {
 
         // 검증 로직
         if (bindingResult.hasErrors()) {
@@ -117,8 +116,7 @@ public class InstructorController {
     }
 
     @PostMapping("/instructor/update/mypage")
-    public String updateMyPage(@Validated @ModelAttribute("instructor") UpdateMemberDto updateParam, BindingResult bindingResult,
-                               HttpSession session) {
+    public String updateMyPage(@Validated @ModelAttribute("instructor") UpdateMemberDto updateParam, BindingResult bindingResult, HttpSession session) {
         Instructor instructor = findInstructor(session);
 
         // 검증 로직
@@ -128,6 +126,31 @@ public class InstructorController {
 
         // 성공 로직
         instructorService.update(instructor.getId(), updateParam);
+        return "redirect:/instructor/mypage";
+    }
+
+    @GetMapping("/instructor/update/pw")
+    public String updatePwForm(Model model) {
+        model.addAttribute("pwForm", new UpdatePwDto());
+        return "member/instructor/updatePw";
+    }
+
+    @PostMapping("/instructor/update/pw")
+    public String updatePw(@Validated @ModelAttribute("pwForm") UpdatePwDto updateParam, BindingResult bindingResult, HttpSession session) {
+        Instructor instructor = findInstructor(session);
+
+        // 검증 로직
+        if (bindingResult.hasErrors()) {
+            return "member/instructor/updatePw";
+        }
+
+        if (!updateParam.getPassword().equals(updateParam.getCheckPassword())) {
+            bindingResult.reject("notMatchPassword", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+            return "member/instructor/updatePw";
+        }
+
+        // 성공 로직
+        instructorService.updatePassword(instructor.getId(), updateParam.getPassword());
         return "redirect:/instructor/mypage";
     }
 
