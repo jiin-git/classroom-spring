@@ -2,12 +2,14 @@ package basic.classroom.controller.member;
 
 import basic.classroom.controller.login.SessionConst;
 import basic.classroom.domain.Lecture;
+import basic.classroom.domain.LectureSearchCondition;
+import basic.classroom.domain.LectureStatusSearchCondition;
 import basic.classroom.domain.Student;
+import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.dto.UpdatePwDto;
 import basic.classroom.service.LectureService;
 import basic.classroom.service.StudentService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,13 +48,52 @@ public class StudentController {
         return "redirect:/student/lectures";
     }
 
-    @GetMapping("/student/find/lectures")
-    public String findLectures(HttpSession session, Model model) {
-        Student student = findStudent(session);
-        List<Lecture> lectures = lectureService.findAll();
+//    @GetMapping("/student/find/lectures")
+//    public String findLectures(HttpSession session, Model model) {
+//        Student student = findStudent(session);
+//        List<Lecture> lectures = lectureService.findAll();
+//
+//        model.addAttribute("student", student);
+//        model.addAttribute("lectures", lectures);
+//        model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
+//        model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
+//
+//        return "member/student/findLecture";
+//    }
 
+    @GetMapping("/student/find/lectures")
+    public String findLectures(@ModelAttribute SearchConditionDto searchConditionDto, BindingResult bindingResult, HttpSession session, Model model) {
+        Student student = findStudent(session);
+        List<Lecture> lectures = lectureService.findPersonalizedLectures(searchConditionDto);
+
+        log.info("searchConditionDto = {}", searchConditionDto);
+        log.info("lectureStatus = {}", searchConditionDto.getStatus());
+        log.info("searchCondition = {}", searchConditionDto.getCondition());
+        log.info("text = {}", searchConditionDto.getText());
+        log.info("lectures = {}", lectures);
+
+        /* Validation
+        String condition = searchConditionDto.getCondition();
+        String text = searchConditionDto.getText();
+        if (condition != null && !condition.isBlank()) {
+            if (text.isBlank()) {
+                bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색명을 입력해주세요.");
+
+                model.addAttribute("student", student);
+                model.addAttribute("lectures", lectures);
+                model.addAttribute("searchConditionDto", searchConditionDto);
+                model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
+                model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
+
+                return "member/student/findLecture";
+            }
+        }
+        */
         model.addAttribute("student", student);
         model.addAttribute("lectures", lectures);
+        model.addAttribute("searchConditionDto", searchConditionDto);
+        model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
+        model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
 
         return "member/student/findLecture";
     }

@@ -19,9 +19,33 @@
             </div>
 
             <div class="container p-3 h-100 ">
+                    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
+                        <div class="container-fluid">
+                            <div class="collapse navbar-collapse" id="searchBar">
+                                <form th:action="@{/student/find/lectures}" class="d-flex" method="get" th:object="${searchConditionDto}">
+                                    <select class="form-select-sm" th:name="status" th:value="*{status}">
+                                        <option th:value="null" selected>강의 상태</option>
+                                        <option th:each="lectureStatus : ${lectureStatusList}"
+                                                th:value="${lectureStatus}" th:text="${lectureStatus}"></option>
+                                    </select>
+                                    <select class="form-select-sm" th:name="condition" th:value="*{condition}">
+                                        <option th:value="null" selected>검색 조건</option>
+                                        <option th:each="lectrueSearchCondition : ${lectureSearchConditions}"
+                                                th:value="${lectrueSearchCondition}" th:text="${lectrueSearchCondition}"></option>
+                                    </select>
+
+                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" th:name="text" th:value="*{text}">
+                                    <div th:if="${#fields.hasGlobalErrors()}">
+                                        <p class="field-error" th:text="${#fields.globalErrors()}"></p>
+                                    </div>
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                    </nav>
+
                 <div class="container-fluid bg-white border-lightgray h-75 p-0">
-                    <form class="card mb-3 w-100" method="post"
-                          th:each="lecture: ${lectures}" th:action="@{'/student/add/lecture/' + ${lecture.id}}">
+                    <div class="card mb-3 w-100" th:each="lecture: ${lectures}">
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <img src="..." class="img-fluid rounded-start" alt="...">
@@ -32,7 +56,8 @@
                                     <p class="card-text gmarketSansFont" th:text="'강사: ' + ${lecture.instructor.member.name}"></p>
                                     <p class="card-text gmarketSansFont" th:text="'남은 정원: ' + ${lecture.personnel}"></p>
                                     <p class="card-text"><small class="text-body-secondary" th:text="${lecture.lectureStatus}"></small></p>
-                                    <form method="post">
+
+                                    <div id="cancelLectureBtn" th:if="${student.getApplyingLectures().get(lecture.id)}">
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelLectureModal">강의 취소</button>
                                         <div class="modal fade" id="cancelLectureModal" tabindex="-1" aria-labelledby="cancelLectureModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -44,12 +69,15 @@
                                                     <div class="modal-body" th:text="'정말로 강의를 취소하시겠습니까?'"></div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                                        <input type="submit" class="btn btn-danger" th:value="'강의 취소'" th:action="@{'/student/cancel/lecture/' + ${lecture.id}}">
+                                                        <form method="post" th:action="@{'/student/cancel/lecture/' + ${lecture.id}}">
+                                                            <input type="submit" class="btn btn-danger" th:value="'강의 취소'">
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
+                                    </div>
+                                    <div id="addLectureBtn" th:unless="${student.getApplyingLectures().get(lecture.id)}">
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLectureModal">강의 신청</button>
                                         <div class="modal fade" id="addLectureModal" tabindex="-1" aria-labelledby="addLectureModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -61,17 +89,19 @@
                                                     <div class="modal-body" th:text="'정말로 강의를 신청하시겠습니까?'"></div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                                        <input type="submit" class="btn btn-primary" th:value="'강의 신청'" th:action="@{'/student/add/lecture/' + ${lecture.id}}">
+                                                        <form method="post" th:action="@{'/student/add/lecture/' + ${lecture.id}}">
+                                                            <input type="submit" class="btn btn-primary" th:value="'강의 신청'" >
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                    </form>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
 
