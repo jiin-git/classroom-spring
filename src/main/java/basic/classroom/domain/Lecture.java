@@ -41,6 +41,10 @@ public class Lecture {
         }
 
         setPersonnel(personnel - 1);
+        // 정원이 다 차면 FULL
+        if (personnel == 0) {
+            setLectureStatus(LectureStatus.FULL);
+        }
     }
 
     /* 생성 메서드 */
@@ -61,6 +65,10 @@ public class Lecture {
     public void removeStudent(Long appliedStudentId) {
         appliedStudents.remove(appliedStudentId);
         setPersonnel(personnel + 1);
+
+        if (lectureStatus == LectureStatus.FULL) {
+            setLectureStatus(LectureStatus.OPEN);
+        }
     }
 
     /* 학생 명단 조회 */
