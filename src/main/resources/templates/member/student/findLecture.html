@@ -52,7 +52,7 @@
                     </div>
                 </nav>
 
-                <div class="container-fluid bg-white border-lightgray h-75 p-0">
+                <div class="container-fluid bg-white border-lightgray h-75 p-0" >
                     <div class="card mb-3 w-100" th:each="lecture: ${lectures}">
                         <div class="row g-0">
                             <div class="col-md-4">
@@ -61,23 +61,24 @@
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h5 class="card-title gmarketSansFont" th:text="'강의명: ' + ${lecture.name}"></h5>
+                                    <p class="card-text gmarketSansFont" th:text="'강의ID: ' + ${lecture.id}"></p>
                                     <p class="card-text gmarketSansFont" th:text="'강사: ' + ${lecture.instructor.member.name}"></p>
-                                    <p class="card-text gmarketSansFont" th:text="'남은 정원: ' + ${lecture.personnel}"></p>
+                                    <p class="card-text gmarketSansFont" th:text="'남은 정원: ' + ${lecture.remainingPersonnel}"></p>
                                     <p class="card-text"><small class="text-body-secondary" th:text="${lecture.lectureStatus}"></small></p>
 
                                     <div id="notAddLectureBtn" th:if="${lecture.lectureStatus.equals(lectureStatusReady)} or ${lecture.lectureStatus.equals(lectureStatusFull)} and ${student.getApplyingLectures().get(lecture.id) == null}">
-                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#notAddLectureModal" disabled>신청 불가</button>
+                                        <button type="button" class="btn btn-secondary" disabled>신청 불가</button>
                                     </div>
                                     <div id="cancelLectureBtn" th:if="${student.getApplyingLectures().get(lecture.id)}">
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelLectureModal">강의 취소</button>
-                                        <div class="modal fade" id="cancelLectureModal" tabindex="-1" aria-labelledby="cancelLectureModalLabel" aria-hidden="true">
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="|#cancelLectureModal${lecture.id}|">강의 취소</button>
+                                        <div class="modal fade" th:id="|cancelLectureModal${lecture.id}|" tabindex="-1" aria-labelledby="cancelLectureModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h1 class="modal-title fs-5" id="cancelLectureModalLabel">강의 취소</h1>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                                                    <div class="modal-body" th:text="'정말로 강의를 취소하시겠습니까?'"></div>
+                                                    <div class="modal-body" th:text="'정말로 ' + ${lecture.name} + ' 강의를 취소하시겠습니까?'"></div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                                                         <form method="post" th:action="@{'/student/cancel/lecture/' + ${lecture.id}}">
@@ -89,15 +90,15 @@
                                         </div>
                                     </div>
                                     <div id="addLectureBtn" th:if="${lecture.lectureStatus.equals(lectureStatusOpen)}" th:unless="${student.getApplyingLectures().get(lecture.id)}">
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLectureModal">강의 신청</button>
-                                        <div class="modal fade" id="addLectureModal" tabindex="-1" aria-labelledby="addLectureModalLabel" aria-hidden="true">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" th:data-bs-target="|#addLectureModal${lecture.id}|">강의 신청</button>
+                                        <div class="modal fade" th:id="|addLectureModal${lecture.id}|" tabindex="-1" aria-labelledby="addLectureModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h1 class="modal-title fs-5" id="addLectureModalLabel">강의 신청</h1>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                                                    <div class="modal-body" th:text="'정말로 강의를 신청하시겠습니까?'"></div>
+                                                    <div class="modal-body" th:text="'정말로 ' + ${lecture.name} + ' 강의를 신청하시겠습니까?'"></div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                                                         <form method="post" th:action="@{'/student/add/lecture/' + ${lecture.id}}">
@@ -108,7 +109,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
