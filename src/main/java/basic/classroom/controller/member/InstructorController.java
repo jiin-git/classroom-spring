@@ -46,6 +46,8 @@ public class InstructorController {
         model.addAttribute("instructor", instructor);
         model.addAttribute("createLectureForm", new AddLectureDto());
         model.addAttribute("lectureStatusList", lectureStatusList);
+        model.addAttribute("lectureStatusReady", LectureStatus.READY);
+        model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
 
         return "member/instructor/createLecture";
     }
@@ -60,6 +62,9 @@ public class InstructorController {
 
             model.addAttribute("instructor", instructor);
             model.addAttribute("lectureStatusList", lectureStatusList);
+            model.addAttribute("lectureStatusReady", LectureStatus.READY);
+            model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
+
             return "member/instructor/createLecture";
         }
 

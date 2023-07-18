@@ -36,8 +36,8 @@
                     <div class="mb-3">
                         <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
                         <select id="lectureStatus" class="form-select" th:field="*{lectureStatus}" th:errorclass="field-error">
-                            <option th:each="LectureStatus : ${lectureStatusList}"
-                                    th:value="${LectureStatus}" th:text="${LectureStatus}"></option>
+                            <option th:value="${lectureStatusReady}" th:text="${lectureStatusReady}"></option>
+                            <option th:value="${lectureStatusOpen}" th:text="${lectureStatusOpen}"></option>
                         </select>
                         <div class="field-error" th:errors="*{lectureStatus}"></div>
                     </div>
