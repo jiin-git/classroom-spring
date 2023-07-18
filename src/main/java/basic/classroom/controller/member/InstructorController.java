@@ -89,11 +89,43 @@ public class InstructorController {
     public String editLecture(@PathVariable Long lectureId,
                               @Validated @ModelAttribute("lecture") UpdateLectureDto lectureDto, BindingResult bindingResult, Model model) {
 
-        // 검증 로직
-        if (bindingResult.hasErrors()) {
-            LectureStatus[] lectureStatusList = LectureStatus.values();
-            model.addAttribute("lectureStatusList", lectureStatusList);
+        Lecture lecture = lectureService.findOne(lectureId);
+        LectureStatus lectureStatus = lectureDto.getLectureStatus();
+        LectureStatus[] lectureStatusList = LectureStatus.values();
 
+        int updatePersonnel = lectureDto.getPersonnel();
+        int personnel = lecture.getPersonnel();
+        int remainingPersonnel = lecture.getRemainingPersonnel();
+        int appliedPersonnel = personnel - remainingPersonnel;
+        int updateRemainingPersonnel = updatePersonnel - appliedPersonnel;
+
+        // 검증 로직
+        if (updateRemainingPersonnel < 0) {
+            bindingResult.reject("NotChangePersonnel", "신청한 정원보다 적은 수로 정원을 변경할 수 없습니다.");
+            model.addAttribute("lectureStatusList", lectureStatusList);
+            return "member/instructor/editLectureForm";
+        }
+
+        if (lectureStatus.equals(LectureStatus.READY) && !lecture.getAppliedStudents().isEmpty()) {
+            bindingResult.reject("NotChangeLectureStatusReady", "신청한 학생이 있어 강의를 준비 상태로 변경할 수 없습니다.");
+            model.addAttribute("lectureStatusList", lectureStatusList);
+            return "member/instructor/editLectureForm";
+        }
+
+        if (lectureStatus.equals(LectureStatus.OPEN) && updateRemainingPersonnel == 0) {
+            bindingResult.reject("NotChangeLectureStatusOpen", "정원이 다 차서 강의를 열 수 없습니다. 강의 상태를 FULL로 변경해주세요.");
+            model.addAttribute("lectureStatusList", lectureStatusList);
+            return "member/instructor/editLectureForm";
+        }
+
+        if (lectureStatus.equals(LectureStatus.FULL) && updateRemainingPersonnel != 0) {
+            bindingResult.reject("NotChangeLectureStatusFull", "정원이 다 차지 않아 강의 상태를 변경 할 수 없습니다.");
+            model.addAttribute("lectureStatusList", lectureStatusList);
+            return "member/instructor/editLectureForm";
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("lectureStatusList", lectureStatusList);
             return "member/instructor/editLectureForm";
         }
 

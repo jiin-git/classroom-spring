@@ -47,6 +47,12 @@
             <div class="field-error" th:errors="*{personnel}"></div>
           </div>
           <div class="mb-3">
+            <label for="personnel" class="form-label gmarketSansFont">남은 정원</label>
+            <input type="text" class="form-control readonly" id="remainingPersonnel" placeholder="남은 정원을 입력해주세요."
+                   th:field="*{remainingPersonnel}" readonly>
+            <div class="field-error" th:errors="*{remainingPersonnel}"></div>
+          </div>
+          <div class="mb-3">
             <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
             <select id="lectureStatus" class="form-select" th:field="*{lectureStatus}" th:errorclass="field-error">
               <option th:each="LectureStatus : ${lectureStatusList}"
