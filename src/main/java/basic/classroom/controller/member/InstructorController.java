@@ -98,7 +98,7 @@ public class InstructorController {
         }
 
         // 성공 로직
-        instructorService.updateLecture(lectureDto.getInstructorId(), lectureDto);
+        instructorService.updateLecture(lectureDto.getInstructorId(), lectureDto, updateRemainingPersonnel);
         return "redirect:/instructor/lectures";
     }
 

@@ -98,14 +98,12 @@ public class InstructorService {
     }
 
     @Transactional
-    public void updateLecture(Long instructorId, UpdateLectureDto updateLectureDto) {
+    public void updateLecture(Long instructorId, UpdateLectureDto updateLectureDto, int updateRemainingPersonnel) {
         Instructor instructor = instructorRepository.findOne(instructorId);
         Lecture lecture = instructor.getLectures().get(updateLectureDto.getLectureId());
 
-        log.info("instructor lecture={}", instructor.getLectures());
-        log.info("instructor lecture={}", instructor.getLectures().values());
-
         lecture.setPersonnel(updateLectureDto.getPersonnel());
+        lecture.setRemainingPersonnel(updateRemainingPersonnel);
         lecture.setLectureStatus(updateLectureDto.getLectureStatus());
     }
 

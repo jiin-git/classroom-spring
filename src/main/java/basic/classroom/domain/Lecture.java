@@ -23,6 +23,7 @@ public class Lecture {
     private Instructor instructor;
 
     private int personnel;
+    private int remainingPersonnel;
 
     @Enumerated(EnumType.STRING)
     private LectureStatus lectureStatus;
@@ -36,13 +37,13 @@ public class Lecture {
         getAppliedStudents().put(studentId, appliedStudent);
 
         // 인원 초과시 에러
-        if (personnel <= 0) {
+        if (remainingPersonnel <= 0) {
             throw new IllegalStateException();
         }
 
-        setPersonnel(personnel - 1);
+        setRemainingPersonnel(remainingPersonnel - 1);
         // 정원이 다 차면 FULL
-        if (personnel == 0) {
+        if (remainingPersonnel == 0) {
             setLectureStatus(LectureStatus.FULL);
         }
     }
@@ -53,6 +54,7 @@ public class Lecture {
         lecture.setName(name);
         lecture.setInstructor(instructor);
         lecture.setPersonnel(personnel);
+        lecture.setRemainingPersonnel(personnel);
         lecture.setLectureStatus(lectureStatus);
         for (LectureStudentMapper appliedStudent : appliedStudents) {
             lecture.addStudent(appliedStudent);
@@ -64,7 +66,7 @@ public class Lecture {
     /* 수강 신청 취소 */
     public void removeStudent(Long appliedStudentId) {
         appliedStudents.remove(appliedStudentId);
-        setPersonnel(personnel + 1);
+        setRemainingPersonnel(remainingPersonnel + 1);
 
         if (lectureStatus == LectureStatus.FULL) {
             setLectureStatus(LectureStatus.OPEN);

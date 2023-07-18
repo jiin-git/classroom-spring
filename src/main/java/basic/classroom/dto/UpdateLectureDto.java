@@ -18,8 +18,11 @@ public class UpdateLectureDto {
     private Long instructorId;
     private String instructorName;
 
-    @Range(min = 1, max = 100, message = "정원을 1 ~ 100명 사이로 입력해주세요.")
+    @Range(min = 0, max = 100, message = "정원을 0 ~ 100명 사이로 입력해주세요.")
     private int personnel;
+
+    @NotNull
+    private int remainingPersonnel;
 
     @NotNull(message = "강의 상태를 설정해주세요.")
     private LectureStatus lectureStatus;
@@ -30,6 +33,7 @@ public class UpdateLectureDto {
         this.instructorId = lecture.getInstructor().getId();
         this.instructorName = lecture.getInstructor().getMember().getName();
         this.personnel = lecture.getPersonnel();
+        this.remainingPersonnel = lecture.getRemainingPersonnel();
         this.lectureStatus = lecture.getLectureStatus();
     }
 }
