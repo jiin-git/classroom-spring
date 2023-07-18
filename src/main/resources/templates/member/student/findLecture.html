@@ -2,6 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: header}"/>
 <head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
+<head>
+<style>
+    .position-right {
+        margin-left: auto;
+        margin-right: 0;
+    }
+</style>
+</head>
 <body>
 <div>
     <div th:replace="~{fragments/bodyHeader :: bodyLoginHomeHeader}"/>
@@ -19,30 +27,30 @@
             </div>
 
             <div class="container p-3 h-100 ">
-                    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
-                        <div class="container-fluid">
-                            <div class="collapse navbar-collapse" id="searchBar">
-                                <form th:action="@{/student/find/lectures}" class="d-flex" method="get" th:object="${searchConditionDto}">
-                                    <select class="form-select-sm" th:name="status" th:value="*{status}">
-                                        <option th:value="null" selected>강의 상태</option>
-                                        <option th:each="lectureStatus : ${lectureStatusList}"
-                                                th:value="${lectureStatus}" th:text="${lectureStatus}"></option>
-                                    </select>
-                                    <select class="form-select-sm" th:name="condition" th:value="*{condition}">
-                                        <option th:value="null" selected>검색 조건</option>
-                                        <option th:each="lectrueSearchCondition : ${lectureSearchConditions}"
-                                                th:value="${lectrueSearchCondition}" th:text="${lectrueSearchCondition}"></option>
-                                    </select>
 
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" th:name="text" th:value="*{text}">
-                                    <div th:if="${#fields.hasGlobalErrors()}">
-                                        <p class="field-error" th:text="${#fields.globalErrors()}"></p>
-                                    </div>
-                                    <button class="btn btn-outline-success" type="submit">Search</button>
-                                </form>
-                            </div>
+                <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" id="searchBar">
+                            <form th:action="@{/student/find/lectures}" class="d-flex" method="get" th:object="${searchConditionDto}">
+                                <select class="form-select-sm" th:name="status" th:value="*{status}">
+                                    <option th:value="null" selected>강의 상태</option>
+                                    <option th:each="lectureStatus : ${lectureStatusList}"
+                                            th:value="${lectureStatus}" th:text="${lectureStatus}"></option>
+                                </select>
+                                <select class="form-select-sm" th:name="condition" th:value="*{condition}">
+                                    <option th:value="null" selected>검색 조건</option>
+                                    <option th:each="lectrueSearchCondition : ${lectureSearchConditions}"
+                                            th:value="${lectrueSearchCondition}" th:text="${lectrueSearchCondition}"></option>
+                                </select>
+                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" th:name="text" th:value="*{text}">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                                <div th:if="${#fields.hasGlobalErrors()}" class="text-">
+                                    <p class="alert alert-danger position-absolute position-right" th:text="${#fields.globalErrors()}"></p>
+                                </div>
+                            </form>
                         </div>
-                    </nav>
+                    </div>
+                </nav>
 
                 <div class="container-fluid bg-white border-lightgray h-75 p-0">
                     <div class="card mb-3 w-100" th:each="lecture: ${lectures}">
@@ -57,6 +65,9 @@
                                     <p class="card-text gmarketSansFont" th:text="'남은 정원: ' + ${lecture.personnel}"></p>
                                     <p class="card-text"><small class="text-body-secondary" th:text="${lecture.lectureStatus}"></small></p>
 
+                                    <div id="notAddLectureBtn" th:if="${lecture.lectureStatus.equals(lectureStatusReady)} or ${lecture.lectureStatus.equals(lectureStatusFull)} and ${student.getApplyingLectures().get(lecture.id) == null}">
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#notAddLectureModal" disabled>신청 불가</button>
+                                    </div>
                                     <div id="cancelLectureBtn" th:if="${student.getApplyingLectures().get(lecture.id)}">
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelLectureModal">강의 취소</button>
                                         <div class="modal fade" id="cancelLectureModal" tabindex="-1" aria-labelledby="cancelLectureModalLabel" aria-hidden="true">
@@ -77,7 +88,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="addLectureBtn" th:unless="${student.getApplyingLectures().get(lecture.id)}">
+                                    <div id="addLectureBtn" th:if="${lecture.lectureStatus.equals(lectureStatusOpen)}" th:unless="${student.getApplyingLectures().get(lecture.id)}">
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLectureModal">강의 신청</button>
                                         <div class="modal fade" id="addLectureModal" tabindex="-1" aria-labelledby="addLectureModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
