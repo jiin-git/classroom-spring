@@ -44,7 +44,7 @@
                                 </select>
                                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" th:name="text" th:value="*{text}">
                                 <button class="btn btn-outline-success" type="submit">Search</button>
-                                <div th:if="${#fields.hasGlobalErrors()}" class="text-">
+                                <div th:if="${#fields.hasGlobalErrors()}">
                                     <p class="alert alert-danger position-absolute position-right" th:text="${#fields.globalErrors()}"></p>
                                 </div>
                             </form>
