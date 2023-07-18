@@ -1,10 +1,7 @@
 package basic.classroom.controller.member;
 
 import basic.classroom.controller.login.SessionConst;
-import basic.classroom.domain.Lecture;
-import basic.classroom.domain.LectureSearchCondition;
-import basic.classroom.domain.LectureStatusSearchCondition;
-import basic.classroom.domain.Student;
+import basic.classroom.domain.*;
 import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.dto.UpdatePwDto;
@@ -72,26 +69,51 @@ public class StudentController {
         log.info("text = {}", searchConditionDto.getText());
         log.info("lectures = {}", lectures);
 
-        /* Validation
+        // Validation
         String condition = searchConditionDto.getCondition();
         String text = searchConditionDto.getText();
         if (condition != null && !condition.isBlank()) {
             if (text.isBlank()) {
-                bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색명을 입력해주세요.");
+                bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색명을 함께 입력해주세요.");
+                log.info("bindingResult Result = {}" , bindingResult.hasErrors());
 
                 model.addAttribute("student", student);
                 model.addAttribute("lectures", lectures);
                 model.addAttribute("searchConditionDto", searchConditionDto);
+                model.addAttribute("lectureStatusReady", LectureStatus.READY);
+                model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
+                model.addAttribute("lectureStatusFull", LectureStatus.FULL);
                 model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
                 model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
 
                 return "member/student/findLecture";
             }
         }
-        */
+
+        if (text != null && !text.isBlank()) {
+            if (condition == null || condition.isBlank()) {
+                bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색 조건을 설정해주세요.");
+                log.info("bindingResult Result = {}" , bindingResult.hasErrors());
+
+                model.addAttribute("student", student);
+                model.addAttribute("lectures", lectures);
+                model.addAttribute("searchConditionDto", searchConditionDto);
+                model.addAttribute("lectureStatusReady", LectureStatus.READY);
+                model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
+                model.addAttribute("lectureStatusFull", LectureStatus.FULL);
+                model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
+                model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
+
+                return "member/student/findLecture";
+            }
+        }
+
         model.addAttribute("student", student);
         model.addAttribute("lectures", lectures);
         model.addAttribute("searchConditionDto", searchConditionDto);
+        model.addAttribute("lectureStatusReady", LectureStatus.READY);
+        model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
+        model.addAttribute("lectureStatusFull", LectureStatus.FULL);
         model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
         model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
 
