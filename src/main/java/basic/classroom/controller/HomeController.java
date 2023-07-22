@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     @GetMapping("/")
     public String home(HttpServletRequest request) {
-
         HttpSession session = request.getSession(false);
-        if (session == null) {
+        if (session == null || session.getAttribute(SessionConst.LOGIN_ID) == null) {
             return "home";
         }
 
