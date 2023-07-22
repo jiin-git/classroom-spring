@@ -20,54 +20,60 @@
       text-decoration: underline;
       color: darkgray;
     }
+
+    @media (max-width: 500px) {
+      .help-login-link {
+        font-size: 13px;
+      }
+    }
   </style>
 </head>
 
 <body>
-<div>
+<div id="template-display">
   <div th:replace="~{fragments/bodyHeader :: bodyLoginHeader}"/>
-
-  <div class="container login-container">
-    <h3 class="login-header kohiFont">ClassRoom</h3>
-    <br/>
-    <form action="/login" method="post" th:object="${loginForm}">
-      <div th:if="${#fields.hasGlobalErrors()}">
-        <p class="field-error" th:text="${#fields.globalErrors()}"></p>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">아이디</label>
-        <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력하세요."
-               th:errorclass="field-error" th:field="*{loginId}">
-        <div class="field-error" th:errors="*{loginId}"></div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">비밀번호</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력하세요."
-               th:errorclass="field-error" th:field="*{loginPw}">
-        <div class="field-error" th:errors="*{loginPw}"></div>
-      </div>
-      <div class="row mb-3">
-        <div class="col form-check">
-          <input type="radio" class="form-check-input" id="student" name="member-status" th:value="${student}" th:field="*{memberStatus}">
-          <label class="form-check-label" for="student">학생</label>
+  <div class="body-display body-display-vertical-center">
+    <div class="container login-container h-100">
+      <h3 class="login-header kohiFont">ClassRoom</h3>
+      <br/>
+      <form class="login-form" action="/login" method="post" th:object="${loginForm}">
+        <div th:if="${#fields.hasGlobalErrors()}">
+          <p class="field-error" th:text="${#fields.globalErrors()}"></p>
         </div>
-        <div class="col form-check">
-          <input type="radio" class="form-check-input" id="instructor" name="member-status" th:value="${instructor}" th:field="*{memberStatus}">
-          <label class="form-check-label" for="instructor">강사</label>
+        <div class="mb-3">
+          <label class="form-label">아이디</label>
+          <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력하세요."
+                 th:errorclass="field-error" th:field="*{loginId}">
+          <div class="field-error" th:errors="*{loginId}"></div>
         </div>
-        <div class="field-error" th:errors="*{memberStatus}"></div>
-      </div>
-      <div class="help-login mb-3">
-        <a class="help-login-link border-end border-opacity-75" href="/login/help/findIds">아이디 찾기</a>
-        <a class="help-login-link border-end border-opacity-75" href="/login/help/findPw">비밀번호 찾기</a>
-        <a class="help-login-link" href="/login/help/createMember">회원가입</a>
-      </div>
-      <div class="text-center">
-        <input class="btn btn-primary login-submit-btn" type="submit" value="로그인">
-      </div>
-    </form>
+        <div class="mb-3">
+          <label class="form-label">비밀번호</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력하세요."
+                 th:errorclass="field-error" th:field="*{loginPw}">
+          <div class="field-error" th:errors="*{loginPw}"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col form-check">
+            <input type="radio" class="form-check-input" id="student" name="member-status" th:value="${student}" th:field="*{memberStatus}">
+            <label class="form-check-label" for="student">학생</label>
+          </div>
+          <div class="col form-check">
+            <input type="radio" class="form-check-input" id="instructor" name="member-status" th:value="${instructor}" th:field="*{memberStatus}">
+            <label class="form-check-label" for="instructor">강사</label>
+          </div>
+          <div class="field-error" th:errors="*{memberStatus}"></div>
+        </div>
+        <div class="help-login mb-3">
+          <a class="help-login-link border-end border-opacity-75" href="/find/ids">아이디 찾기</a>
+          <a class="help-login-link border-end border-opacity-75" href="/find/pw">비밀번호 찾기</a>
+          <a class="help-login-link" href="/create/member">회원가입</a>
+        </div>
+        <div class="text-center">
+          <input class="btn btn-primary login-submit-btn" type="submit" value="로그인">
+        </div>
+      </form>
+    </div>
   </div>
-
   <div th:replace="~{fragments/footer :: footer}"/>
 </div>
 </body>
