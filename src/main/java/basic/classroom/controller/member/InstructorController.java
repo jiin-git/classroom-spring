@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -36,6 +37,25 @@ public class InstructorController {
         model.addAttribute("lectures", lectures);
 
         return "member/instructor/lectureList";
+    }
+
+    @GetMapping("/instructor/lecture/{lectureId}")
+    public String lectureInfo(@PathVariable Long lectureId, Model model) {
+        Lecture lecture = lectureService.findOne(lectureId);
+        model.addAttribute("lecture", lecture);
+
+        return "member/instructor/lectureInfo";
+    }
+
+    @GetMapping("/instructor/lecture/{lectureId}/applicants")
+    public String applicantList(@PathVariable Long lectureId, Model model) {
+        Lecture lecture = lectureService.findOne(lectureId);
+        Collection<LectureStudentMapper> mappers = lecture.getAppliedStudents().values();
+        List<Student> applicants = mappers.stream().map(lsm -> lsm.getStudent()).toList();
+
+        model.addAttribute("applicants", applicants);
+
+        return "member/instructor/applicantsInfo";
     }
 
     @GetMapping("/instructor/create/lecture")

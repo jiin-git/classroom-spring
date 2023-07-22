@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"/>
+<head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
+<head>
+  <link href="https://webfontworld.github.io/SCoreDream/SCoreDream.css" rel="stylesheet">
+  <style>
+    .sCoreDreamFont {
+      font-family: SCoreDream;
+      font-weight: normal;
+    }
+    .border-bottom-gray {
+      border-bottom: 2px solid gray;
+    }
+  </style>
+</head>
+<body>
+<div>
+  <div th:replace="~{fragments/bodyHeader :: bodyLoginHomeHeader}"/>
+
+  <div class="member-container">
+    <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
+
+    <div class="container body-container">
+      <div class="p-3 border-bottom-lightgray">
+        <nav aria-label="breadcrumb"  class="d-flex align-items-center">
+          <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item active">Home</li>
+            <li class="breadcrumb-item active" aria-current="page">강의 정보</li>
+            <li class="breadcrumb-item active" aria-current="page">수강생 명단</li>
+          </ol>
+        </nav>
+      </div>
+
+      <div class="container p-3 h-50">
+        <div class="container-fluid bg-white border-lightgray p-3 h-75" >
+          <div class="border-bottom-gray row w-100 m-0 p-2">
+            <p class="col-1 m-0 gmarketSansFont">ID</p>
+            <p class="col-2 m-0 gmarketSansFont">수강생</p>
+          </div>
+          <div class="border-bottom-lightgray row w-100 m-0 p-2" th:each="applicant : ${applicants}">
+            <p class="col-1 m-0 pt-1 pb-1 sCoreDreamFont" th:text="${applicant.id}"></p>
+            <p class="col-2 m-0 pt-1 pb-1 sCoreDreamFont" th:text="${applicant.member.name}"></p>
+          </div>
+        </div>
+        <div class="text-center mt-2">
+          <a class="btn btn-secondary" th:href="@{'/instructor/lecture/' + ${lectureId}}" >이전으로</a>
+          <a class="btn btn-primary" th:href="@{/instructor/lectures}" >홈으로</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/footer :: footer}"/>
+</div>
+</body>
+</html>

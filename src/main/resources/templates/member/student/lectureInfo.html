@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"/>
+<head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
+<body>
+<div th:replace="~{fragments/bodyHeader :: bodyLoginHomeHeader}"/>
+<div class="member-container" th:object="${lecture}">
+  <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
+
+  <div class="container body-container">
+    <div class="p-3 border-bottom-lightgray">
+      <nav aria-label="breadcrumb"  class="d-flex align-items-center">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item active">Home</li>
+          <li class="breadcrumb-item active" aria-current="page">강의 정보</li>
+        </ol>
+      </nav>
+    </div>
+
+    <div class="container p-3 h-100">
+      <form method="post"  th:action="@{'/student/cancel/lecture/' + ${lecture.id}}"
+            class="container-fluid bg-white border-lightgray h-75">
+        <div class="mb-3 mt-3">
+          <label for="lectureId" class="form-label gmarketSansFont">강의번호</label>
+          <input type="text" class="form-control readonly" id="lectureId" th:field="*{id}" readonly>
+        </div>
+        <div class="mb-3 mt-3">
+          <label for="lectureName" class="form-label gmarketSansFont">강의명</label>
+          <input type="text" class="form-control readonly" id="lectureName" th:field="*{name}" readonly>
+        </div>
+        <div class="mb-3">
+          <label for="instructorId" class="form-label gmarketSansFont">강사 ID</label>
+          <input type="text" class="form-control readonly" id="instructorId" th:field="*{instructor.id}" readonly>
+        </div>
+        <div class="mb-3">
+          <label for="instructorName" class="form-label gmarketSansFont">강사</label>
+          <input type="text" class="form-control readonly" id="instructorName" th:field="*{instructor.member.name}" readonly>
+        </div>
+        <div class="mb-3">
+          <label for="personnel" class="form-label gmarketSansFont">정원</label>
+          <input type="text" class="form-control readonly" id="personnel" th:field="*{personnel}" readonly>
+        </div>
+        <div class="mb-3">
+          <label for="personnel" class="form-label gmarketSansFont">남은 정원</label>
+          <input type="text" class="form-control readonly" id="remainingPersonnel" th:field="*{remainingPersonnel}" readonly>
+        </div>
+        <div class="mb-3">
+          <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
+          <input type="text" class="form-control readonly" id="lectureStatus" th:field="*{lectureStatus}" readonly>
+        </div>
+
+        <div class="text-center">
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelLectureModal">강의 취소</button>
+          <a class="btn btn-primary" th:href="@{/student/lectures}" >홈으로</a>
+        </div>
+        <div class="modal fade" id="cancelLectureModal" tabindex="-1" aria-labelledby="cancelLectureModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="cancelLectureModalLabel">강의 취소</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" th:text="'정말로 강의를 취소하시겠습니까?'"></div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <input type="submit" class="btn btn-danger" th:value="'강의 취소'">
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"/>
+</body>
+</html>

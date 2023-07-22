@@ -37,6 +37,14 @@ public class StudentController {
         return "member/student/lectureList";
     }
 
+    @GetMapping("/student/lecture/{lectureId}")
+    public String lectureInfo(@PathVariable Long lectureId, Model model) {
+        Lecture lecture = lectureService.findOne(lectureId);
+        model.addAttribute("lecture", lecture);
+
+        return "member/student/lectureInfo";
+    }
+
     @PostMapping("/student/cancel/lecture/{lectureId}")
     public String cancelLecture(@PathVariable Long lectureId, HttpSession session) {
         Student student = findStudent(session);
