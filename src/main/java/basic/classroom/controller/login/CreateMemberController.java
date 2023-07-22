@@ -54,6 +54,11 @@ public class CreateMemberController {
             studentService.join(student);
         }
 
-        return "redirect:/login";
+        return "redirect:/create/member/result";
+    }
+
+    @GetMapping("/create/member/result")
+    public String createMemberResult() {
+        return "login/createMemberResult";
     }
 }
