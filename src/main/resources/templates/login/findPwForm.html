@@ -4,45 +4,44 @@
 <head><link rel="stylesheet" href="/css/login.css"></head>
 
 <body>
-<div>
+<div id="template-display">
     <div th:replace="~{fragments/bodyHeader :: bodyLoginHeader}"/>
-
-    <div class="container login-container">
-        <h3 class="login-header kohiFont">비밀번호 찾기</h3>
-        <br/>
-        <form th:object="${findPwForm}" action="/login/help/findPw" method="post">
-            <div class="mb-3">
-                <label class="form-label">아이디</label>
-                <input type="text" class="form-control" th:errorclass="field-error"
-                       id="loginId" name="loginId" th:field="*{loginId}" placeholder="가입한 아이디를 입력하세요.">
-                <div class="field-error" th:errors="*{loginId}"></div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">이메일</label>
-                <input type="email" class="form-control" th:errorclass="field-error"
-                       id="email" name="email" th:field="*{email}" placeholder="가입시 사용한 이메일 입력하세요.">
-                <div class="field-error" th:errors="*{email}"></div>
-            </div>
-            <label class="form-label">가입 계정</label>
-            <div class="row mb-3">
-                <div class="col form-check">
-                    <input type="radio" class="form-check-input" id="student" name="member-status"
-                           th:value="${student}" th:field="*{memberStatus}">
-                    <label class="form-check-label" for="student">학생</label>
+    <div class="body-display body-display-vertical-center">
+        <div class="container login-container">
+            <h3 class="login-header kohiFont">비밀번호 찾기</h3>
+            <br/>
+            <form th:object="${findPwForm}" action="/find/pw" method="post">
+                <div class="mb-3">
+                    <label class="form-label">아이디</label>
+                    <input type="text" class="form-control" th:errorclass="field-error"
+                           id="loginId" name="loginId" th:field="*{loginId}" placeholder="가입한 아이디를 입력하세요.">
+                    <div class="field-error" th:errors="*{loginId}"></div>
                 </div>
-                <div class="col form-check">
-                    <input type="radio" class="form-check-input" id="instructor" name="member-status"
-                           th:value="${instructor}" th:field="*{memberStatus}">
-                    <label class="form-check-label" for="instructor">강사</label>
+                <div class="mb-3">
+                    <label class="form-label">이메일</label>
+                    <input type="email" class="form-control" th:errorclass="field-error"
+                           id="email" name="email" th:field="*{email}" placeholder="가입시 사용한 이메일 입력하세요.">
+                    <div class="field-error" th:errors="*{email}"></div>
                 </div>
-                <div class="field-error" th:errors="*{memberStatus}"></div>
-            </div>
-            <div class="text-center">
-                <input class="btn btn-primary login-submit-btn" type="submit" value="비밀번호 찾기">
-            </div>
-        </form>
+                <div class="row mb-3">
+                    <div class="col form-check">
+                        <input type="radio" class="form-check-input" id="student" name="member-status"
+                               th:value="${student}" th:field="*{memberStatus}">
+                        <label class="form-check-label" for="student">학생</label>
+                    </div>
+                    <div class="col form-check">
+                        <input type="radio" class="form-check-input" id="instructor" name="member-status"
+                               th:value="${instructor}" th:field="*{memberStatus}">
+                        <label class="form-check-label" for="instructor">강사</label>
+                    </div>
+                    <div class="field-error" th:errors="*{memberStatus}"></div>
+                </div>
+                <div class="text-center">
+                    <input class="btn btn-primary login-submit-btn" type="submit" value="비밀번호 찾기">
+                </div>
+            </form>
+        </div>
     </div>
-
     <div th:replace="~{fragments/footer :: footer}"/>
 </div>
 </body>
