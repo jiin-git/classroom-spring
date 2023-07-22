@@ -1,31 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: header}"/>
+
 <head>
+<link href="https://webfontworld.github.io/SCoreDream/SCoreDream.css" rel="stylesheet">
 <style>
-    .result-container {
-        height: 500px;
-        border: 5px solid black;
+    .sCoreDreamFont {
+        font-family: SCoreDream;
+        font-weight: normal;
+    }
+    .result-ids-container {
+        height: 300px;
+        border: 1px solid gray;
+        border-radius: 5px;
+        padding-top: 5px;
+        text-align: left;
     }
 </style>
 </head>
 
 <body>
-<div>
+<div id="template-display">
     <div th:replace="~{fragments/bodyHeader :: bodyLoginHeader}"/>
+    <div class="text-center">
+        <div class="container login-result-container body-display body-display-vertical-center">
+            <h2 th:if="${loginIds.isEmpty()}"
+                class="alert alert-danger alert-result body-display-vertical-center" role="alert">
+                유효하는 회원이 존재하지 않습니다. 다시 확인해주세요.
+            </h2>
+            <div class="mb-3" th:unless="${loginIds.isEmpty()}">
+                <h2 class="gmarketSansFont fw-bold">조회한 회원 아이디 결과입니다.</h2>
+                <div class="result-ids-container">
+                    <ul th:each="loginId : ${loginIds}">
+                        <li class="sCoreDreamFont" th:value="${loginId}" th:text="${loginId}"></li>
+                    </ul>
+                </div>
+            </div>
 
-    <div class="container result-container">
-        <p th:if="${loginIds.isEmpty()}" th:value="${loginIds}" th:text="'유효하는 회원이 존재하지 않습니다. 다시 확인해주세요.'"></p>
-        <ul th:unless="${loginIds.isEmpty()}" th:each="loginId : ${loginIds}">
-            <li th:value="${loginId}" th:text="${loginId}"></li>
-        </ul>
-
-        <div class="row-cols-2 w-100">
-            <a href="/login" class="btn btn-primary col">로그인 화면</a>
-            <a th:if="${loginIds == null}" href="/login/help/findIds" class="btn btn-secondary col">아이디 찾기</a>
+            <div class="w-100 text-center">
+                <a href="/login" class="btn btn-primary login-result-btn">로그인 화면</a>
+                <a th:if="${loginIds.isEmpty()}" href="/find/ids" class="btn btn-secondary login-result-btn">아이디 찾기</a>
+            </div>
         </div>
     </div>
-
     <div th:replace="~{fragments/footer :: footer}"/>
 </div>
 </body>
