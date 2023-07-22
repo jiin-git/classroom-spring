@@ -22,11 +22,11 @@ public class LoginHelpController {
 
     @GetMapping("/find/ids")
     public String findLoginIdForm(Model model) {
-        model.addAttribute("findIdForm", new FindIdDto());
+        model.addAttribute("findIdsForm", new FindIdDto());
         model.addAttribute("student", MemberStatus.STUDENT);
         model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
 
-        return "login/findIdForm";
+        return "login/findIdsForm";
     }
 
     @PostMapping("/find/ids")
@@ -38,7 +38,7 @@ public class LoginHelpController {
             model.addAttribute("student", MemberStatus.STUDENT);
             model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
 
-            return "login/findIdForm";
+            return "login/findIdsForm";
         }
 
         // 성공 로직
