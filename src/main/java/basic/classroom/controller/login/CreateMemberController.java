@@ -24,7 +24,7 @@ public class CreateMemberController {
     private final InstructorService instructorService;
     private final StudentService studentService;
 
-    @GetMapping("/login/help/createMember")
+    @GetMapping("/create/member")
     public String createMemberForm(Model model) {
         model.addAttribute("createMemberForm", new CreateMemberDto());
         model.addAttribute("student", MemberStatus.STUDENT);
@@ -32,7 +32,7 @@ public class CreateMemberController {
         return "login/createMemberForm";
     }
 
-    @PostMapping("/login/help/createMember")
+    @PostMapping("/create/member")
     public String createMember(@Validated @ModelAttribute("createMemberForm") CreateMemberDto createMemberDto, BindingResult bindingResult, Model model) {
         // 검증 로직
         if (bindingResult.hasErrors()) {
