@@ -3,8 +3,12 @@
 <head th:replace="~{fragments/header :: header}"/>
 <head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
 <body>
-  <div th:replace="~{fragments/bodyHeader :: bodyLoginHomeHeader}"/>
-  <div class="member-container" th:object="${lecture}">
+<div id="template-display">
+
+  <div th:replace="~{fragments/bodyHeader :: LoginInstructorHeader}"/>
+  <div th:replace="~{fragments/bodyContainer :: instructorOffCanvas}"/>
+
+  <div class="member-container body-display" th:object="${lecture}">
     <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
 
     <div class="container body-container">
@@ -61,7 +65,7 @@
             <div class="field-error" th:errors="*{lectureStatus}"></div>
           </div>
           <div th:if="${#fields.hasGlobalErrors()}" class="mb-3">
-              <p class="alert alert-danger" th:text="${#fields.globalErrors()}"></p>
+            <p class="alert alert-danger" th:text="${#fields.globalErrors()}"></p>
           </div>
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeLectureModal">강의 수정</button>
           <div class="modal fade" id="changeLectureModal" tabindex="-1" aria-labelledby="changeLectureModalLabel" aria-hidden="true">
@@ -86,5 +90,7 @@
   </div>
 
   <div th:replace="~{fragments/footer :: footer}"/>
+</div>
+
 </body>
 </html>

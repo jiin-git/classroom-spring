@@ -1,3 +1,7 @@
+.navbar-left-align {
+    display: inline-flex;
+}
+
 .navbar {
     background-color: #374785;
     height: 80px;
@@ -37,6 +41,29 @@
     transition-duration: 0.2s;
 }
 
+.list-btn {
+    display: none;
+    margin-bottom: 5px;
+    background-color: transparent;
+    border: none;
+}
+
+.list-svg {
+    width: 32px;
+    height: 32px;
+    color: white;
+}
+
+.offcanvas-header {
+    height: 80px;
+}
+
+@media (max-width: 1000px) {
+    .list-btn {
+        display: block;
+    }
+}
+
 @media (max-width: 500px) {
     .logo {
         font-size: 20px;
@@ -48,7 +75,7 @@
         margin-right: 0px;
         margin-bottom: 5px;
     }
-    .navbar {
+    .navbar, .offcanvas-header {
         height: 50px;
     }
 }

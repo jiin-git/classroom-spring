@@ -3,62 +3,66 @@
 <head th:replace="~{fragments/header :: header}"/>
 <head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
 <body>
-<div th:replace="~{fragments/bodyHeader :: bodyLoginHomeHeader}"/>
-<div class="member-container" th:object="${lecture}">
-  <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
+<div id="template-display">
+  <div th:replace="~{fragments/bodyHeader :: LoginInstructorHeader}"/>
+  <div th:replace="~{fragments/bodyContainer :: instructorOffCanvas}"/>
 
-  <div class="container body-container">
-    <div class="p-3 border-bottom-lightgray">
-      <nav aria-label="breadcrumb"  class="d-flex align-items-center">
-        <ol class="breadcrumb m-0">
-          <li class="breadcrumb-item active">Home</li>
-          <li class="breadcrumb-item active" aria-current="page">강의 정보</li>
-        </ol>
-      </nav>
-    </div>
+  <div class="member-container body-display" th:object="${lecture}">
+    <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
 
-    <div class="container p-3 h-100">
-      <form class="container-fluid bg-white border-lightgray h-75">
-        <div class="mb-3 mt-3">
-          <label for="lectureId" class="form-label gmarketSansFont">강의번호</label>
-          <input type="text" class="form-control readonly" id="lectureId" th:field="*{id}" readonly>
-        </div>
-        <div class="mb-3 mt-3">
-          <label for="lectureName" class="form-label gmarketSansFont">강의명</label>
-          <input type="text" class="form-control readonly" id="lectureName" th:field="*{name}" readonly>
-        </div>
-        <div class="mb-3">
-          <label for="instructorId" class="form-label gmarketSansFont">강사 ID</label>
-          <input type="text" class="form-control readonly" id="instructorId" th:field="*{instructor.id}" readonly>
-        </div>
-        <div class="mb-3">
-          <label for="instructorName" class="form-label gmarketSansFont">강사</label>
-          <input type="text" class="form-control readonly" id="instructorName" th:field="*{instructor.member.name}" readonly>
-        </div>
-        <div class="mb-3">
-          <label for="personnel" class="form-label gmarketSansFont">정원</label>
-          <input type="text" class="form-control readonly" id="personnel" th:field="*{personnel}" readonly>
-        </div>
-        <div class="mb-3">
-          <label for="personnel" class="form-label gmarketSansFont">남은 정원</label>
-          <input type="text" class="form-control readonly" id="remainingPersonnel" th:field="*{remainingPersonnel}" readonly>
-        </div>
-        <div class="mb-3">
-          <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
-          <input type="text" class="form-control readonly" id="lectureStatus" th:field="*{lectureStatus}" readonly>
-        </div>
-        <div class="mb-3">
-          <label for="appliedStudent" class="form-label gmarketSansFont">수강생 명단</label><br>
-          <a type="button" class="btn btn-secondary" id="appliedStudent" th:href="@{'/instructor/lecture/' + ${lecture.id} + '/applicants'}">명단 보기</a>
-        </div>
+    <div class="container body-container">
+      <div class="p-3 border-bottom-lightgray">
+        <nav aria-label="breadcrumb"  class="d-flex align-items-center">
+          <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item active">Home</li>
+            <li class="breadcrumb-item active" aria-current="page">강의 정보</li>
+          </ol>
+        </nav>
+      </div>
 
-        <a type="button" class="btn btn-primary" th:href="@{'/instructor/edit/lecture/' + ${lecture.id}}">강의 수정</a>
+      <div class="container p-3 h-100">
+        <form class="container-fluid bg-white border-lightgray h-75">
+          <div class="mb-3 mt-3">
+            <label for="lectureId" class="form-label gmarketSansFont">강의번호</label>
+            <input type="text" class="form-control readonly" id="lectureId" th:field="*{id}" readonly>
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="lectureName" class="form-label gmarketSansFont">강의명</label>
+            <input type="text" class="form-control readonly" id="lectureName" th:field="*{name}" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="instructorId" class="form-label gmarketSansFont">강사 ID</label>
+            <input type="text" class="form-control readonly" id="instructorId" th:field="*{instructor.id}" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="instructorName" class="form-label gmarketSansFont">강사</label>
+            <input type="text" class="form-control readonly" id="instructorName" th:field="*{instructor.member.name}" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="personnel" class="form-label gmarketSansFont">정원</label>
+            <input type="text" class="form-control readonly" id="personnel" th:field="*{personnel}" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="personnel" class="form-label gmarketSansFont">남은 정원</label>
+            <input type="text" class="form-control readonly" id="remainingPersonnel" th:field="*{remainingPersonnel}" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
+            <input type="text" class="form-control readonly" id="lectureStatus" th:field="*{lectureStatus}" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="appliedStudent" class="form-label gmarketSansFont">수강생 명단</label><br>
+            <a type="button" class="btn btn-secondary" id="appliedStudent" th:href="@{'/instructor/lecture/' + ${lecture.id} + '/applicants'}">명단 보기</a>
+          </div>
 
-      </form>
+          <a type="button" class="btn btn-primary" th:href="@{'/instructor/edit/lecture/' + ${lecture.id}}">강의 수정</a>
+
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
-<div th:replace="~{fragments/footer :: footer}"/>
+  <div th:replace="~{fragments/footer :: footer}"/>
+</div>
 </body>
 </html>

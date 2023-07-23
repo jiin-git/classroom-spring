@@ -10,8 +10,8 @@
     border: 1px solid lightgray;
 }
 
-/*@media (max-width: 1200px) {*/
-/*    .body-container {*/
-/*        width: 1200px;*/
-/*    }*/
-/*}*/
+@media (max-width: 1000px) {
+    .body-container {
+        width: 100%;
+    }
+}

@@ -5,16 +5,82 @@
     <link rel="stylesheet" href="/css/bootstrap-bodyContainer.css">
 </head>
 <body>
-    <div class="btn-group-vertical" th:fragment="studentSideBar">
+    <div id="student-side-bar" class="btn-group-vertical" th:fragment="studentSideBar">
         <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/lectures}">내 강의</a>
         <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/find/lectures}">강의 찾기</a>
         <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/mypage}">My Page</a>
     </div>
 
-    <div class="btn-group-vertical" th:fragment="instructorSideBar">
+    <div id="instructor-side-bar" class="btn-group-vertical" th:fragment="instructorSideBar">
         <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures}">내 강의</a>
         <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture}">강의 등록</a>
         <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage}">My Page</a>
+    </div>
+
+    <div id="offCanvas" class="offcanvas offcanvas-start" tabindex="-1" aria-labelledby="offcanvas-label"
+        th:fragment="offCanvasSideBar" style="background-color: #111938;">
+        <div id="offcanvas-label" class="offcanvas-header border-bottom border-light border-opacity-50">
+            <h5 class="offcanvas-title kohiFont logo text-light text-center body-display-vertical-center" style="height: 80px;">ClassRoom</h5>
+            <button type="button" class="btn-close btn-close-white h-100" data-bs-dismiss="offcanvas" aria-label="Close" style="height: 80px;"></button>
+        </div>
+
+        <div class="offcanvas-body h-100">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item border-opacity-50" >
+                    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures}">내 강의</a>
+                </li>
+                <li class="nav-item border-opacity-50">
+                    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture}">강의 등록</a>
+                </li>
+                <li class="nav-item border-opacity-50">
+                    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage}">My Page</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="student-offcanvas" class="offcanvas offcanvas-start" tabindex="-1" aria-labelledby="student-offcanvas-label"
+         th:fragment="studentOffCanvas" style="background-color: #111938;">
+        <div class="offcanvas-header border-bottom border-light border-opacity-50">
+            <h5 id="student-offcanvas-label" class="offcanvas-title kohiFont logo text-light text-center body-display-vertical-center" style="height: 80px;">ClassRoom</h5>
+            <button type="button" class="btn-close btn-close-white h-100" data-bs-dismiss="offcanvas" aria-label="Close" style="height: 80px;"></button>
+        </div>
+
+        <div class="offcanvas-body h-100">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item border-opacity-50" >
+                    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/lectures}">내 강의</a>
+                </li>
+                <li class="nav-item border-opacity-50">
+                    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/find/lectures}">강의 찾기</a>
+                </li>
+                <li class="nav-item border-opacity-50">
+                    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/mypage}">My Page</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="instructor-offcanvas" class="offcanvas offcanvas-start" tabindex="-1" aria-labelledby="instructor-offcanvas-label"
+         th:fragment="instructorOffCanvas" style="background-color: #111938;">
+        <div class="offcanvas-header border-bottom border-light border-opacity-50">
+            <h5 id="instructor-offcanvas-label" class="offcanvas-title kohiFont logo text-light text-center body-display-vertical-center" style="height: 80px;">ClassRoom</h5>
+            <button type="button" class="btn-close btn-close-white h-100" data-bs-dismiss="offcanvas" aria-label="Close" style="height: 80px;"></button>
+        </div>
+
+        <div class="offcanvas-body h-100">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item border-opacity-50" >
+                    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures}">내 강의</a>
+                </li>
+                <li class="nav-item border-opacity-50">
+                    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture}">강의 등록</a>
+                </li>
+                <li class="nav-item border-opacity-50">
+                    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage}">My Page</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>

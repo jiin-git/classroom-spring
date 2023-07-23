@@ -11,9 +11,11 @@
 </style>
 </head>
 <body>
-<div>
-    <div th:replace="~{fragments/bodyHeader :: bodyLoginHomeHeader}"/>
-    <div class="member-container" th:object="${student}">
+<div id="template-display">
+    <div th:replace="~{fragments/bodyHeader :: LoginStudentHeader}"/>
+    <div th:replace="~{fragments/bodyContainer :: studentOffCanvas}"/>
+
+    <div class="member-container body-display" th:object="${student}">
         <div th:replace="~{fragments/bodyContainer :: studentSideBar}"/>
 
         <div class="container body-container">

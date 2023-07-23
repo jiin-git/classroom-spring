@@ -2,14 +2,24 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: header}"/>
 <head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
+<head>
+<style>
+    @media (max-width: 770px) {
+        .img-display {
+            display: none;
+        }
+    }
+</style>
+</head>
 <body>
-<div>
-    <div th:replace="~{fragments/bodyHeader :: bodyLoginHomeHeader}"/>
+<div id="template-display">
+    <div th:replace="~{fragments/bodyHeader :: LoginInstructorHeader}"/>
+    <div th:replace="~{fragments/bodyContainer :: instructorOffCanvas}"/>
 
-    <div class="member-container" th:object="${instructor}">
+    <div class="member-container body-display" th:object="${instructor}">
         <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
 
-        <div class="container body-container">
+        <div class="body-container">
             <div class="p-3 border-bottom-lightgray">
                 <nav aria-label="breadcrumb"  class="d-flex align-items-center">
                     <ol class="breadcrumb m-0">
@@ -20,10 +30,10 @@
             </div>
 
             <div class="container p-3 h-100">
-                <div class="container-fluid bg-white border-lightgray p-0 h-75" >
+                <div class="container-fluid bg-white border-lightgray p-0" >
                     <div class="card mb-3 w-100" th:each="lecture : ${lectures}">
                         <div class="row g-0">
-                            <div class="col-md-4">
+                            <div class="col-md-4 img-display">
                                 <img src="..." class="img-fluid rounded-start" alt="...">
                             </div>
                             <div class="col-md-8">

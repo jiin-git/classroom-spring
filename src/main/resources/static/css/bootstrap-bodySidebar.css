@@ -23,3 +23,13 @@
     color: white;
     background-color: #232e5a;
 }
+
+@media (max-width: 1000px) {
+    .btn-group-vertical {
+        display: none;
+    }
+    .member-container {
+        grid-template-columns: auto;
+
+    }
+}

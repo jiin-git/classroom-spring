@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: header}"/>
 <head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
-
 <body>
-<div>
-    <div th:replace="~{fragments/bodyHeader :: bodyLoginHomeHeader}"/>
-    <div class="member-container">
+<div id="template-display">
+    <div th:replace="~{fragments/bodyHeader :: LoginStudentHeader}"/>
+    <div th:replace="~{fragments/bodyContainer :: studentOffCanvas}"/>
+
+    <div class="member-container body-display">
         <div th:replace="~{fragments/bodyContainer :: studentSideBar}"/>
 
         <div class="container body-container">
