@@ -10,7 +10,7 @@
     <div class="member-container body-display">
         <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
 
-        <div class="container body-container">
+        <div class="body-container">
             <div class="p-3 border-bottom-lightgray">
                 <nav aria-label="breadcrumb"  class="d-flex align-items-center">
                     <ol class="breadcrumb m-0">
@@ -21,7 +21,7 @@
             </div>
 
             <div class="container p-3 h-100">
-                <form class="card justify-content-center mb-3 w-100 h-50" method="post" th:action="@{/instructor/update/pw}">
+                <form class="card justify-content-center mb-3 w-100" method="post" th:action="@{/instructor/update/pw}">
                     <div class="card-body" th:object="${pwForm}">
                         <div class="mb-3">
                             <label for="loginPw" class="form-label gmarketSansFont">비밀번호</label>

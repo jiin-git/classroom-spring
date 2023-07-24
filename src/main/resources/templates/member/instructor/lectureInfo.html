@@ -10,7 +10,7 @@
   <div class="member-container body-display" th:object="${lecture}">
     <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
 
-    <div class="container body-container">
+    <div class="body-container">
       <div class="p-3 border-bottom-lightgray">
         <nav aria-label="breadcrumb"  class="d-flex align-items-center">
           <ol class="breadcrumb m-0">
@@ -20,8 +20,8 @@
         </nav>
       </div>
 
-      <div class="container p-3 h-100">
-        <form class="container-fluid bg-white border-lightgray h-75">
+      <div class="container p-3">
+        <form class="container-fluid bg-white border-lightgray pb-2">
           <div class="mb-3 mt-3">
             <label for="lectureId" class="form-label gmarketSansFont">강의번호</label>
             <input type="text" class="form-control readonly" id="lectureId" th:field="*{id}" readonly>

@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: header}"/>
 <head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
+
 <body>
 <div id="template-display">
 
@@ -11,7 +12,7 @@
   <div class="member-container body-display" th:object="${lecture}">
     <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
 
-    <div class="container body-container">
+    <div class="body-container">
       <div class="p-3 border-bottom-lightgray">
         <nav aria-label="breadcrumb"  class="d-flex align-items-center">
           <ol class="breadcrumb m-0">
@@ -21,8 +22,8 @@
         </nav>
       </div>
 
-      <div class="container p-3 h-100">
-        <form th:action method="post" class="container-fluid bg-white border-lightgray h-75">
+      <div class="container p-3">
+        <form th:action method="post" class="container-fluid bg-white border-lightgray pb-2">
           <div class="mb-3 mt-3">
             <label for="lectureId" class="form-label gmarketSansFont">강의번호</label>
             <input type="text" class="form-control readonly" id="lectureId" placeholder="강의번호를 입력해주세요."

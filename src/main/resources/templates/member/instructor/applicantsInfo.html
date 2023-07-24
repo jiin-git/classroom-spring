@@ -12,6 +12,11 @@
     .border-bottom-gray {
       border-bottom: 2px solid gray;
     }
+    @media (max-width: 550px) {
+      .fs-list {
+        font-size: 13px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -22,7 +27,7 @@
     <div class="member-container body-display">
     <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
 
-    <div class="container body-container">
+    <div class="body-container">
       <div class="p-3 border-bottom-lightgray">
         <nav aria-label="breadcrumb"  class="d-flex align-items-center">
           <ol class="breadcrumb m-0">
@@ -36,16 +41,16 @@
       <div class="container p-3 h-50">
         <div class="container-fluid bg-white border-lightgray p-3 h-75" >
           <div class="border-bottom-gray row w-100 m-0 p-2">
-            <p class="col-1 m-0 gmarketSansFont">ID</p>
-            <p class="col-2 m-0 gmarketSansFont">수강생</p>
+            <p class="col-1 m-0 gmarketSansFont fs-list">ID</p>
+            <p class="col-2 m-0 gmarketSansFont fs-list">수강생</p>
           </div>
           <div class="border-bottom-lightgray row w-100 m-0 p-2" th:each="applicant : ${applicants}">
-            <p class="col-1 m-0 pt-1 pb-1 sCoreDreamFont" th:text="${applicant.id}"></p>
-            <p class="col-2 m-0 pt-1 pb-1 sCoreDreamFont" th:text="${applicant.member.name}"></p>
+            <p class="col-1 m-0 pt-1 pb-1 sCoreDreamFont fs-list" th:text="${applicant.id}"></p>
+            <p class="col-2 m-0 pt-1 pb-1 sCoreDreamFont fs-list" th:text="${applicant.member.name}"></p>
           </div>
         </div>
         <div class="text-center mt-2">
-          <a class="btn btn-secondary" th:href="@{'/instructor/lecture/' + ${lectureId}}" >이전으로</a>
+          <a class="btn btn-secondary" th:href="@{'/instructor/lecture/' + ${lectureId}}">이전으로</a>
           <a class="btn btn-primary" th:href="@{/instructor/lectures}" >홈으로</a>
         </div>
       </div>
