@@ -10,7 +10,7 @@
     <div class="member-container body-display" th:object="${student}">
         <div th:replace="~{fragments/bodyContainer :: studentSideBar}"/>
 
-        <div class="container body-container">
+        <div class="body-container">
             <div class="p-3 border-bottom-lightgray">
                 <nav aria-label="breadcrumb"  class="d-flex align-items-center">
                     <ol class="breadcrumb m-0">
@@ -20,10 +20,10 @@
                 </nav>
             </div>
 
-            <div class="container p-3 h-100">
-                <div class="card mb-3 h-25 justify-content-center w-100">
+            <div class="container p-3">
+                <div class="card justify-content-center mb-3 w-100">
                     <div class="row g-0">
-                        <div class="col-md-4">
+                        <div class="col-md-4 img-display">
                             <img src="..." class="img-fluid rounded-start" alt="...">
                         </div>
                         <div class="col-md-8">

@@ -10,7 +10,7 @@
   <div class="member-container body-display" th:object="${lecture}">
     <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
 
-    <div class="container body-container">
+    <div class="body-container">
       <div class="p-3 border-bottom-lightgray">
         <nav aria-label="breadcrumb"  class="d-flex align-items-center">
           <ol class="breadcrumb m-0">
@@ -20,9 +20,9 @@
         </nav>
       </div>
 
-      <div class="container p-3 h-100">
+      <div class="container p-3">
         <form method="post"  th:action="@{'/student/cancel/lecture/' + ${lecture.id}}"
-              class="container-fluid bg-white border-lightgray h-75">
+              class="container-fluid bg-white border-lightgray">
           <div class="mb-3 mt-3">
             <label for="lectureId" class="form-label gmarketSansFont">강의번호</label>
             <input type="text" class="form-control readonly" id="lectureId" th:field="*{id}" readonly>
@@ -52,7 +52,7 @@
             <input type="text" class="form-control readonly" id="lectureStatus" th:field="*{lectureStatus}" readonly>
           </div>
 
-          <div class="text-center">
+          <div class="text-center mb-3">
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelLectureModal">강의 취소</button>
             <a class="btn btn-primary" th:href="@{/student/lectures}" >홈으로</a>
           </div>
@@ -67,7 +67,6 @@
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                   <input type="submit" class="btn btn-danger" th:value="'강의 취소'">
-
                 </div>
               </div>
             </div>

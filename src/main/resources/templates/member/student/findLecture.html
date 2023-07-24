@@ -8,6 +8,34 @@
         margin-left: auto;
         margin-right: 0;
     }
+    .option-margin {
+        margin-right: 5px;
+    }
+
+    @media (max-width: 800px) {
+        .search-font {
+            font-size: 10px;
+        }
+        .option-margin {
+            margin-right: 0px;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .card-title {
+            font-size: 17px;
+        }
+        .card-text {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        #addLectureBtn button, #cancelLectureBtn button, #notAddLectureBtn button{
+            font-size: 13px;
+            width: 80px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    }
 </style>
 </head>
 <body>
@@ -18,7 +46,7 @@
     <div class="member-container body-display" th:object="${student}">
         <div th:replace="~{fragments/bodyContainer :: studentSideBar}"/>
 
-        <div class="container body-container">
+        <div class="body-container">
             <div class="p-3 border-bottom-lightgray">
                 <nav aria-label="breadcrumb"  class="d-flex align-items-center">
                     <ol class="breadcrumb m-0">
@@ -29,21 +57,21 @@
             </div>
 
             <div class="container p-3 h-100 ">
-
-                <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
+                <nav class="navbar bg-body-tertiary" style="background-color: #e3f2fd;">
                     <div class="container-fluid">
-                        <div class="collapse navbar-collapse" id="searchBar">
+                        <div id="searchBar">
                             <form th:action="@{/student/find/lectures}" class="d-flex" method="get" th:object="${searchConditionDto}">
-                                <select class="form-select-sm" th:name="status" th:value="*{status}">
+                                <select class="form-select-sm search-font option-margin" th:name="status" th:value="*{status}">
                                     <option th:value="null" selected>강의 상태</option>
                                     <option th:each="lectureStatus : ${lectureStatusList}"
                                             th:value="${lectureStatus}" th:text="${lectureStatus}"></option>
                                 </select>
-                                <select class="form-select-sm" th:name="condition" th:value="*{condition}">
+                                <select class="form-select-sm search-font option-margin" th:name="condition" th:value="*{condition}">
                                     <option th:value="null" selected>검색 조건</option>
                                     <option th:each="lectrueSearchCondition : ${lectureSearchConditions}"
                                             th:value="${lectrueSearchCondition}" th:text="${lectrueSearchCondition}"></option>
                                 </select>
+                                <br/>
                                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" th:name="text" th:value="*{text}">
                                 <button class="btn btn-outline-success" type="submit">Search</button>
                                 <div th:if="${#fields.hasGlobalErrors()}">
@@ -57,7 +85,7 @@
                 <div class="container-fluid bg-white border-lightgray h-75 p-0" >
                     <div class="card mb-3 w-100" th:each="lecture: ${lectures}">
                         <div class="row g-0">
-                            <div class="col-md-4">
+                            <div class="col-md-4 img-display">
                                 <img src="..." class="img-fluid rounded-start" alt="...">
                             </div>
                             <div class="col-md-8">
