@@ -68,6 +68,7 @@
           <div th:if="${#fields.hasGlobalErrors()}" class="mb-3">
             <p class="alert alert-danger" th:text="${#fields.globalErrors()}"></p>
           </div>
+
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeLectureModal">강의 수정</button>
           <div class="modal fade" id="changeLectureModal" tabindex="-1" aria-labelledby="changeLectureModalLabel" aria-hidden="true">
             <div class="modal-dialog">

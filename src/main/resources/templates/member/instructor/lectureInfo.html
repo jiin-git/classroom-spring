@@ -54,9 +54,7 @@
             <label for="appliedStudent" class="form-label gmarketSansFont">수강생 명단</label><br>
             <a type="button" class="btn btn-secondary" id="appliedStudent" th:href="@{'/instructor/lecture/' + ${lecture.id} + '/applicants'}">명단 보기</a>
           </div>
-
           <a type="button" class="btn btn-primary" th:href="@{'/instructor/edit/lecture/' + ${lecture.id}}">강의 수정</a>
-
         </form>
       </div>
     </div>
