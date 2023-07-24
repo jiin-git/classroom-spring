@@ -10,8 +10,18 @@
     border: 1px solid lightgray;
 }
 
+.form-container {
+    height: 450px;
+}
+
 @media (max-width: 1000px) {
     .body-container {
         width: 100%;
+    }
+}
+
+@media (max-width: 770px) {
+    .img-display {
+        display: none;
     }
 }
