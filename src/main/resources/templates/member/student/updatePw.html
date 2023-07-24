@@ -20,8 +20,8 @@
                 </nav>
             </div>
 
-            <div class="container p-3 h-100">
-                <form class="card justify-content-center mb-3 w-100 h-50" method="post" th:action="@{/student/update/pw}">
+            <div class="container p-3">
+                <form class="card justify-content-center mb-3 w-100" method="post" th:action="@{/student/update/pw}">
                     <div class="card-body" th:object="${pwForm}">
                         <div class="mb-3">
                             <label for="loginPw" class="form-label gmarketSansFont">비밀번호</label>
@@ -35,7 +35,9 @@
                             <div th:if="${#fields.hasGlobalErrors()}" class="field-error" th:text="${#fields.globalErrors()}"></div>
                         </div>
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">비밀번호 변경</button>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">비밀번호 변경</button>
+                        </div>
                         <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
