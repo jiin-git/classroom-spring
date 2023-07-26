@@ -8,6 +8,7 @@ import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.dto.UpdatePwDto;
 import basic.classroom.service.InstructorService;
 import basic.classroom.service.LectureService;
+import basic.classroom.service.PagingService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +28,31 @@ public class InstructorController {
 
     private final InstructorService instructorService;
     private final LectureService lectureService;
+    private final PagingService pagingService;
 
     @GetMapping("/instructor/lectures")
-    public String myLecture(HttpSession session, Model model) {
+    public String pagingMyLecture(@RequestParam(required = false) Long page, HttpSession session, Model model) {
         Instructor instructor = findInstructor(session);
         List<Lecture> lectures = instructorService.findLectures(instructor.getId());
 
+        int lecturesCnt = lectures.size();
+        int pageSize = pagingService.getPageSize(lecturesCnt);
+        int currentPage = 1;
+        int startPage = 1;
+        int endPage = pageSize;
+
+        if (page != null) {
+            currentPage = page.intValue();
+        }
+
+        List<Lecture> showLectures = pagingService.filteringLectures(lectures, currentPage);
+        List<Integer> showPages = pagingService.getShowPages(lecturesCnt, currentPage);
+
         model.addAttribute("instructor", instructor);
-        model.addAttribute("lectures", lectures);
+        model.addAttribute("lectures", showLectures);
+        model.addAttribute("pages", showPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "member/instructor/lectureList";
     }

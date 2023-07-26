@@ -6,6 +6,7 @@ import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.dto.UpdatePwDto;
 import basic.classroom.service.LectureService;
+import basic.classroom.service.PagingService;
 import basic.classroom.service.StudentService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +26,31 @@ public class StudentController {
 
     private final StudentService studentService;
     private final LectureService lectureService;
+    private final PagingService pagingService;
 
     @GetMapping("/student/lectures")
-    public String myLecture(HttpSession session, Model model) {
+    public String pagingMyLecture(@RequestParam(required = false) Long page, HttpSession session, Model model) {
         Student student = findStudent(session);
         List<Lecture> lectures = studentService.findAllLectures(student.getId());
 
+        int lecturesCnt = lectures.size();
+        int pageSize = pagingService.getPageSize(lecturesCnt);
+        int currentPage = 1;
+        int startPage = 1;
+        int endPage = pageSize;
+
+        if (page != null) {
+            currentPage = page.intValue();
+        }
+
+        List<Lecture> showLectures = pagingService.filteringLectures(lectures, currentPage);
+        List<Integer> showPages = pagingService.getShowPages(lecturesCnt, currentPage);
+
         model.addAttribute("student", student);
-        model.addAttribute("lectures", lectures);
+        model.addAttribute("lectures", showLectures);
+        model.addAttribute("pages", showPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "member/student/lectureList";
     }
@@ -53,29 +71,23 @@ public class StudentController {
         return "redirect:/student/lectures";
     }
 
-//    @GetMapping("/student/find/lectures")
-//    public String findLectures(HttpSession session, Model model) {
-//        Student student = findStudent(session);
-//        List<Lecture> lectures = lectureService.findAll();
-//
-//        model.addAttribute("student", student);
-//        model.addAttribute("lectures", lectures);
-//        model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
-//        model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
-//
-//        return "member/student/findLecture";
-//    }
-
     @GetMapping("/student/find/lectures")
     public String findLectures(@ModelAttribute SearchConditionDto searchConditionDto, BindingResult bindingResult, HttpSession session, Model model) {
         Student student = findStudent(session);
         List<Lecture> lectures = lectureService.findPersonalizedLectures(searchConditionDto);
 
-        log.info("searchConditionDto = {}", searchConditionDto);
-        log.info("lectureStatus = {}", searchConditionDto.getStatus());
-        log.info("searchCondition = {}", searchConditionDto.getCondition());
-        log.info("text = {}", searchConditionDto.getText());
-        log.info("lectures = {}", lectures);
+        int lecturesCnt = lectures.size();
+        int pageSize = pagingService.getPageSize(lecturesCnt);
+        int currentPage = 1;
+        int startPage = 1;
+        int endPage = pageSize;
+
+        if (searchConditionDto.getPage() != null) {
+            currentPage = searchConditionDto.getPage().intValue();
+        }
+
+        List<Lecture> showLectures = pagingService.filteringLectures(lectures, currentPage);
+        List<Integer> showPages = pagingService.getShowPages(lecturesCnt, currentPage);
 
         // Validation
         String condition = searchConditionDto.getCondition();
@@ -83,41 +95,28 @@ public class StudentController {
         if (condition != null && !condition.isBlank()) {
             if (text.isBlank()) {
                 bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색명을 함께 입력해주세요.");
-                log.info("bindingResult Result = {}" , bindingResult.hasErrors());
-
-                model.addAttribute("student", student);
-                model.addAttribute("lectures", lectures);
-                model.addAttribute("searchConditionDto", searchConditionDto);
-                model.addAttribute("lectureStatusReady", LectureStatus.READY);
-                model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
-                model.addAttribute("lectureStatusFull", LectureStatus.FULL);
-                model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
-                model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
-
-                return "member/student/findLecture";
+                return findLecturesTemplate(searchConditionDto, model, student, showLectures, showPages, startPage, endPage);
             }
         }
 
         if (text != null && !text.isBlank()) {
             if (condition == null || condition.isBlank()) {
                 bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색 조건을 설정해주세요.");
-                log.info("bindingResult Result = {}" , bindingResult.hasErrors());
+                return findLecturesTemplate(searchConditionDto, model, student, showLectures, showPages, startPage, endPage);
 
-                model.addAttribute("student", student);
-                model.addAttribute("lectures", lectures);
-                model.addAttribute("searchConditionDto", searchConditionDto);
-                model.addAttribute("lectureStatusReady", LectureStatus.READY);
-                model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
-                model.addAttribute("lectureStatusFull", LectureStatus.FULL);
-                model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
-                model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
-
-                return "member/student/findLecture";
             }
         }
 
+        return findLecturesTemplate(searchConditionDto, model, student, showLectures, showPages, startPage, endPage);
+    }
+
+    private static String findLecturesTemplate(SearchConditionDto searchConditionDto, Model model, Student student,
+                                               List<Lecture> showLectures, List<Integer> showPages, int startPage, int endPage) {
         model.addAttribute("student", student);
-        model.addAttribute("lectures", lectures);
+        model.addAttribute("lectures", showLectures);
+        model.addAttribute("pages", showPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("searchConditionDto", searchConditionDto);
         model.addAttribute("lectureStatusReady", LectureStatus.READY);
         model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
