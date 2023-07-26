@@ -41,21 +41,34 @@
                 </div>
 
                 <nav class="d-flex justify-content-center mt-3" aria-label="Page navigation">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
+                    <form method="get" th:action="@{/instructor/lectures}">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <button type="submit" class="page-link" th:name="page" th:value="${startPage}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </button>
+                            </li>
+
+                            <li class="page-item" th:unless="${pages.contains(startPage)}">
+                                <a class="page-link" href="#" aria-label="morePrevious" th:text="'...'"></a>
+                            </li>
+
+                            <li class="page-item" th:each="page: ${pages}">
+                                <button type="submit" class="page-link" th:name="page" th:value="${page}" th:text="${page}"></button>
+                            </li>
+
+                            <li class="page-item" th:unless="${pages.contains(endPage)}">
+                                <a class="page-link" href="#" aria-label="moreNext" th:text="'...'"></a>
+                            </li>
+
+                            <li class="page-item">
+                                <button class="page-link" th:name="page" th:value="${endPage}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </button>
+                            </li>
+                        </ul>
+
+                    </form>
                 </nav>
             </div>
         </div>

@@ -20,8 +20,8 @@
                 </nav>
             </div>
 
-            <div class="container p-3 h-100">
-                <div class="container-fluid bg-white border-lightgray h-75 p-0">
+            <div class="container p-3">
+                <div class="container-fluid bg-white border-lightgray p-0">
                     <div class="card mb-3 w-100" th:each="lecture: ${lectures}">
                         <div class="row g-0">
                             <div class="col-md-4 img-display">
@@ -33,31 +33,43 @@
                                     <p class="card-text"><small class="text-body-secondary" th:text="${lecture.instructor.member.name}"></small></p>
                                     <a class="btn btn-secondary" th:href="@{'/student/lecture/' + ${lecture.id}}">강의정보</a>
 
-<!--                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelLectureModal">강의 취소</button>-->
-<!--                                    <div class="modal fade" id="cancelLectureModal" tabindex="-1" aria-labelledby="cancelLectureModalLabel" aria-hidden="true">-->
-<!--                                        <div class="modal-dialog">-->
-<!--                                            <div class="modal-content">-->
-<!--                                                <div class="modal-header">-->
-<!--                                                    <h1 class="modal-title fs-5" id="cancelLectureModalLabel">강의 취소</h1>-->
-<!--                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                                                </div>-->
-<!--                                                <div class="modal-body" th:text="'정말로 강의를 취소하시겠습니까?'"></div>-->
-<!--                                                <div class="modal-footer">-->
-<!--                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>-->
-<!--                                                    <form method="post"  th:action="@{'/student/cancel/lecture/' + ${lecture.id}}">-->
-<!--                                                        <input type="submit" class="btn btn-danger" th:value="'강의 취소'">-->
-<!--                                                    </form>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <nav class="d-flex justify-content-center mt-3" aria-label="Page navigation">
+                    <form method="get" th:action="@{/student/lectures}">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <button type="submit" class="page-link" th:name="page" th:value="${startPage}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </button>
+                            </li>
+
+                            <li class="page-item" th:unless="${pages.contains(startPage)}">
+                                <a class="page-link" href="#" aria-label="morePrevious" th:text="'...'"></a>
+                            </li>
+
+                            <li class="page-item" th:each="page: ${pages}">
+                                <button type="submit" class="page-link" th:name="page" th:value="${page}" th:text="${page}"></button>
+                            </li>
+
+                            <li class="page-item" th:unless="${pages.contains(endPage)}">
+                                <a class="page-link" href="#" aria-label="moreNext" th:text="'...'"></a>
+                            </li>
+
+                            <li class="page-item">
+                                <button class="page-link" th:name="page" th:value="${endPage}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </button>
+                            </li>
+                        </ul>
+
+                    </form>
+                </nav>
+            </div>
         </div>
     </div>
 
