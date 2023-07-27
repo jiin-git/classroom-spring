@@ -3,11 +3,11 @@ package basic.classroom.domain;
 import basic.classroom.dto.CreateMemberDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Embeddable
+@NoArgsConstructor
 @Getter @Setter
 public class Member {
     private String name;
@@ -19,9 +19,6 @@ public class Member {
 //    private MemberStatus memberStatus;
 
 //    private List<Mail> mailbox;
-
-    protected Member() {
-    }
 
     public Member(CreateMemberDto createMemberDto) {
         this.name = createMemberDto.getName();
