@@ -28,8 +28,7 @@ public class CreateMemberController {
     @GetMapping("/create/member")
     public String createMemberForm(Model model) {
         model.addAttribute("createMemberForm", new CreateMemberDto());
-        model.addAttribute("student", MemberStatus.STUDENT);
-        model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
+        addModelMemberStatus(model);
         return "login/createMemberForm";
     }
 
@@ -38,8 +37,7 @@ public class CreateMemberController {
         // 검증 로직
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
-            model.addAttribute("student", MemberStatus.STUDENT);
-            model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
+            addModelMemberStatus(model);
             return "login/createMemberForm";
         }
 
@@ -59,5 +57,10 @@ public class CreateMemberController {
     @GetMapping("/create/member/result")
     public String createMemberResult() {
         return "login/createMemberResult";
+    }
+
+    private static void addModelMemberStatus(Model model) {
+        model.addAttribute("student", MemberStatus.STUDENT);
+        model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
     }
 }
