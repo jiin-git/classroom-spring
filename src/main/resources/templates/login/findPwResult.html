@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head}"/>
+<head><link rel="stylesheet" href="/css/login.css"></head>
 
 <body>
 <div id="template-display">
@@ -10,7 +11,7 @@
             <h2 class="alert alert-danger login-alert-result display-vertical-center" th:if="${loginPw == null}" th:value="${loginPw}">
                 유효하는 회원이 존재하지 않습니다. 다시 확인해주세요.
             </h2>
-            <h2 class="gmarketSansFont fw-bold" th:if="${loginPw != null}" th:value="${loginPw}" th:text="'임시 비밀번호는 ' + ${loginPw} + ' 입니다.'" ></h2>
+            <h2 class="login-help-result" th:if="${loginPw != null}" th:value="${loginPw}" th:text="'임시 비밀번호는 ' + ${loginPw} + ' 입니다.'" ></h2>
 
             <div class="text-center w-100">
                 <a href="/login" class="btn btn-primary login-result-btn">로그인 화면</a>
