@@ -11,7 +11,7 @@
     height: 100%;
 }
 
-.body-display-vertical-center {
+.display-vertical-center {
     display: flex;
     flex-direction: column;
     align-items: center;
