@@ -1,5 +1,7 @@
 package basic.classroom.service;
 
+import basic.classroom.dto.FindIdDto;
+import basic.classroom.dto.FindPwDto;
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,11 @@ public class LoginHelpService {
     private final StudentRepository studentRepository;
 
     @Transactional
-    public List<String> findLoginIds(String name, String email, MemberStatus memberStatus) {
+    public List<String> findLoginIds(FindIdDto findIdDto) {
+        String name = findIdDto.getName();
+        String email = findIdDto.getEmail();
+        MemberStatus memberStatus = findIdDto.getMemberStatus();
+
         if (memberStatus == MemberStatus.INSTRUCTOR) {
             return getInstructorIds(name, email);
         }
@@ -48,7 +53,11 @@ public class LoginHelpService {
     }
 
     @Transactional
-    public String findLoginPw(String loginId, String email, MemberStatus memberStatus) {
+    public String findLoginPw(FindPwDto findPwDto) {
+        String loginId = findPwDto.getLoginId();;
+        String email = findPwDto.getEmail();
+        MemberStatus memberStatus = findPwDto.getMemberStatus();
+
         if (memberStatus == MemberStatus.INSTRUCTOR) {
             return getInstructorPassword(loginId, email);
         }

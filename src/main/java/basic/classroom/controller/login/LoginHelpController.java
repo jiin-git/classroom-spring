@@ -1,6 +1,8 @@
 package basic.classroom.controller.login;
 
 import basic.classroom.domain.MemberStatus;
+import basic.classroom.dto.FindIdDto;
+import basic.classroom.dto.FindPwDto;
 import basic.classroom.service.LoginHelpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +44,7 @@ public class LoginHelpController {
         }
 
         // 성공 로직
-        List<String> loginIds = loginHelpService.findLoginIds(findIdDto.getName(), findIdDto.getEmail(), findIdDto.getMemberStatus());
+        List<String> loginIds = loginHelpService.findLoginIds(findIdDto);
         redirectAttributes.addFlashAttribute("loginIds", loginIds);
         return "redirect:/find/ids/result";
     }
@@ -74,7 +76,7 @@ public class LoginHelpController {
         }
 
         // 성공 로직
-        String loginPw = loginHelpService.findLoginPw(findPwDto.getLoginId(), findPwDto.getEmail(), findPwDto.getMemberStatus());
+        String loginPw = loginHelpService.findLoginPw(findPwDto);
         redirectAttributes.addFlashAttribute("loginPw", loginPw);
         return "redirect:/find/pw/result";
     }
