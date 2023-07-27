@@ -1,16 +1,11 @@
-.member-container {
-    display: grid;
-    grid-template-columns: 250px auto;
-    width: 100%;
-    height: 1200px;
-}
-.btn-group-vertical {
-    border-radius: 0px;
-    background-color: #111938;
+.sidebar {
     justify-content: flex-start;
+    background-color: #111938;
+    border-radius: 0px;
     height: 100%;
     width: 100%;
 }
+
 .sidebar-btn {
     display: flex;
     justify-content: center;
@@ -18,17 +13,24 @@
     border-bottom: 1px solid black;
     color: white;
 }
+
 .sidebar-btn:hover {
     color: white;
     background-color: #232e5a;
 }
 
+.offcanvas-header {
+    height: 80px;
+}
+
 @media (max-width: 1000px) {
-    .btn-group-vertical {
+    .sidebar {
         display: none;
     }
-    .member-container {
-        grid-template-columns: auto;
+}
 
+@media (max-width: 500px) {
+    .offcanvas-header {
+        height: 50px;
     }
 }
