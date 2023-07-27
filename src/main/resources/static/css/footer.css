@@ -11,7 +11,6 @@
 }
 
 .footer-link {
-    display: block;
     margin: 5px;
     color: darkgray;
 }
@@ -24,7 +23,7 @@
     .footer {
         height: 100px;
     }
-    .footer-p {
+    .footer-p, .footer-link {
         font-size: 10px;
     }
 }
