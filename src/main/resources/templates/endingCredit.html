@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<head>
+    <style>
+        /*#reference {*/
+        /*    margin-top: 10px;*/
+        /*    margin-bottom: 10px;*/
+        /*}*/
+        #reference a {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="template-display">
+    <div th:replace="~{fragments/bodyHeader :: bodyLoginHeader}"/>
+
+    <div id="reference" class="body-display body-display-vertical-center position-relative mt-3 mb-3">
+        <div class="mb-3">
+            <h3 class="text-center gmarketSansFont">Img&Icons</h3>
+            <a class="gmarketSansFont" target="_blank" href="https://www.freepik.com/free-vector/happy-women-learning-language-online-isolated-flat-vector-illustration-cartoon-female-characters-taking-individual-lessons-through-messenger-education-digital-technology-concept_10613101.htm#query=education&position=20&from_view=search&track=sph">pch.vector(Freepik)</a>
+            <a class="gmarketSansFont" target="_blank" href="https://icons.getbootstrap.com/">Bootstrap Icons</a>
+        </div>
+
+        <div class="mb-3">
+            <h3 class="text-center gmarketSansFont">Fonts</h3>
+            <a class="gmarketSansFont" target="_blank" href="https://corp.gmarket.com/fonts/">Gmarket Sans</a>
+            <a class="oneMobileFont" target="_blank" href="https://www.onestorecorp.com/sv/fordev_font/">One Mobile Title</a>
+            <a class="kohiFont" target="_blank" href="https://csp.kohi.or.kr/user/bbs/BD_selectBbs.do?q_bbsCode=1070&q_bbscttSn=20211118135429370">KOHI Baeum</a>
+        </div>
+
+        <div class="mb-3">
+            <h3 class="text-center gmarketSansFont">Open Source</h3>
+            <a class="gmarketSansFont" target="_blank" href="https://spring.io/">Java Spring</a>
+            <a class="gmarketSansFont" target="_blank" href="https://projectlombok.org/">Lombok</a>
+            <a class="gmarketSansFont" target="_blank" href="https://www.thymeleaf.org/">Thymeleaf</a>
+            <a class="gmarketSansFont" target="_blank" href="https://getbootstrap.com/">Bootstrap</a>
+        </div>
+
+        <div class="mb-3">
+            <h3 class="text-center gmarketSansFont">Database</h3>
+            <a class="gmarketSansFont" target="_blank" href="https://www.h2database.com/html/main.html">H2 Database</a>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: endingCreditFooter}"/>
+</div>
+</body>
+</html>

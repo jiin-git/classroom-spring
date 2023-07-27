@@ -17,7 +17,12 @@ public class HomeController {
             return "home";
         }
 
-        String memberStatus = String.valueOf(session.getAttribute(SessionConst.MEMBER_STATUS));
-        return "redirect:/" + memberStatus.toLowerCase() + "/lectures";
+        String memberStatus = String.valueOf(session.getAttribute(SessionConst.MEMBER_STATUS)).toLowerCase();
+        return "redirect:/" + memberStatus + "/lectures";
+    }
+
+    @GetMapping("/ending/credit")
+    public String endingCredit() {
+        return "endingCredit";
     }
 }
