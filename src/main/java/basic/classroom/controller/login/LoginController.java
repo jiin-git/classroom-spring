@@ -29,10 +29,7 @@ public class LoginController {
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("loginForm", new LoginDto());
-        model.addAttribute("student", MemberStatus.STUDENT);
-        model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
-
-        return "login/loginForm";
+        return goToLoginForm(model);
     }
 
     @PostMapping("/login")
