@@ -1,5 +1,6 @@
 package basic.classroom.domain;
 
+import basic.classroom.dto.CreateMemberDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,13 @@ public class Member {
 //    private List<Mail> mailbox;
 
     protected Member() {
+    }
+
+    public Member(CreateMemberDto createMemberDto) {
+        this.name = createMemberDto.getName();
+        this.loginId = createMemberDto.getLoginId();
+        this.password = createMemberDto.getLoginPw();
+        this.email = createMemberDto.getEmail();
     }
 
     public Member(String name, String loginId, String password, String email) {
