@@ -25,8 +25,7 @@ public class LoginHelpController {
     @GetMapping("/find/ids")
     public String findLoginIdsForm(Model model) {
         model.addAttribute("findIdsForm", new FindIdDto());
-        model.addAttribute("student", MemberStatus.STUDENT);
-        model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
+        addModelMemberStatus(model);
 
         return "login/findIdsForm";
     }
@@ -37,9 +36,7 @@ public class LoginHelpController {
 
         // 검증 로직
         if (bindingResult.hasErrors()) {
-            model.addAttribute("student", MemberStatus.STUDENT);
-            model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
-
+            addModelMemberStatus(model);
             return "login/findIdsForm";
         }
 
@@ -58,8 +55,7 @@ public class LoginHelpController {
     @GetMapping("/find/pw")
     public String findPwForm(Model model) {
         model.addAttribute("findPwForm", new FindPwDto());
-        model.addAttribute("student", MemberStatus.STUDENT);
-        model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
+        addModelMemberStatus(model);
 
         return "login/findPwForm";
     }
@@ -69,9 +65,7 @@ public class LoginHelpController {
                               BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         // 검증 로직
         if (bindingResult.hasErrors()) {
-            model.addAttribute("student", MemberStatus.STUDENT);
-            model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
-
+            addModelMemberStatus(model);
             return "login/findPwForm";
         }
 
@@ -87,4 +81,8 @@ public class LoginHelpController {
         return "login/findPwResult";
     }
 
+    private static void addModelMemberStatus(Model model) {
+        model.addAttribute("student", MemberStatus.STUDENT);
+        model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
+    }
 }
