@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}"/>
-<head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
+<head th:replace="~{fragments/head :: head}"/>
+<head th:replace="~{fragments/body :: bodycss}"/>
 <head>
 <style>
     .position-right {
@@ -40,11 +40,11 @@
 </head>
 <body>
 <div id="template-display">
-    <div th:replace="~{fragments/bodyHeader :: LoginStudentHeader}"/>
-    <div th:replace="~{fragments/bodyContainer :: studentOffCanvas}"/>
+    <div th:replace="~{fragments/header :: loginStudentHeader}"/>
+    <div th:replace="~{fragments/body :: studentOffCanvas}"/>
 
     <div class="member-container body-display" th:object="${student}">
-        <div th:replace="~{fragments/bodyContainer :: studentSideBar}"/>
+        <div th:replace="~{fragments/body :: studentSideBar}"/>
 
         <div class="body-container">
             <div class="p-3 border-bottom-lightgray">

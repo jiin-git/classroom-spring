@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}"></head>
+<head th:replace="~{fragments/head :: head}"></head>
 <head>
-    <style>
-        /*#reference {*/
-        /*    margin-top: 10px;*/
-        /*    margin-bottom: 10px;*/
-        /*}*/
-        #reference a {
-            display: block;
-            text-decoration: none;
-            text-align: center;
-        }
-    </style>
+<style>
+#reference a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+}
+</style>
 </head>
 <body>
 <div id="template-display">
-    <div th:replace="~{fragments/bodyHeader :: bodyLoginHeader}"/>
+    <div th:replace="~{fragments/header :: loginHeader}"/>
 
-    <div id="reference" class="body-display body-display-vertical-center position-relative mt-3 mb-3">
+    <div id="reference" class="body-display display-vertical-center position-relative mt-3 mb-3">
         <div class="mb-3">
             <h3 class="text-center gmarketSansFont">Img&Icons</h3>
             <a class="gmarketSansFont" target="_blank" href="https://www.freepik.com/free-vector/happy-women-learning-language-online-isolated-flat-vector-illustration-cartoon-female-characters-taking-individual-lessons-through-messenger-education-digital-technology-concept_10613101.htm#query=education&position=20&from_view=search&track=sph">pch.vector(Freepik)</a>

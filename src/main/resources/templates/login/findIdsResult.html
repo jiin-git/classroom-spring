@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}"/>
+<head th:replace="~{fragments/head :: head}"/>
 
 <head>
 <link href="https://webfontworld.github.io/SCoreDream/SCoreDream.css" rel="stylesheet">
@@ -21,11 +21,11 @@
 
 <body>
 <div id="template-display">
-    <div th:replace="~{fragments/bodyHeader :: bodyLoginHeader}"/>
+    <div th:replace="~{fragments/header :: loginHeader}"/>
     <div class="text-center">
-        <div class="container login-result-container body-display body-display-vertical-center">
+        <div class="container login-result-container body-display display-vertical-center">
             <h2 th:if="${loginIds.isEmpty()}"
-                class="alert alert-danger alert-result body-display-vertical-center" role="alert">
+                class="alert alert-danger alert-result display-vertical-center" role="alert">
                 유효하는 회원이 존재하지 않습니다. 다시 확인해주세요.
             </h2>
             <div class="mb-3" th:unless="${loginIds.isEmpty()}">

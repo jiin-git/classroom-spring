@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}"/>
+<head th:replace="~{fragments/head :: head}"/>
 <head>
 <style>
   .btn-width-250 {
@@ -10,10 +10,10 @@
 </head>
 <body>
 <div id="template-display">
-  <div th:replace="~{fragments/bodyHeader :: bodyLoginHeader}"/>
+  <div th:replace="~{fragments/header :: loginHeader}"/>
   <div class="text-center">
-    <div class="container login-result-container body-display body-display-vertical-center">
-      <h2 class="alert alert-primary alert-result body-display-vertical-center" role="alert">
+    <div class="container login-result-container body-display display-vertical-center">
+      <h2 class="alert alert-primary alert-result display-vertical-center" role="alert">
         회원 가입이 완료되었습니다.
       </h2>
       <a class="btn btn-lg btn-primary btn-width-250" href="/login">로그인 화면</a>

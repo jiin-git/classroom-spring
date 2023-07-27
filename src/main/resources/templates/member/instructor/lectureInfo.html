@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}"/>
-<head th:replace="~{fragments/bodyContainer :: bodyContainerCss}"/>
+<head th:replace="~{fragments/head :: head}"/>
+<head th:replace="~{fragments/body :: bodycss}"/>
 <body>
 <div id="template-display">
-  <div th:replace="~{fragments/bodyHeader :: LoginInstructorHeader}"/>
-  <div th:replace="~{fragments/bodyContainer :: instructorOffCanvas}"/>
+  <div th:replace="~{fragments/header :: loginInstructorHeader}"/>
+  <div th:replace="~{fragments/body :: instructorOffCanvas}"/>
 
   <div class="member-container body-display" th:object="${lecture}">
-    <div th:replace="~{fragments/bodyContainer :: instructorSideBar}"/>
+    <div th:replace="~{fragments/body :: instructorSideBar}"/>
 
     <div class="body-container">
       <div class="p-3 border-bottom-lightgray">

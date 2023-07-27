@@ -1,60 +1,54 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}"></head>
+<head th:replace="~{fragments/head :: head}"></head>
 <head>
-    <style>
-        .img-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 500px;
-            text-align: center;
-            margin-top: 50px;
-            margin-bottom: 50px;
+<style>
+    .home-img-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 500px;
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+    .home-img {
+        height: 500px;
+        object-fit: contain;
+    }
+    .home-intro {
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        font-weight: bold;
+        font-size: 30px;
+        color: white;
+        background-color: slategray;
+        padding: 10px 0px 10px 0px;
+        opacity: 50%;
+    }
+
+    @media (max-width: 500px) {
+        .home-img-container {
+            margin: 0px;
         }
         .home-img {
-            height: 500px;
-            object-fit: contain;
+            height: 180px;
         }
         .home-intro {
-            position: absolute;
-            text-align: center;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 100%;
-            font-weight: bold;
-            font-size: 30px;
-            color: white;
-            background-color: slategray;
-            padding: 10px 0px 10px 0px;
-            opacity: 50%;
+            font-size: 20px;
         }
-
-        @media (max-width: 500px) {
-            .home-container {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .img-container {
-                margin: 0px;
-            }
-            .home-img {
-                height: 180px;
-            }
-            .home-intro {
-                font-size: 20px;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 <div id="template-display">
-    <div th:replace="~{fragments/bodyHeader :: bodyHomeHeader}"/>
-    <div class="body-display body-display-vertical-center position-relative">
+    <div th:replace="~{fragments/header :: homeHeader}"/>
+    <div class="body-display display-vertical-center position-relative">
         <h2 class="home-intro gmarketSansFont">통합 강의 사이트 ClassRoom.</h2>
-        <div class="img-container"><img class="home-img" th:src="@{img/education.jpg}"></div>
-        <!-- <a href="https://www.freepik.com/free-vector/happy-women-learning-language-online-isolated-flat-vector-illustration-cartoon-female-characters-taking-individual-lessons-through-messenger-education-digital-technology-concept_10613101.htm#query=education&position=20&from_view=search&track=sph">Image by pch.vector</a> on Freepik-->
+        <div class="home-img-container"><img class="home-img" th:src="@{img/education.jpg}"></div>
     </div>
     <div th:replace="~{fragments/footer :: footer}"/>
 </div>

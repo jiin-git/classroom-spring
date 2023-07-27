@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}"/>
+<head th:replace="~{fragments/head :: head}"/>
 <head><link rel="stylesheet" href="/css/login.css"></head>
 
 <head>
@@ -31,8 +31,8 @@
 
 <body>
 <div id="template-display">
-  <div th:replace="~{fragments/bodyHeader :: bodyLoginHeader}"/>
-  <div class="body-display body-display-vertical-center">
+  <div th:replace="~{fragments/header :: loginHeader}"/>
+  <div class="body-display display-vertical-center">
     <div class="container login-container h-100">
       <h3 class="login-header kohiFont">ClassRoom</h3>
       <br/>
