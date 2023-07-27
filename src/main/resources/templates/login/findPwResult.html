@@ -7,7 +7,7 @@
     <div th:replace="~{fragments/header :: loginHeader}"/>
     <div class="body-display display-vertical-center">
         <div class="container login-result-container display-vertical-center">
-            <h2 class="alert alert-danger alert-result display-vertical-center" th:if="${loginPw == null}" th:value="${loginPw}">
+            <h2 class="alert alert-danger login-alert-result display-vertical-center" th:if="${loginPw == null}" th:value="${loginPw}">
                 유효하는 회원이 존재하지 않습니다. 다시 확인해주세요.
             </h2>
             <h2 class="gmarketSansFont fw-bold" th:if="${loginPw != null}" th:value="${loginPw}" th:text="'임시 비밀번호는 ' + ${loginPw} + ' 입니다.'" ></h2>

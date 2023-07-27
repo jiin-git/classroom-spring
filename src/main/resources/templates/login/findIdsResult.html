@@ -9,7 +9,7 @@
         font-family: SCoreDream;
         font-weight: normal;
     }
-    .result-ids-container {
+    .ids-result-container {
         height: 300px;
         border: 1px solid gray;
         border-radius: 5px;
@@ -25,12 +25,12 @@
     <div class="text-center">
         <div class="container login-result-container body-display display-vertical-center">
             <h2 th:if="${loginIds.isEmpty()}"
-                class="alert alert-danger alert-result display-vertical-center" role="alert">
+                class="alert alert-danger login-alert-result display-vertical-center" role="alert">
                 유효하는 회원이 존재하지 않습니다. 다시 확인해주세요.
             </h2>
             <div class="mb-3" th:unless="${loginIds.isEmpty()}">
                 <h2 class="gmarketSansFont fw-bold">조회한 회원 아이디 결과입니다.</h2>
-                <div class="result-ids-container">
+                <div class="ids-result-container">
                     <ul th:each="loginId : ${loginIds}">
                         <li class="sCoreDreamFont" th:value="${loginId}" th:text="${loginId}"></li>
                     </ul>
