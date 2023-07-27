@@ -28,12 +28,4 @@ public class CreateMemberDto {
 
     @NotNull(message = "회원 상태를 설정해주세요.")
     private MemberStatus memberStatus;
-
-    public CreateMemberDto(String loginId, String loginPw, String name, String email, MemberStatus memberStatus) {
-        this.loginId = loginId;
-        this.loginPw = loginPw;
-        this.name = name;
-        this.email = email;
-        this.memberStatus = memberStatus;
-    }
 }

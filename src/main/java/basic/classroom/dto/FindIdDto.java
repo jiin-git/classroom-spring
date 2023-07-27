@@ -21,10 +21,4 @@ public class FindIdDto {
 
     @NotNull(message = "회원 상태를 설정해주세요.")
     private MemberStatus memberStatus;
-
-    public FindIdDto(String name, String email, MemberStatus memberStatus) {
-        this.name = name;
-        this.email = email;
-        this.memberStatus = memberStatus;
-    }
 }
