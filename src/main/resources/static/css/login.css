@@ -26,9 +26,16 @@
 
 .login-alert-result {
     font-family: GmarketSansMedium;
+    text-align: center;
     width: 100%;
     height: 200px;
     margin-bottom: 30px;
+}
+
+.login-help-result {
+    font-family: GmarketSansMedium;
+    font-weight: bold;
+    text-align: center;
 }
 
 @media (max-width: 500px) {
@@ -38,5 +45,8 @@
     .login-submit-btn {
         height: 40px;
         width: 160px;
+    }
+    .login-alert-result, .login-help-result {
+        font-size: 20px;
     }
 }
