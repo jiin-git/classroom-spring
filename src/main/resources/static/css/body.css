@@ -17,6 +17,10 @@
     border: 1px solid lightgray;
 }
 
+.breadcrumb-item {
+    font-family: SCoreDream;
+}
+
 @media (max-width: 1000px) {
     .body-container {
         width: 100%;
