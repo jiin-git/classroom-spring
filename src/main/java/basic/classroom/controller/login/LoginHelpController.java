@@ -23,7 +23,7 @@ public class LoginHelpController {
     private final LoginHelpService loginHelpService;
 
     @GetMapping("/find/ids")
-    public String findLoginIdForm(Model model) {
+    public String findLoginIdsForm(Model model) {
         model.addAttribute("findIdsForm", new FindIdDto());
         model.addAttribute("student", MemberStatus.STUDENT);
         model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
@@ -32,7 +32,7 @@ public class LoginHelpController {
     }
 
     @PostMapping("/find/ids")
-    public String findLoginId(@Validated @ModelAttribute("findIdsForm") FindIdDto findIdDto,
+    public String findLoginIds(@Validated @ModelAttribute("findIdsForm") FindIdDto findIdDto,
                               BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         // 검증 로직
