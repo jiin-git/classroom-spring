@@ -21,8 +21,7 @@
       </div>
 
       <div class="container p-3">
-        <form method="post"  th:action="@{'/student/cancel/lecture/' + ${lecture.id}}"
-              class="container-fluid bg-white border-lightgray">
+        <form method="post" th:action="@{'/student/cancel/lecture/' + ${lecture.id}}" class="container-fluid bg-white border-lightgray">
           <div class="mb-3 mt-3">
             <label for="lectureId" class="form-label gmarketSansFont">강의번호</label>
             <input type="text" class="form-control readonly" id="lectureId" th:field="*{id}" readonly>
@@ -71,7 +70,6 @@
               </div>
             </div>
           </div>
-
         </form>
       </div>
     </div>

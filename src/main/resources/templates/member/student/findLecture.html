@@ -57,7 +57,7 @@
             </div>
 
             <div class="container p-3">
-                <nav class="navbar bg-body-tertiary" style="background-color: #e3f2fd;">
+                <nav class="navbar bg-body-tertiary mb-3" style="background-color: #e3f2fd;">
                     <div class="container-fluid">
                         <div id="searchBar">
                             <form id="searchCondition" th:action="@{/student/find/lectures}" class="d-flex" method="get" th:object="${searchConditionDto}">
@@ -84,7 +84,7 @@
                     </div>
                 </nav>
 
-                <div class="container-fluid bg-white border-lightgray p-0" >
+                <div class="container-fluid p-0" >
                     <div class="card mb-3 w-100" th:each="lecture: ${lectures}">
                         <div class="row g-0">
                             <div class="col-md-4 img-display">
@@ -148,32 +148,31 @@
                 </div>
 
                 <nav class="d-flex justify-content-center mt-3" aria-label="Page navigation">
-                        <ul class="pagination">
-                            <li class="page-item">
-                                <button form="searchCondition" type="submit" class="page-link" th:name="page" th:value="${startPage}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </button>
-                            </li>
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <button form="searchCondition" type="submit" class="page-link" th:name="page" th:value="${startPage}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </button>
+                        </li>
 
-                            <li class="page-item" th:unless="${pages.contains(startPage)}">
-                                <a class="page-link" href="#" aria-label="morePrevious" th:text="'...'"></a>
-                            </li>
+                        <li class="page-item" th:unless="${pages.contains(startPage)}">
+                            <a class="page-link" href="#" aria-label="morePrevious" th:text="'...'"></a>
+                        </li>
 
-                            <li class="page-item" th:each="page: ${pages}">
-                                <button form="searchCondition" type="submit" class="page-link" th:name="page" th:value="${page}" th:text="${page}"></button>
-                            </li>
+                        <li class="page-item" th:each="page: ${pages}">
+                            <button form="searchCondition" type="submit" class="page-link" th:name="page" th:value="${page}" th:text="${page}"></button>
+                        </li>
 
-                            <li class="page-item" th:unless="${pages.contains(endPage)}">
-                                <a class="page-link" href="#" aria-label="moreNext" th:text="'...'"></a>
-                            </li>
+                        <li class="page-item" th:unless="${pages.contains(endPage)}">
+                            <a class="page-link" href="#" aria-label="moreNext" th:text="'...'"></a>
+                        </li>
 
-                            <li class="page-item">
-                                <button form="searchCondition" class="page-link" th:name="page" th:value="${endPage}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </button>
-                            </li>
-                        </ul>
-
+                        <li class="page-item">
+                            <button form="searchCondition" class="page-link" th:name="page" th:value="${endPage}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </button>
+                        </li>
+                    </ul>
                 </nav>
             </div>
 

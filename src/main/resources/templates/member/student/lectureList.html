@@ -21,7 +21,7 @@
             </div>
 
             <div class="container p-3">
-                <div class="container-fluid bg-white border-lightgray p-0">
+                <div class="container-fluid p-0">
                     <div class="card mb-3 w-100" th:each="lecture: ${lectures}">
                         <div class="row g-0">
                             <div class="col-md-4 img-display">
@@ -32,7 +32,6 @@
                                     <h5 class="card-title gmarketSansFont" th:text="${lecture.name}"></h5>
                                     <p class="card-text"><small class="text-body-secondary" th:text="${lecture.instructor.member.name}"></small></p>
                                     <a class="btn btn-secondary" th:href="@{'/student/lecture/' + ${lecture.id}}">강의정보</a>
-
                                 </div>
                             </div>
                         </div>
