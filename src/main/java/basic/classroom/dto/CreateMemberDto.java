@@ -1,4 +1,4 @@
-package basic.classroom.controller.login;
+package basic.classroom.dto;
 
 import basic.classroom.domain.MemberStatus;
 import jakarta.validation.constraints.Email;
