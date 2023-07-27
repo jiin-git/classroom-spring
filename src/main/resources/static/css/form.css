@@ -15,3 +15,12 @@
 .readonly, .readonly:focus {
     background-color: #e9ecef;
 }
+
+@media (max-width: 500px) {
+    .form-control {
+        font-size: 15px;
+    }
+    .form-label, .form-check-input, .form-check-label {
+        font-size: 13px;
+    }
+}
