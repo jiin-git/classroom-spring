@@ -4,6 +4,7 @@ import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Member;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
+import basic.classroom.dto.CreateMemberDto;
 import basic.classroom.service.InstructorService;
 import basic.classroom.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -44,13 +45,11 @@ public class CreateMemberController {
 
         // 성공 로직
         if (createMemberDto.getMemberStatus() == MemberStatus.INSTRUCTOR) {
-            Instructor instructor = Instructor.createInstructor(
-                    new Member(createMemberDto.getName(), createMemberDto.getLoginId(), createMemberDto.getLoginPw(), createMemberDto.getEmail()));
+            Instructor instructor = Instructor.createInstructor(new Member(createMemberDto));
             instructorService.join(instructor);
         }
         else {
-            Student student = Student.createStudent(
-                    new Member(createMemberDto.getName(), createMemberDto.getLoginId(), createMemberDto.getLoginPw(), createMemberDto.getEmail()));
+            Student student = Student.createStudent(new Member(createMemberDto));
             studentService.join(student);
         }
 
