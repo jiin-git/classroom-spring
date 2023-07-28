@@ -2,6 +2,7 @@ package basic.classroom.service;
 
 import basic.classroom.dto.*;
 import basic.classroom.domain.*;
+import basic.classroom.exception.CreateDuplicatedMemberException;
 import basic.classroom.repository.InstructorRepository;
 import basic.classroom.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,9 @@ public class InstructorService {
 
         // 중복 회원 존재시 에러
         if (duplicateInstructor.isPresent()) {
-            log.info("duplicated!");
-            throw new IllegalStateException();
+//            Long error = -1L;
+//            return error;
+            throw new CreateDuplicatedMemberException("중복 가입 ID 입니다. 다시 가입해주세요.");
         }
 
         // 성공 로직
