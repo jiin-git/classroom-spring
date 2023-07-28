@@ -13,10 +13,12 @@
 .footer-link {
     margin: 5px;
     color: darkgray;
+    text-decoration: none;
 }
 
 .footer-link:hover {
     color: gray;
+    text-decoration: underline;
 }
 
 @media (max-width: 500px) {
