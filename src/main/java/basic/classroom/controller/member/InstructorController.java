@@ -79,13 +79,10 @@ public class InstructorController {
     @GetMapping("/instructor/create/lecture")
     public String createLectureForm(HttpSession session, Model model) {
         Instructor instructor = findInstructor(session);
-        LectureStatus[] lectureStatusList = LectureStatus.values();
 
         model.addAttribute("instructor", instructor);
         model.addAttribute("createLectureForm", new AddLectureDto());
-        model.addAttribute("lectureStatusList", lectureStatusList);
-        model.addAttribute("lectureStatusReady", LectureStatus.READY);
-        model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
+        addModelLectureStatus(model);
 
         return "member/instructor/createLecture";
     }
@@ -96,12 +93,8 @@ public class InstructorController {
 
         // 검증 로직
         if (bindingResult.hasErrors()) {
-            LectureStatus[] lectureStatusList = LectureStatus.values();
-
             model.addAttribute("instructor", instructor);
-            model.addAttribute("lectureStatusList", lectureStatusList);
-            model.addAttribute("lectureStatusReady", LectureStatus.READY);
-            model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
+            addModelLectureStatus(model);
 
             return "member/instructor/createLecture";
         }
@@ -109,6 +102,13 @@ public class InstructorController {
         // 성공 로직
         instructorService.addLecture(instructor.getId(), lectureDto);
         return "redirect:/instructor/lectures";
+    }
+
+    private static void addModelLectureStatus(Model model) {
+        LectureStatus[] lectureStatusList = LectureStatus.values();
+        model.addAttribute("lectureStatusList", lectureStatusList);
+        model.addAttribute("lectureStatusReady", LectureStatus.READY);
+        model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
     }
 
     @GetMapping("/instructor/edit/lecture/{lectureId}")
