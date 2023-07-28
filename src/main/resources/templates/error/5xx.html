@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"/>
+<head th:replace="~{fragments/body :: bodycss}"/>
+<head><link rel="stylesheet" href="/css/errorPage.css"></head>
+
+<body>
+<div id="template-display">
+
+  <div class="container body-display display-vertical-center">
+    <div class="error-container">
+      <div class="error-message-container display-vertical-center">
+        <h2 class="error-message-title" th:text="|${status} ${error}|"></h2>
+        <div class="error-message-box">
+          <p class="error-message-body" th:text="'서버 오류가 발생했습니다.'"></p>
+          <p class="error-message-body" th:text="'잠시 후에 다시 요청해주세요.'"></p>
+        </div>
+      </div>
+      <div class="error-img-container">
+        <img class="server-error-img" src="/img/error500.jpg">
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

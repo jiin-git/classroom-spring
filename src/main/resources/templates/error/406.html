@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"/>
+<head th:replace="~{fragments/body :: bodycss}"/>
+<head><link rel="stylesheet" href="/css/errorPage.css"></head>
+
+<body>
+<div id="template-display">
+  <div th:replace="~{fragments/header :: loginHeader}"/>
+
+  <div class="container body-display display-vertical-center">
+    <div class="error-container">
+      <div class="error-message-container display-vertical-center">
+        <h2 class="error-message-title" th:text="|${status} ${error}|"></h2>
+        <div class="error-message-box">
+          <p class="error-message-body" th:text="|${message}|"></p>
+          <p class="error-message-body" th:text="'홈 화면으로 가려면 아래의 버튼을 클릭하세요.'"></p>
+        </div>
+        <a class="btn btn-primary" href="/">Home</a>
+      </div>
+      <div class="error-img-container">
+        <img class="error-img" src="/img/error400.jpg">
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
