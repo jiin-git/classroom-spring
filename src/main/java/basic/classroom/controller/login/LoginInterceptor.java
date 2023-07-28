@@ -1,6 +1,7 @@
 package basic.classroom.controller.login;
 
 import basic.classroom.domain.MemberStatus;
+import basic.classroom.exception.AuthorizationNotAvailableException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -29,13 +30,10 @@ public class LoginInterceptor implements HandlerInterceptor {
 
             if (requestURI.indexOf(memberStatusToString) == -1) {
                 log.info("memberStatus is not match URI.");
-                response.sendRedirect("/");
-                return false;
+                throw new AuthorizationNotAvailableException();
             }
         }
 
         return true;
     }
-
-
 }
