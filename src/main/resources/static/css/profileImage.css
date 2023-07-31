@@ -1,0 +1,35 @@
+img {
+    border-radius: 50%;
+}
+.circle-container {
+    width: 256px;
+    height: 256px;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+.circle-container img, .default-profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.default-profile-img {
+    fill: #0d6efd;
+    background-color: #cfe2ff;
+    border-radius: 50%;
+}
+#previewProfileImg {
+    width: 100%;
+}
+
+@media (max-width: 850px) {
+    .circle-container {
+        width: 200px;
+        height: 200px;
+    }
+}
+@media (max-width: 767px) {
+    .circle-container {
+        width: 128px;
+        height: 128px;
+    }
+}
