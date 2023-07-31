@@ -38,5 +38,4 @@ public class InstructorRepository {
                 .getResultList();
     }
 
-
 }

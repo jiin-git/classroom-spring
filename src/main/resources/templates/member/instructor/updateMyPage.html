@@ -67,7 +67,6 @@
                                 <div class="mb-3">
                                     <label for="imageFile" class="form-label gmarketSansFont">프로필 이미지</label>
                                     <input type="file" class="form-control mb-2" id="imageFile" onchange="loadFile()" th:field="*{imageFile}">
-<!--                                    <input type="submit" class="btn btn-success" value="프로필 초기화" th:formaction="@{/instructor/initialize/profile}">-->
 
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#initializeProfileModal">프로필 초기화</button>
                                     <div class="modal fade" id="initializeProfileModal" tabindex="-1" aria-labelledby="initializeProfileModalLabel" aria-hidden="true">
@@ -124,8 +123,6 @@
         }
 
     };
-
-    // loadFile();
 </script>
 </body>
 </html>

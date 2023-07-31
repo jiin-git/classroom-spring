@@ -15,9 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,39 +44,6 @@ public class InstructorService {
 
     public Instructor findOne(Long id) {
         return instructorRepository.findOne(id);
-    }
-
-    @Transactional
-    public List<Instructor> findLoginId(String name, String email) {
-        List<Instructor> instructors = instructorRepository.findByName(name);
-        List<Instructor> findInstructors = instructors.stream().filter(s -> s.getMember().getEmail() == email).collect(Collectors.toList());
-
-        // 추가 검증 필요
-        // 회원이 존재하지 않을 경우
-        if (findInstructors.isEmpty()) {
-            log.info("아이디를 찾을 수 없습니다.");
-            throw new NoSuchElementException();
-        }
-
-        return findInstructors;
-    }
-
-    @Transactional
-    public String findLoginPw(String loginId, String email) {
-        Optional<Instructor> instructor = instructorRepository.findByLoginId(loginId);
-        if (instructor.isEmpty()) {
-            log.info("유효한 아이디가 없습니다.");
-            throw new NoSuchElementException();
-        }
-
-        // 검증 코드 필요 + 랜덤 pw 생성 하여 리턴하게끔 추후 변경
-        String findEmail = instructor.get().getMember().getEmail();
-        if (!findEmail.equals(email)) {
-            log.info("이메일이 틀렸습니다.");
-            throw new IllegalStateException();
-        }
-
-        return instructor.get().getMember().getPassword();
     }
 
     @Transactional
