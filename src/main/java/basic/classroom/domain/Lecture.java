@@ -1,6 +1,5 @@
 package basic.classroom.domain;
 
-import basic.classroom.dto.AddLectureDto;
 import jakarta.persistence.*;
 import lombok.Data;
 

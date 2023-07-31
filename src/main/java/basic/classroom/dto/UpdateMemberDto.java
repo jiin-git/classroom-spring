@@ -1,6 +1,5 @@
 package basic.classroom.dto;
 
-
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Student;
 import jakarta.validation.constraints.Email;
@@ -40,9 +39,4 @@ public class UpdateMemberDto {
         this.email = instructor.getMember().getEmail();
     }
 
-
-
-//    public UpdateMemberDto(String email) {
-//        this.email = email;
-//    }
 }

@@ -1,7 +1,5 @@
 package basic.classroom.dto;
 
-import basic.classroom.domain.LectureSearchCondition;
-import basic.classroom.domain.LectureStatusSearchCondition;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
