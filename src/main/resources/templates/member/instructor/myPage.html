@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head}"/>
 <head th:replace="~{fragments/body :: bodycss}"/>
+<head><link rel="stylesheet" th:href="@{/css/profileImage.css}"></head>
 
 <body>
 <div id="template-display">
@@ -21,24 +22,31 @@
                 </nav>
             </div>
 
-            <div class="container p-3">
+            <div class="container-lg p-3 h-100">
                 <div class="card justify-content-center mb-3 w-100">
                     <div class="row g-0">
-                        <div class="col-md-4 img-display">
-                            <img src="..." class="img-fluid rounded-start" alt="...">
+                        <div class="col-md-4 img-display text-center display-vertical-center p-3">
+                            <div class="circle-container">
+                                <img th:unless="*{profileImage == null}" th:src="@{/instructor/profile/image}" class="img-fluid">
+                                <div th:if="*{profileImage == null}" class="profile-img-container">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-person-fill default-profile-img" viewBox="0 0 16 16">
+                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-8">
+
+                        <div class="col-md-8 display-vertical-center flex-row">
                             <div class="card-body">
-                                <h4 class="card-title gmarketSansFont" th:text="'이름: ' + *{member.name}">이름</h4>
-                                <p class="card-text gmarketSansFont mb-1" th:text="'아이디: ' + *{member.loginId}">id</p>
-                                <p class="card-text gmarketSansFont mb-1" th:text="'이메일: ' + *{member.email}">email</p>
-                                <a class="btn btn-primary" th:href="@{/instructor/update/mypage}">회원정보 변경</a>
+                                <h4 class="gmarketSansFont" th:text="'이름: ' + *{member.name}">이름</h4>
+                                <p class="gmarketSansFont mb-1" th:text="'아이디: ' + *{member.loginId}">id</p>
+                                <p class="gmarketSansFont mb-1" th:text="'이메일: ' + *{member.email}">email</p>
+                                <a class="btn btn-primary mt-3" th:href="@{/instructor/update/mypage}">회원정보 변경</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 

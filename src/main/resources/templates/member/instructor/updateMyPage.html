@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head}"/>
 <head th:replace="~{fragments/body :: bodycss}"/>
+<head><link rel="stylesheet" th:href="@{/css/profileImage.css}"></head>
+
 <body>
 <div id="template-display">
     <div th:replace="~{fragments/header :: loginInstructorHeader}"/>
@@ -20,13 +22,23 @@
                 </nav>
             </div>
 
-            <div class="container p-3 h-100">
-                <form class="card justify-content-center mb-3 w-100" method="post"
-                      th:action="@{/instructor/update/mypage}">
+            <div class="container-lg p-3 h-100">
+                <form class="card justify-content-center mb-3 w-100" method="post" enctype="multipart/form-data">
                     <div class="row g-0">
-                        <div class="col-md-4 img-display">
-                            <img src="..." class="img-fluid rounded-start" alt="...">
+                        <div class="col-md-4 img-display text-center display-vertical-center p-3">
+                            <div id="previewImgContainer" class="circle-container d-none">
+                                <img id="previewProfileImg" class="img-fluid" src="">
+                            </div>
+                            <div id="currentImgContainer" class="circle-container">
+                                <img th:unless="${profileImage == null}" id="profileImg" class="img-fluid" th:src="@{/instructor/profile/image}">
+                                <div th:if="${profileImage == null}" id="defaultProfileImg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-person-fill default-profile-img" viewBox="0 0 16 16">
+                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="col-md-8">
                             <div class="card-body" th:object="${instructor}">
                                 <div class="mb-3">
@@ -52,8 +64,31 @@
                                            th:errorclass="field-error" th:field="*{email}">
                                     <div class="field-error" th:errors="*{email}"></div>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="imageFile" class="form-label gmarketSansFont">프로필 이미지</label>
+                                    <input type="file" class="form-control mb-2" id="imageFile" onchange="loadFile()" th:field="*{imageFile}">
+<!--                                    <input type="submit" class="btn btn-success" value="프로필 초기화" th:formaction="@{/instructor/initialize/profile}">-->
 
-                                <input type="submit" class="btn btn-primary" value="회원정보 변경">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#initializeProfileModal">프로필 초기화</button>
+                                    <div class="modal fade" id="initializeProfileModal" tabindex="-1" aria-labelledby="initializeProfileModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="initializeProfileModalLabel">프로필 초기화</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body" th:text="'정말로 프로필을 초기화하시겠습니까?'"></div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                    <input type="submit" class="btn btn-success" value="프로필 초기화" th:formaction="@{/instructor/initialize/profile}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <input type="submit" class="btn btn-primary" value="회원정보 변경" th:formaction="@{/instructor/update/mypage}">
                             </div>
                         </div>
                     </div>
@@ -65,5 +100,32 @@
 
     <div th:replace="~{fragments/footer :: footer}"/>
 </div>
+<script>
+    function loadFile() {
+        // console.log("call load File");
+        let currentImgContainer = document.getElementById('currentImgContainer');
+        let previewImgContainer = document.getElementById('previewImgContainer');
+        let previewImg = document.getElementById('previewProfileImg');
+        let imageFile = document.getElementById('imageFile');
+        const [file] = imageFile.files;
+
+        if (file) {
+            previewImg.src = URL.createObjectURL(file);
+            if (previewImgContainer.classList.contains('d-none')) {
+                previewImgContainer.classList.remove('d-none');
+                currentImgContainer.classList.add('d-none');
+            }
+        }
+        else {
+            previewImgContainer.classList.add("d-none");
+            if (currentImgContainer.classList.contains("d-none")) {
+                currentImgContainer.classList.remove("d-none");
+            }
+        }
+
+    };
+
+    // loadFile();
+</script>
 </body>
 </html>
