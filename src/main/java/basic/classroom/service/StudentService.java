@@ -3,6 +3,7 @@ package basic.classroom.service;
 import basic.classroom.dto.LoginDto;
 import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.domain.*;
+import basic.classroom.exception.StoreImageException;
 import basic.classroom.repository.LectureRepository;
 import basic.classroom.repository.LectureStudentMapperRepository;
 import basic.classroom.repository.StudentRepository;
@@ -10,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -50,6 +54,28 @@ public class StudentService {
     public void update(Long id, UpdateMemberDto updateMemberDto) {
         Student student = studentRepository.findOne(id);
         student.getMember().setEmail(updateMemberDto.getEmail());
+
+        if (updateMemberDto.getImageFile() != null && !updateMemberDto.getImageFile().isEmpty()) {
+            try {
+                MultipartFile imageFile = updateMemberDto.getImageFile();
+                String imageName = Normalizer.normalize(imageFile.getOriginalFilename(), Normalizer.Form.NFC);
+                String contentType = imageFile.getContentType();
+                byte[] imageBytes = imageFile.getBytes();
+
+                student.setProfileImage(new ProfileImage(imageName, contentType, imageBytes));
+            } catch (IOException e) {
+                throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
+            }
+        }
+    }
+    @Transactional
+    public void initializeProfile(Long id) {
+        Student student = studentRepository.findOne(id);
+        if (student.getProfileImage() != null) {
+            student.getProfileImage().setImageName(null);
+            student.getProfileImage().setDataType(null);
+            student.getProfileImage().setImageData(null);
+        }
     }
 
     @Transactional

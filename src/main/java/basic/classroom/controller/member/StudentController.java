@@ -11,6 +11,9 @@ import basic.classroom.service.StudentService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -143,12 +146,28 @@ public class StudentController {
         return "member/student/myPage";
     }
 
+    @GetMapping("/student/profile/image")
+    public ResponseEntity<byte[]> profileImg(HttpSession session) {
+        Student student = findStudent(session);
+        ProfileImage profileImage = student.getProfileImage();
+
+        byte[] imageData = profileImage.getImageData();
+        String dataType = profileImage.getDataType();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf(dataType))
+                .body(imageData);
+    }
+
     @GetMapping("/student/update/mypage")
     public String updateMyPageForm(HttpSession session, Model model) {
         Student student = findStudent(session);
-        UpdateMemberDto memberDto = new UpdateMemberDto(student);
+        UpdateMemberDto updateMemberDto = new UpdateMemberDto(student);
 
-        model.addAttribute("student", memberDto);
+        model.addAttribute("student", updateMemberDto);
+        if (student.getProfileImage() != null) {
+            model.addAttribute("profileImage", student.getProfileImage());
+        }
 
         return "member/student/updateMyPage";
     }
@@ -165,6 +184,14 @@ public class StudentController {
         // 성공 로직
         studentService.update(student.getId(), updateParam);
         return "redirect:/student/mypage";
+    }
+
+    @PostMapping("/student/initialize/profile")
+    public String initializeProfile(@ModelAttribute("student") UpdateMemberDto updateMemberDto, HttpSession session) {
+        Student student = findStudent(session);
+        studentService.initializeProfile(student.getId());
+
+        return "redirect:/student/update/mypage";
     }
 
     @GetMapping("/student/update/pw")
