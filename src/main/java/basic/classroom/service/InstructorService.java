@@ -3,13 +3,17 @@ package basic.classroom.service;
 import basic.classroom.dto.*;
 import basic.classroom.domain.*;
 import basic.classroom.exception.CreateDuplicatedMemberException;
+import basic.classroom.exception.StoreImageException;
 import basic.classroom.repository.InstructorRepository;
 import basic.classroom.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -81,7 +85,38 @@ public class InstructorService {
     public void update(Long id, UpdateMemberDto updateMemberDto) {
         Instructor instructor = instructorRepository.findOne(id);
         instructor.getMember().setEmail(updateMemberDto.getEmail());
+
+//        log.info("getImageFile = {}", updateMemberDto.getImageFile());
+//        log.info("getImageFile is null? = {}", updateMemberDto.getImageFile() == null);
+
+        if (updateMemberDto.getImageFile() != null && !updateMemberDto.getImageFile().isEmpty()) {
+            try {
+                MultipartFile imageFile = updateMemberDto.getImageFile();
+                String imageName = Normalizer.normalize(imageFile.getOriginalFilename(), Normalizer.Form.NFC);
+                String contentType = imageFile.getContentType();
+                byte[] imageBytes = imageFile.getBytes();
+
+//                log.info("imageFile Name = {}", imageName);
+//                log.info("contentType = {}", contentType);
+//                log.info("imageBytes = {}", imageBytes);
+                instructor.setProfileImage(new ProfileImage(imageName, contentType, imageBytes));
+//                log.info("instructor getProfileImage = {}", instructor.getProfileImage());
+            } catch (IOException e) {
+                throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
+            }
+        }
     }
+
+    @Transactional
+    public void initializeProfile(Long id) {
+        Instructor instructor = instructorRepository.findOne(id);
+        if (instructor.getProfileImage() != null) {
+            instructor.getProfileImage().setImageName(null);
+            instructor.getProfileImage().setDataType(null);
+            instructor.getProfileImage().setImageData(null);
+        }
+    }
+
     @Transactional
     public void updatePassword(Long id, String password) {
         Instructor instructor = instructorRepository.findOne(id);
@@ -107,6 +142,22 @@ public class InstructorService {
         lecture.setPersonnel(updateLectureDto.getPersonnel());
         lecture.setRemainingPersonnel(updateRemainingPersonnel);
         lecture.setLectureStatus(updateLectureDto.getLectureStatus());
+
+        if (!updateLectureDto.getImageFile().isEmpty()) {
+            try {
+                MultipartFile imageFile = updateLectureDto.getImageFile();
+                String imageName = Normalizer.normalize(imageFile.getOriginalFilename(), Normalizer.Form.NFC);
+                String contentType = imageFile.getContentType();
+                byte[] imageBytes = imageFile.getBytes();
+
+//                log.info("imageFile Name = {}", imageName);
+//                log.info("contentType = {}", contentType);
+//                log.info("imageBytes = {}", imageBytes);
+                lecture.setProfileImage(new ProfileImage(imageName, contentType, imageBytes));
+            } catch (IOException e) {
+                throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
+            }
+        }
     }
 
     public List<Lecture> findLectures(Long id) {

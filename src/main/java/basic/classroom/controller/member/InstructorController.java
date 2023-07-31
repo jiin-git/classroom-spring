@@ -12,6 +12,9 @@ import basic.classroom.service.PagingService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -180,12 +183,28 @@ public class InstructorController {
         return "member/instructor/myPage";
     }
 
+    @GetMapping("/instructor/profile/image")
+    public ResponseEntity<byte[]> profileImg(HttpSession session) {
+        Instructor instructor = findInstructor(session);
+        ProfileImage profileImage = instructor.getProfileImage();
+
+        byte[] imageData = profileImage.getImageData();
+        String dataType = profileImage.getDataType();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf(dataType))
+                .body(imageData);
+    }
+
     @GetMapping("/instructor/update/mypage")
     public String updateMyPageForm(HttpSession session, Model model) {
         Instructor instructor = findInstructor(session);
-        UpdateMemberDto memberDto = new UpdateMemberDto(instructor);
+        UpdateMemberDto updateMemberDto = new UpdateMemberDto(instructor);
 
-        model.addAttribute("instructor", memberDto);
+        model.addAttribute("instructor", updateMemberDto);
+        if (instructor.getProfileImage() != null) {
+            model.addAttribute("profileImage", instructor.getProfileImage());
+        }
 
         return "member/instructor/updateMyPage";
     }
@@ -202,6 +221,14 @@ public class InstructorController {
         // 성공 로직
         instructorService.update(instructor.getId(), updateParam);
         return "redirect:/instructor/mypage";
+    }
+
+    @PostMapping("/instructor/initialize/profile")
+    public String initializeProfile(@ModelAttribute("instructor") UpdateMemberDto updateMemberDto, HttpSession session) {
+        Instructor instructor = findInstructor(session);
+        instructorService.initializeProfile(instructor.getId());
+
+        return "redirect:/instructor/update/mypage";
     }
 
     @GetMapping("/instructor/update/pw")
