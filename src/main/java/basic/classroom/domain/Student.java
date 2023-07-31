@@ -22,6 +22,9 @@ public class Student {
     @Embedded
     private Member member;
 
+    @Embedded
+    private ProfileImage profileImage;
+
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Map<Long, LectureStudentMapper> applyingLectures = new HashMap<>();
 

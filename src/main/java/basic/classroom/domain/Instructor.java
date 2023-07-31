@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -21,6 +19,9 @@ public class Instructor {
 
     @Embedded
     private Member member;
+
+    @Embedded
+    private ProfileImage profileImage;
 
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL)
     private Map<Long, Lecture> lectures = new HashMap();

@@ -18,6 +18,9 @@ public class Lecture {
 
     private String name;
 
+    @Embedded
+    private ProfileImage profileImage;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id")
     private Instructor instructor;
