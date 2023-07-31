@@ -51,9 +51,6 @@ public class InstructorService {
         Instructor instructor = instructorRepository.findOne(id);
         instructor.getMember().setEmail(updateMemberDto.getEmail());
 
-//        log.info("getImageFile = {}", updateMemberDto.getImageFile());
-//        log.info("getImageFile is null? = {}", updateMemberDto.getImageFile() == null);
-
         if (updateMemberDto.getImageFile() != null && !updateMemberDto.getImageFile().isEmpty()) {
             try {
                 MultipartFile imageFile = updateMemberDto.getImageFile();
@@ -61,11 +58,7 @@ public class InstructorService {
                 String contentType = imageFile.getContentType();
                 byte[] imageBytes = imageFile.getBytes();
 
-//                log.info("imageFile Name = {}", imageName);
-//                log.info("contentType = {}", contentType);
-//                log.info("imageBytes = {}", imageBytes);
                 instructor.setProfileImage(new ProfileImage(imageName, contentType, imageBytes));
-//                log.info("instructor getProfileImage = {}", instructor.getProfileImage());
             } catch (IOException e) {
                 throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
             }
@@ -115,9 +108,6 @@ public class InstructorService {
                 String contentType = imageFile.getContentType();
                 byte[] imageBytes = imageFile.getBytes();
 
-//                log.info("imageFile Name = {}", imageName);
-//                log.info("contentType = {}", contentType);
-//                log.info("imageBytes = {}", imageBytes);
                 lecture.setProfileImage(new ProfileImage(imageName, contentType, imageBytes));
             } catch (IOException e) {
                 throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
