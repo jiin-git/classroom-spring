@@ -1,8 +1,7 @@
 package basic.classroom.service;
 
-import basic.classroom.dto.LoginDto;
-import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.domain.*;
+import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.exception.StoreImageException;
 import basic.classroom.repository.LectureRepository;
 import basic.classroom.repository.LectureStudentMapperRepository;
@@ -16,9 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
