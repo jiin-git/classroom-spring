@@ -5,18 +5,15 @@ import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.repository.LectureRepository;
 import basic.classroom.repository.LectureStudentMapperRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class LectureService {
 
     private final LectureRepository lectureRepository;
-    private final LectureStudentMapperRepository mapperRepository;
 
     @Transactional
     public Long create(Lecture lecture) {
