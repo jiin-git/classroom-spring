@@ -17,9 +17,3 @@
     align-items: center;
     justify-content: center;
 }
-
-@media (max-width: 770px) {
-    .img-display {
-        display: none;
-    }
-}
