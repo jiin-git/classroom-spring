@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -22,6 +23,8 @@ public class UpdateMemberDto {
     @Email(message = "이메일을 입력하세요.")
     @NotBlank(message = "이메일을 입력하세요.")
     private String email;
+
+    private MultipartFile imageFile;
 
     public UpdateMemberDto(Student student) {
         this.name = student.getMember().getName();
