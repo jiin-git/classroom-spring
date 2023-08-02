@@ -113,23 +113,6 @@ public class StudentController {
         return findLecturesTemplate(searchConditionDto, model, student, showLectures, showPages, startPage, endPage);
     }
 
-    private static String findLecturesTemplate(SearchConditionDto searchConditionDto, Model model, Student student,
-                                               List<Lecture> showLectures, List<Integer> showPages, int startPage, int endPage) {
-        model.addAttribute("student", student);
-        model.addAttribute("lectures", showLectures);
-        model.addAttribute("pages", showPages);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("searchConditionDto", searchConditionDto);
-        model.addAttribute("lectureStatusReady", LectureStatus.READY);
-        model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
-        model.addAttribute("lectureStatusFull", LectureStatus.FULL);
-        model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
-        model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
-
-        return "member/student/findLecture";
-    }
-
     @PostMapping("/student/add/lecture/{lectureId}")
     public String addLecture(@PathVariable Long lectureId, HttpSession session) {
         Student student = findStudent(session);
@@ -144,19 +127,6 @@ public class StudentController {
         model.addAttribute("student", student);
 
         return "member/student/myPage";
-    }
-
-    @GetMapping("/student/profile/image")
-    public ResponseEntity<byte[]> profileImg(HttpSession session) {
-        Student student = findStudent(session);
-        ProfileImage profileImage = student.getProfileImage();
-
-        byte[] imageData = profileImage.getImageData();
-        String dataType = profileImage.getDataType();
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf(dataType))
-                .body(imageData);
     }
 
     @GetMapping("/student/update/mypage")
@@ -186,14 +156,6 @@ public class StudentController {
         return "redirect:/student/mypage";
     }
 
-    @PostMapping("/student/initialize/profile")
-    public String initializeProfile(@ModelAttribute("student") UpdateMemberDto updateMemberDto, HttpSession session) {
-        Student student = findStudent(session);
-        studentService.initializeProfile(student.getId());
-
-        return "redirect:/student/update/mypage";
-    }
-
     @GetMapping("/student/update/pw")
     public String updatePwForm(Model model) {
         model.addAttribute("pwForm", new UpdatePwDto());
@@ -219,6 +181,56 @@ public class StudentController {
         return "redirect:/student/mypage";
     }
 
+    @GetMapping("/student/profile/image")
+    public ResponseEntity<byte[]> profileImg(HttpSession session) {
+        Student student = findStudent(session);
+        ProfileImage profileImage = student.getProfileImage();
+
+        byte[] imageData = profileImage.getImageData();
+        String dataType = profileImage.getDataType();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf(dataType))
+                .body(imageData);
+    }
+
+    @GetMapping("/student/lecture/image/{lectureId}")
+    public ResponseEntity<byte[]> lectureImg(@PathVariable Long lectureId) {
+        Lecture lecture = lectureService.findOne(lectureId);
+        ProfileImage profileImage = lecture.getProfileImage();
+
+        byte[] imageData = profileImage.getImageData();
+        String dataType = profileImage.getDataType();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf(dataType))
+                .body(imageData);
+    }
+
+    @PostMapping("/student/initialize/profile")
+    public String initializeProfile(@ModelAttribute("student") UpdateMemberDto updateMemberDto, HttpSession session) {
+        Student student = findStudent(session);
+        studentService.initializeProfile(student.getId());
+
+        return "redirect:/student/update/mypage";
+    }
+
+    private static String findLecturesTemplate(SearchConditionDto searchConditionDto, Model model, Student student,
+                                               List<Lecture> showLectures, List<Integer> showPages, int startPage, int endPage) {
+        model.addAttribute("student", student);
+        model.addAttribute("lectures", showLectures);
+        model.addAttribute("pages", showPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("searchConditionDto", searchConditionDto);
+        model.addAttribute("lectureStatusReady", LectureStatus.READY);
+        model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
+        model.addAttribute("lectureStatusFull", LectureStatus.FULL);
+        model.addAttribute("lectureStatusList", LectureStatusSearchCondition.values());
+        model.addAttribute("lectureSearchConditions", LectureSearchCondition.values());
+
+        return "member/student/findLecture";
+    }
 
     private Student findStudent(HttpSession session) {
         Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
