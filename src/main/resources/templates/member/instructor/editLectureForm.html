@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head}"/>
 <head th:replace="~{fragments/body :: bodycss}"/>
+<head><link rel="stylesheet" th:href="@{/css/lectureImage.css}"></head>
 
 <body>
 <div id="template-display">
@@ -22,77 +23,104 @@
         </nav>
       </div>
 
-      <div class="container p-3">
-        <form th:action method="post" class="container-fluid bg-white border-lightgray pb-2">
-          <div class="mb-3 mt-3">
-            <label for="lectureId" class="form-label gmarketSansFont">강의번호</label>
-            <input type="text" class="form-control readonly" id="lectureId" placeholder="강의번호를 입력해주세요."
-                   th:field="*{lectureId}" readonly>
-            <div class="field-error" th:errors="*{lectureId}"></div>
-          </div>
-          <div class="mb-3 mt-3">
-            <label for="lectureName" class="form-label gmarketSansFont">강의명</label>
-            <input type="text" class="form-control readonly" id="lectureName" placeholder="강의명을 입력해주세요."
-                   th:field="*{lectureName}" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="instructorId" class="form-label gmarketSansFont">강사 ID</label>
-            <input type="text" class="form-control readonly" id="instructorId" placeholder="강사ID를 입력해주세요."
-                   th:field="*{instructorId}" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="instructorName" class="form-label gmarketSansFont">강사</label>
-            <input type="text" class="form-control readonly" id="instructorName" placeholder="강사를 입력해주세요."
-                   th:field="*{instructorName}" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="personnel" class="form-label gmarketSansFont">정원</label>
-            <input type="text" class="form-control" id="personnel" placeholder="정원을 입력해주세요."
-                   th:errorclass="field-error" th:field="*{personnel}">
-            <div class="field-error" th:errors="*{personnel}"></div>
-          </div>
-          <div class="mb-3">
-            <label for="personnel" class="form-label gmarketSansFont">남은 정원</label>
-            <input type="text" class="form-control readonly" id="remainingPersonnel" placeholder="남은 정원을 입력해주세요."
-                   th:field="*{remainingPersonnel}" readonly>
-            <div class="field-error" th:errors="*{remainingPersonnel}"></div>
-          </div>
-          <div class="mb-3">
-            <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
-            <select id="lectureStatus" class="form-select" th:field="*{lectureStatus}" th:errorclass="field-error">
-              <option th:each="LectureStatus : ${lectureStatusList}"
-                      th:value="${LectureStatus}" th:text="${LectureStatus}"></option>
-            </select>
-            <div class="field-error" th:errors="*{lectureStatus}"></div>
-          </div>
-          <div th:if="${#fields.hasGlobalErrors()}" class="mb-3">
-            <p class="alert alert-danger" th:text="${#fields.globalErrors()}"></p>
-          </div>
-
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeLectureModal">강의 수정</button>
-          <div class="modal fade" id="changeLectureModal" tabindex="-1" aria-labelledby="changeLectureModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="changeLectureModalLabel">강의 수정</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" th:text="'정말로 강의를 수정하시겠습니까?'"></div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                  <input type="submit" class="btn btn-primary" value="강의 수정">
+      <div class="container-lg p-3 h-100">
+        <div class="card justify-content-center mb-3 w-100">
+          <div class="row g-0">
+            <div class="col-md-4 text-center display-vertical-center p-3">
+              <div id="previewImgContainer" class="rounded-square-container d-none">
+                <img id="previewProfileImg" class="img-fluid" src="">
+              </div>
+              <div id="currentImgContainer" class="rounded-square-container">
+                <img th:unless="${profileImage == null}" id="profileImg" class="img-fluid" th:src="@{'/instructor/lecture/image/' + ${lectureId}}">
+                <div th:if="${profileImage == null}" id="defaultProfileImg" class="profile-img-container">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-images default-lecture-img" viewBox="0 0 16 16">
+                    <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                    <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"/>
+                  </svg>
                 </div>
               </div>
             </div>
-          </div>
 
-        </form>
+            <div class="col-md-8 display-vertical-center flex-row">
+              <form method="post" class="container-fluid bg-white pb-2" enctype="multipart/form-data">
+                <div class="mb-3 mt-3">
+                  <label for="lectureId" class="form-label gmarketSansFont">강의번호</label>
+                  <input type="text" class="form-control readonly" id="lectureId" placeholder="강의번호를 입력해주세요."
+                         th:field="*{lectureId}" readonly>
+                  <div class="field-error" th:errors="*{lectureId}"></div>
+                </div>
+                <div class="mb-3 mt-3">
+                  <label for="lectureName" class="form-label gmarketSansFont">강의명</label>
+                  <input type="text" class="form-control readonly" id="lectureName" placeholder="강의명을 입력해주세요."
+                         th:field="*{lectureName}" readonly>
+                </div>
+                <div class="mb-3">
+                  <label for="instructorId" class="form-label gmarketSansFont">강사 ID</label>
+                  <input type="text" class="form-control readonly" id="instructorId" placeholder="강사ID를 입력해주세요."
+                         th:field="*{instructorId}" readonly>
+                </div>
+                <div class="mb-3">
+                  <label for="instructorName" class="form-label gmarketSansFont">강사</label>
+                  <input type="text" class="form-control readonly" id="instructorName" placeholder="강사를 입력해주세요."
+                         th:field="*{instructorName}" readonly>
+                </div>
+                <div class="mb-3">
+                  <label for="personnel" class="form-label gmarketSansFont">정원</label>
+                  <input type="text" class="form-control" id="personnel" placeholder="정원을 입력해주세요."
+                         th:errorclass="field-error" th:field="*{personnel}">
+                  <div class="field-error" th:errors="*{personnel}"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="personnel" class="form-label gmarketSansFont">남은 정원</label>
+                  <input type="text" class="form-control readonly" id="remainingPersonnel" placeholder="남은 정원을 입력해주세요."
+                         th:field="*{remainingPersonnel}" readonly>
+                  <div class="field-error" th:errors="*{remainingPersonnel}"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
+                  <select id="lectureStatus" class="form-select" th:field="*{lectureStatus}" th:errorclass="field-error">
+                    <option th:each="LectureStatus : ${lectureStatusList}"
+                            th:value="${LectureStatus}" th:text="${LectureStatus}"></option>
+                  </select>
+                  <div class="field-error" th:errors="*{lectureStatus}"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="imageFile" class="form-label gmarketSansFont">프로필 이미지</label>
+                  <input type="file" class="form-control mb-2" id="imageFile" onchange="loadFile()" th:field="*{imageFile}">
+                </div>
+
+                <div th:if="${#fields.hasGlobalErrors()}" class="mb-3">
+                  <p class="alert alert-danger" th:text="${#fields.globalErrors()}"></p>
+                </div>
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeLectureModal">강의 수정</button>
+                <div class="modal fade" id="changeLectureModal" tabindex="-1" aria-labelledby="changeLectureModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="changeLectureModalLabel">강의 수정</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body" th:text="'정말로 강의를 수정하시겠습니까?'"></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <input type="submit" class="btn btn-primary" value="강의 수정">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 
   <div th:replace="~{fragments/footer :: footer}"/>
 </div>
-
+<script src="/js/loadFile.js"></script>
 </body>
 </html>

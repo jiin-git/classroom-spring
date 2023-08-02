@@ -25,7 +25,7 @@
             <div class="container-lg p-3 h-100">
                 <form class="card justify-content-center mb-3 w-100" method="post" enctype="multipart/form-data">
                     <div class="row g-0">
-                        <div class="col-md-4 img-display text-center display-vertical-center p-3">
+                        <div class="col-md-4 text-center display-vertical-center p-3">
                             <div id="previewImgContainer" class="circle-container d-none">
                                 <img id="previewProfileImg" class="img-fluid" src="">
                             </div>
@@ -99,30 +99,6 @@
 
     <div th:replace="~{fragments/footer :: footer}"/>
 </div>
-<script>
-    function loadFile() {
-        // console.log("call load File");
-        let currentImgContainer = document.getElementById('currentImgContainer');
-        let previewImgContainer = document.getElementById('previewImgContainer');
-        let previewImg = document.getElementById('previewProfileImg');
-        let imageFile = document.getElementById('imageFile');
-        const [file] = imageFile.files;
-
-        if (file) {
-            previewImg.src = URL.createObjectURL(file);
-            if (previewImgContainer.classList.contains('d-none')) {
-                previewImgContainer.classList.remove('d-none');
-                currentImgContainer.classList.add('d-none');
-            }
-        }
-        else {
-            previewImgContainer.classList.add("d-none");
-            if (currentImgContainer.classList.contains("d-none")) {
-                currentImgContainer.classList.remove("d-none");
-            }
-        }
-
-    };
-</script>
+<script src="/js/loadFile.js"></script>
 </body>
 </html>

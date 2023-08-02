@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head}"/>
 <head th:replace="~{fragments/body :: bodycss}"/>
+<head><link rel="stylesheet" th:href="@{/css/lectureImage.css}"></head>
 
 <body>
 <div id="template-display">
@@ -21,52 +22,76 @@
                 </nav>
             </div>
 
-            <div class="container p-3">
-                <form th:action method="post"
-                      class="form-container container-fluid bg-white border-lightgray" th:object="${createLectureForm}">
-                    <div class="mb-3 mt-3">
-                        <label for="lectureName" class="form-label gmarketSansFont">강의명</label>
-                        <input type="text" class="form-control" id="lectureName" placeholder="강의명을 입력해주세요."
-                               th:errorclass="field-error" th:field="*{name}">
-                        <div class="field-error" th:errors="*{name}"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="personnel" class="form-label gmarketSansFont">정원</label>
-                        <input type="text" class="form-control" id="personnel" placeholder="정원을 입력해주세요."
-                               th:errorclass="field-error" th:field="*{personnel}">
-                        <div class="field-error" th:errors="*{personnel}"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
-                        <select id="lectureStatus" class="form-select" th:field="*{lectureStatus}" th:errorclass="field-error">
-                            <option th:value="${lectureStatusReady}" th:text="${lectureStatusReady}"></option>
-                            <option th:value="${lectureStatusOpen}" th:text="${lectureStatusOpen}"></option>
-                        </select>
-                        <div class="field-error" th:errors="*{lectureStatus}"></div>
-                    </div>
-
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLectureModal">강의 등록</button>
-                    <div class="modal fade" id="addLectureModal" tabindex="-1" aria-labelledby="addLectureModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="addLectureModalLabel">강의 등록</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body" th:text="'정말로 강의를 등록하시겠습니까?'"></div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                    <button type="submit" class="btn btn-primary">강의 등록</button>
+            <div class="container-lg p-3 h-100">
+                <div class="card justify-content-center mb-3 w-100">
+                    <div class="row g-0">
+                        <div class="col-md-4 text-center display-vertical-center p-3">
+                            <div id="previewImgContainer" class="rounded-square-container d-none">
+                                <img id="previewProfileImg" class="img-fluid" src="">
+                            </div>
+                            <div id="currentImgContainer" class="rounded-square-container">
+                                <div id="defaultProfileImg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-images default-lecture-img" viewBox="0 0 16 16">
+                                        <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                        <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"/>
+                                    </svg>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-md-8 display-vertical-center flex-row">
+                            <form method="post" class="form-container container-fluid bg-white" enctype="multipart/form-data" th:object="${createLectureForm}">
+                                <div class="mb-3 mt-3">
+                                    <label for="lectureName" class="form-label gmarketSansFont">강의명</label>
+                                    <input type="text" class="form-control" id="lectureName" placeholder="강의명을 입력해주세요."
+                                           th:errorclass="field-error" th:field="*{name}">
+                                    <div class="field-error" th:errors="*{name}"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="personnel" class="form-label gmarketSansFont">정원</label>
+                                    <input type="text" class="form-control" id="personnel" placeholder="정원을 입력해주세요."
+                                           th:errorclass="field-error" th:field="*{personnel}">
+                                    <div class="field-error" th:errors="*{personnel}"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
+                                    <select id="lectureStatus" class="form-select" th:field="*{lectureStatus}" th:errorclass="field-error">
+                                        <option th:value="${lectureStatusReady}" th:text="${lectureStatusReady}"></option>
+                                        <option th:value="${lectureStatusOpen}" th:text="${lectureStatusOpen}"></option>
+                                    </select>
+                                    <div class="field-error" th:errors="*{lectureStatus}"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="imageFile" class="form-label gmarketSansFont">프로필 이미지</label>
+                                    <input type="file" class="form-control mb-2" id="imageFile" onchange="loadFile()" th:field="*{imageFile}">
+                                </div>
+
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLectureModal">강의 등록</button>
+                                <div class="modal fade" id="addLectureModal" tabindex="-1" aria-labelledby="addLectureModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="addLectureModalLabel">강의 등록</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" th:text="'정말로 강의를 등록하시겠습니까?'"></div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                <button type="submit" class="btn btn-primary">강의 등록</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
     <div th:replace="~{fragments/footer :: footer}"/>
 </div>
+<script src="/js/loadFile.js"></script>
 </body>
 </html>
