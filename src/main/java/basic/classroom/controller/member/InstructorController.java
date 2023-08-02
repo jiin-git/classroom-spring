@@ -12,6 +12,8 @@ import basic.classroom.service.PagingService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Controller
@@ -107,12 +118,6 @@ public class InstructorController {
         return "redirect:/instructor/lectures";
     }
 
-    private static void addModelLectureStatus(Model model) {
-        LectureStatus[] lectureStatusList = LectureStatus.values();
-        model.addAttribute("lectureStatusList", lectureStatusList);
-        model.addAttribute("lectureStatusReady", LectureStatus.READY);
-        model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
-    }
 
     @GetMapping("/instructor/edit/lecture/{lectureId}")
     public String editLectureForm(@PathVariable Long lectureId, Model model) {
@@ -135,7 +140,6 @@ public class InstructorController {
 
         Lecture lecture = lectureService.findOne(lectureId);
         LectureStatus lectureStatus = lectureDto.getLectureStatus();
-        LectureStatus[] lectureStatusList = LectureStatus.values();
 
         int updatePersonnel = lectureDto.getPersonnel();
         int personnel = lecture.getPersonnel();
@@ -145,30 +149,31 @@ public class InstructorController {
 
         // 검증 로직
         if (updateRemainingPersonnel < 0) {
-            bindingResult.reject("NotChangePersonnel", "신청한 정원보다 적은 수로 정원을 변경할 수 없습니다.");
-            model.addAttribute("lectureStatusList", lectureStatusList);
-            return "member/instructor/editLectureForm";
+            String errorCode = "NotChangePersonnel";
+            String message = "신청한 정원보다 적은 수로 정원을 변경할 수 없습니다.";
+            return rejectRequest(bindingResult, model, errorCode, message);
         }
 
         if (lectureStatus.equals(LectureStatus.READY) && !lecture.getAppliedStudents().isEmpty()) {
-            bindingResult.reject("NotChangeLectureStatusReady", "신청한 학생이 있어 강의를 준비 상태로 변경할 수 없습니다.");
-            model.addAttribute("lectureStatusList", lectureStatusList);
-            return "member/instructor/editLectureForm";
+            String errorCode = "NotChangeLectureStatusReady";
+            String message = "신청한 학생이 있어 강의를 준비 상태로 변경할 수 없습니다.";
+            return rejectRequest(bindingResult, model, errorCode, message);
         }
 
         if (lectureStatus.equals(LectureStatus.OPEN) && updateRemainingPersonnel == 0) {
-            bindingResult.reject("NotChangeLectureStatusOpen", "정원이 다 차서 강의를 열 수 없습니다. 강의 상태를 FULL로 변경해주세요.");
-            model.addAttribute("lectureStatusList", lectureStatusList);
-            return "member/instructor/editLectureForm";
+            String errorCode = "NotChangeLectureStatusOpen";
+            String message = "정원이 다 차서 강의를 열 수 없습니다. 강의 상태를 FULL로 변경해주세요.";
+            return rejectRequest(bindingResult, model, errorCode, message);
         }
 
         if (lectureStatus.equals(LectureStatus.FULL) && updateRemainingPersonnel != 0) {
-            bindingResult.reject("NotChangeLectureStatusFull", "정원이 다 차지 않아 강의 상태를 변경 할 수 없습니다.");
-            model.addAttribute("lectureStatusList", lectureStatusList);
-            return "member/instructor/editLectureForm";
+            String errorCode = "NotChangeLectureStatusFull";
+            String message = "정원이 다 차지 않아 강의 상태를 변경 할 수 없습니다.";
+            return rejectRequest(bindingResult, model, errorCode, message);
         }
 
         if (bindingResult.hasErrors()) {
+            LectureStatus[] lectureStatusList = LectureStatus.values();
             model.addAttribute("lectureStatusList", lectureStatusList);
             return "member/instructor/editLectureForm";
         }
@@ -178,6 +183,13 @@ public class InstructorController {
         return "redirect:/instructor/lectures";
     }
 
+    private static String rejectRequest(BindingResult bindingResult, Model model, String errorCode, String message) {
+        LectureStatus[] lectureStatusList = LectureStatus.values();
+        bindingResult.reject(errorCode, message);
+        model.addAttribute("lectureStatusList", lectureStatusList);
+        return "member/instructor/editLectureForm";
+    }
+
     @GetMapping("/instructor/mypage")
     public String myPage(HttpSession session, Model model) {
         Instructor instructor = findInstructor(session);
@@ -185,20 +197,6 @@ public class InstructorController {
 
         return "member/instructor/myPage";
     }
-
-    @GetMapping("/instructor/profile/image")
-    public ResponseEntity<byte[]> profileImg(HttpSession session) {
-        Instructor instructor = findInstructor(session);
-        ProfileImage profileImage = instructor.getProfileImage();
-
-        byte[] imageData = profileImage.getImageData();
-        String dataType = profileImage.getDataType();
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf(dataType))
-                .body(imageData);
-    }
-
     @GetMapping("/instructor/update/mypage")
     public String updateMyPageForm(HttpSession session, Model model) {
         Instructor instructor = findInstructor(session);
@@ -224,14 +222,6 @@ public class InstructorController {
         // 성공 로직
         instructorService.update(instructor.getId(), updateParam);
         return "redirect:/instructor/mypage";
-    }
-
-    @PostMapping("/instructor/initialize/profile")
-    public String initializeProfile(@ModelAttribute("instructor") UpdateMemberDto updateMemberDto, HttpSession session) {
-        Instructor instructor = findInstructor(session);
-        instructorService.initializeProfile(instructor.getId());
-
-        return "redirect:/instructor/update/mypage";
     }
 
     @GetMapping("/instructor/update/pw")
@@ -325,5 +315,12 @@ public class InstructorController {
         Instructor instructor = instructorService.findOne(memberId);
 
         return instructor;
+    }
+
+    private static void addModelLectureStatus(Model model) {
+        LectureStatus[] lectureStatusList = LectureStatus.values();
+        model.addAttribute("lectureStatusList", lectureStatusList);
+        model.addAttribute("lectureStatusReady", LectureStatus.READY);
+        model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
     }
 }
