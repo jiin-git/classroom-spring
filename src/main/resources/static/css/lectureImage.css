@@ -1,0 +1,41 @@
+img {
+    border-radius: 10px;
+}
+.default-lecture-img {
+    fill: #0d6efd;
+    border-radius: 10px;
+}
+.rounded-square-container {
+    width: 256px;
+    height: 256px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+}
+.rounded-square-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.small-rounded-square-container {
+    width: 128px;
+    height: 128px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+}
+
+@media (max-width: 850px) {
+    .rounded-square-container {
+        width: 200px;
+        height: 200px;
+    }
+}
+@media (max-width: 767px) {
+    .rounded-square-container {
+        width: 128px;
+        height: 128px;
+    }
+    .small-rounded-square-container {
+        display: none;
+    }
+}
