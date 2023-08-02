@@ -3,7 +3,7 @@ package basic.classroom.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "이미지 저장에 실패했습니다.")
 public class StoreImageException extends RuntimeException {
     public StoreImageException() {
         super();
