@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head}"/>
 <head th:replace="~{fragments/body :: bodycss}"/>
+<head><link rel="stylesheet" th:href="@{/css/lectureImage.css}"></head>
+
 <head>
 <style>
     .position-right {
@@ -87,9 +89,18 @@
                 <div class="container-fluid p-0" >
                     <div class="card mb-3 w-100" th:each="lecture: ${lectures}">
                         <div class="row g-0">
-                            <div class="col-md-4 ">
-                                <img src="..." class="img-fluid rounded-start" alt="...">
+                            <div class="col-md-4 text-center display-vertical-center p-3">
+                                <div class="small-rounded-square-container">
+                                    <img th:unless="${lecture.profileImage == null}" th:src="@{|/student/lecture/image/${lecture.id}|}" class="img-fluid">
+                                    <div th:if="${lecture.profileImage == null}" class="profile-img-container">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-images default-lecture-img" viewBox="0 0 16 16">
+                                            <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                            <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"/>
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h5 class="card-title gmarketSansFont" th:text="'강의명: ' + ${lecture.name}"></h5>
