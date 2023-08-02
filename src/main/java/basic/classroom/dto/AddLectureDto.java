@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -21,6 +22,8 @@ public class AddLectureDto {
 
     @NotNull(message = "강의 상태를 설정해주세요.")
     private LectureStatus lectureStatus;
+
+    private MultipartFile imageFile;
 
     public AddLectureDto(String name, int personnel, LectureStatus lectureStatus) {
         this.name = name;
