@@ -256,6 +256,67 @@ public class InstructorController {
         return "redirect:/instructor/mypage";
     }
 
+    @GetMapping("/instructor/profile/image")
+    public ResponseEntity<byte[]> profileImg(HttpSession session) {
+        Instructor instructor = findInstructor(session);
+        ProfileImage profileImage = instructor.getProfileImage();
+
+        byte[] imageData = profileImage.getImageData();
+        String dataType = profileImage.getDataType();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.noCache().mustRevalidate().cachePrivate())
+                .contentType(MediaType.valueOf(dataType))
+                .body(imageData);
+    }
+
+    @GetMapping("/instructor/lecture/image/{lectureId}")
+    public ResponseEntity<byte[]> lectureImg(@PathVariable Long lectureId) {
+        Lecture lecture = lectureService.findOne(lectureId);
+        ProfileImage profileImage = lecture.getProfileImage();
+
+        byte[] imageData = profileImage.getImageData();
+        String dataType = profileImage.getDataType();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.noCache().mustRevalidate().sMaxAge(1, TimeUnit.DAYS))
+                .contentType(MediaType.valueOf(dataType))
+                .body(imageData);
+    }
+
+    @PostMapping("/instructor/initialize/profile")
+    public String initializeProfile(@ModelAttribute("instructor") UpdateMemberDto updateMemberDto, HttpSession session) {
+        Instructor instructor = findInstructor(session);
+        instructorService.initializeProfile(instructor.getId());
+
+        return "redirect:/instructor/update/mypage";
+    }
+
+
+//    @GetMapping("/instructor/lecture/image/{lectureId}")
+//    public ResponseEntity<byte[]> lectureImg(@PathVariable Long lectureId) throws IOException {
+//        Lecture lecture = lectureService.findOne(lectureId);
+//        ProfileImage profileImage = lecture.getProfileImage();
+//
+//        byte[] imageData = profileImage.getImageData();
+//        String dataType = profileImage.getDataType();
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(imageData);
+//
+//        int width = 256;
+//        int height = 256;
+//
+//        BufferedImage image = ImageIO.read(inputStream);
+//        BufferedImage resizedImage = new BufferedImage(width, height, image.getType());
+//
+//        ByteArrayOutputStream outputImage = new ByteArrayOutputStream();
+//        ImageIO.write(resizedImage, dataType, outputImage);
+//        byte[] bytesData = outputImage.toByteArray();
+//
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .contentType(MediaType.valueOf(dataType))
+//                .body(bytesData);
+//    }
+
     private Instructor findInstructor(HttpSession session) {
         Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
         Instructor instructor = instructorService.findOne(memberId);
