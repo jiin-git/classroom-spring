@@ -19,8 +19,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/img/**", "/css/**", "/js/**")
                 .addResourceLocations("classpath:/static/css/", "classpath:/static/img/", "classpath:/static/js/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS)
-                        .noTransform()
-                        .mustRevalidate());
+                .noTransform()
+                .mustRevalidate());
     }
 
     @Override
@@ -28,6 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", "/js/**", "/*.ico", "/error", "/img/**", "/", "/login", "/find/**", "/logout", "/create/member/**");
+                .excludePathPatterns("/css/**", "/js/**", "/*.ico", "/error", "/img/**", "/",
+                        "/login", "/find/**", "/logout", "/create/member/**", "/ending/credit", "/error/**");
     }
 }
