@@ -122,6 +122,9 @@ public class InstructorController {
 
         model.addAttribute("lecture", lectureDto);
         model.addAttribute("lectureStatusList", lectureStatusList);
+        if (lecture.getProfileImage() != null) {
+            model.addAttribute("profileImage", lecture.getProfileImage());
+        }
 
         return "member/instructor/editLectureForm";
     }
