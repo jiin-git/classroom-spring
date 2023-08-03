@@ -8,6 +8,7 @@ import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.dto.UpdatePwDto;
 import basic.classroom.service.InstructorService;
 import basic.classroom.service.LectureService;
+import basic.classroom.service.MemberService;
 import basic.classroom.service.PagingService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public class InstructorController {
     private final InstructorService instructorService;
     private final LectureService lectureService;
     private final PagingService pagingService;
+    private final MemberService memberService;
 
     @GetMapping("/instructor/lectures")
     public String pagingMyLecture(@RequestParam(required = false) Long page, HttpSession session, Model model) {
@@ -219,7 +221,8 @@ public class InstructorController {
         }
 
         // 성공 로직
-        instructorService.update(instructor.getId(), updateParam);
+//        instructorService.update(instructor.getId(), updateParam);
+        memberService.update(instructor, updateParam);
         return "redirect:/instructor/mypage";
     }
 
@@ -244,7 +247,8 @@ public class InstructorController {
         }
 
         // 성공 로직
-        instructorService.updatePassword(instructor.getId(), updateParam.getPassword());
+//        instructorService.updatePassword(instructor.getId(), updateParam.getPassword());
+        memberService.updatePassword(instructor, updateParam.getPassword());
         return "redirect:/instructor/mypage";
     }
 
@@ -279,11 +283,10 @@ public class InstructorController {
     @PostMapping("/instructor/initialize/profile")
     public String initializeProfile(@ModelAttribute("instructor") UpdateMemberDto updateMemberDto, HttpSession session) {
         Instructor instructor = findInstructor(session);
-        instructorService.initializeProfile(instructor.getId());
-
+//        instructorService.initializeProfile(instructor.getId());
+        memberService.initializeProfile(instructor);
         return "redirect:/instructor/update/mypage";
     }
-
 
 //    @GetMapping("/instructor/lecture/image/{lectureId}")
 //    public ResponseEntity<byte[]> lectureImg(@PathVariable Long lectureId) throws IOException {
@@ -311,7 +314,8 @@ public class InstructorController {
 
     private Instructor findInstructor(HttpSession session) {
         Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
-        Instructor instructor = instructorService.findOne(memberId);
+//        Instructor instructor = instructorService.findOne(memberId);
+        Instructor instructor = memberService.findInstructor(memberId);
 
         return instructor;
     }

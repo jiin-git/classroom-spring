@@ -6,6 +6,7 @@ import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.dto.UpdatePwDto;
 import basic.classroom.service.LectureService;
+import basic.classroom.service.MemberService;
 import basic.classroom.service.PagingService;
 import basic.classroom.service.StudentService;
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +31,7 @@ public class StudentController {
     private final StudentService studentService;
     private final LectureService lectureService;
     private final PagingService pagingService;
+    private final MemberService memberService;
 
     @GetMapping("/student/lectures")
     public String pagingMyLecture(@RequestParam(required = false) Long page, HttpSession session, Model model) {
@@ -152,7 +154,8 @@ public class StudentController {
         }
 
         // 성공 로직
-        studentService.update(student.getId(), updateParam);
+//        studentService.update(student.getId(), updateParam);
+        memberService.update(student, updateParam);
         return "redirect:/student/mypage";
     }
 
@@ -177,7 +180,8 @@ public class StudentController {
         }
 
         // 성공 로직
-        studentService.updatePassword(student.getId(), updateParam.getPassword());
+//        studentService.updatePassword(student.getId(), updateParam.getPassword());
+        memberService.updatePassword(student, updateParam.getPassword());
         return "redirect:/student/mypage";
     }
 
@@ -210,7 +214,8 @@ public class StudentController {
     @PostMapping("/student/initialize/profile")
     public String initializeProfile(@ModelAttribute("student") UpdateMemberDto updateMemberDto, HttpSession session) {
         Student student = findStudent(session);
-        studentService.initializeProfile(student.getId());
+//        studentService.initializeProfile(student.getId());
+        memberService.initializeProfile(student);
 
         return "redirect:/student/update/mypage";
     }
@@ -234,7 +239,8 @@ public class StudentController {
 
     private Student findStudent(HttpSession session) {
         Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
-        Student student = studentService.findOne(memberId);
+//        Student student = studentService.findOne(memberId);
+        Student student = memberService.findStudent(memberId);
 
         return student;
     }
