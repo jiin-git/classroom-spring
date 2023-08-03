@@ -22,6 +22,7 @@ import static basic.classroom.service.ProfileImageService.*;
 public class LectureService {
 
     private final LectureRepository lectureRepository;
+    private final LectureStudentMapperRepository mapperRepository;
     @Transactional
     public Long create(Instructor instructor, AddLectureDto addLectureDto) {
         Lecture lecture = Lecture.createLecture(addLectureDto.getName(), instructor, addLectureDto.getPersonnel(), addLectureDto.getLectureStatus());
@@ -46,6 +47,7 @@ public class LectureService {
         return lectureRepository.findAll();
     }
 
+//    ==================== Student에서 요청하는 Service ==========================
     public List<Lecture> findPersonalizedLectures(SearchConditionDto searchConditionDto) {
         String status = searchConditionDto.getStatus();
         String condition = searchConditionDto.getCondition();
@@ -112,6 +114,43 @@ public class LectureService {
     public List<Lecture> findByLectureStatus(LectureStatus lectureStatus) {
         return lectureRepository.findByLectureStatus(lectureStatus);
     }
+
+    @Transactional
+    public Long applyLecture(Student student, Long lectureId) {
+        // 엔티티 조회
+        Lecture lecture = findOne(lectureId);
+
+        // mapper 생성
+        LectureStudentMapper mapper = new LectureStudentMapper();
+        mapper.setStudent(student);
+        mapper.setLecture(lecture);
+
+        // mapper 저장 및 설정
+        mapperRepository.save(mapper);
+        student.applyLecture(mapper);
+        lecture.addStudent(mapper);
+
+        return lectureId;
+    }
+
+    @Transactional
+    public void cancelLecture(Student student, Long lectureId) {
+        // 엔티티 조회
+        Lecture lecture = lectureRepository.findOne(lectureId);
+
+        // mapper 제거
+        LectureStudentMapper mapper = student.getApplyingLectures().get(lectureId);
+        mapperRepository.cancel(mapper);
+
+        student.cancelLecture(lectureId);
+        lecture.removeStudent(student.getId());
+    }
+
+    public List<Lecture> findAllLectures(Student student) {
+        List<Lecture> lectures = student.findAllLectures();
+        return lectures;
+    }
+//    ======================================================================
 
     public List<Student> findAllStudents(Long id) {
         Lecture lecture = lectureRepository.findOne(id);

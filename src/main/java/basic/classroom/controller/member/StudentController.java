@@ -36,7 +36,8 @@ public class StudentController {
     @GetMapping("/student/lectures")
     public String pagingMyLecture(@RequestParam(required = false) Long page, HttpSession session, Model model) {
         Student student = findStudent(session);
-        List<Lecture> lectures = studentService.findAllLectures(student.getId());
+//        List<Lecture> lectures = studentService.findAllLectures(student.getId());
+        List<Lecture> lectures = lectureService.findAllLectures(student);
 
         int lecturesCnt = lectures.size();
         int pageSize = pagingService.getPageSize(lecturesCnt);
@@ -71,7 +72,8 @@ public class StudentController {
     @PostMapping("/student/cancel/lecture/{lectureId}")
     public String cancelLecture(@PathVariable Long lectureId, HttpSession session) {
         Student student = findStudent(session);
-        studentService.cancelLecture(student.getId(), lectureId);
+//        studentService.cancelLecture(student.getId(), lectureId);
+        lectureService.cancelLecture(student, lectureId);
 
         return "redirect:/student/lectures";
     }
@@ -118,7 +120,8 @@ public class StudentController {
     @PostMapping("/student/add/lecture/{lectureId}")
     public String addLecture(@PathVariable Long lectureId, HttpSession session) {
         Student student = findStudent(session);
-        studentService.addLecture(student.getId(), lectureId);
+//        studentService.addLecture(student.getId(), lectureId);
+        lectureService.applyLecture(student, lectureId);
 
         return "redirect:/student/lectures";
     }
