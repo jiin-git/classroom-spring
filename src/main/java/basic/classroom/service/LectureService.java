@@ -3,6 +3,7 @@ package basic.classroom.service;
 import basic.classroom.domain.*;
 import basic.classroom.dto.AddLectureDto;
 import basic.classroom.dto.SearchConditionDto;
+import basic.classroom.dto.UpdateLectureDto;
 import basic.classroom.exception.StoreImageException;
 import basic.classroom.repository.LectureRepository;
 import basic.classroom.repository.LectureStudentMapperRepository;
@@ -23,6 +24,17 @@ public class LectureService {
 
     private final LectureRepository lectureRepository;
     private final LectureStudentMapperRepository mapperRepository;
+
+    public Lecture findOne(Long id){
+        return lectureRepository.findOne(id);
+    }
+
+    public List<Lecture> findAll() {
+        return lectureRepository.findAll();
+    }
+
+//  ===================================================================================
+//  =========================== Instructor에서 요청하는 Service =========================
     @Transactional
     public Long create(Instructor instructor, AddLectureDto addLectureDto) {
         Lecture lecture = Lecture.createLecture(addLectureDto.getName(), instructor, addLectureDto.getPersonnel(), addLectureDto.getLectureStatus());
@@ -39,15 +51,31 @@ public class LectureService {
         return lecture.getId();
     }
 
-    public Lecture findOne(Long id){
-        return lectureRepository.findOne(id);
+    public List<Lecture> findAllLectures(Instructor instructor) {
+        List<Lecture> lectures = instructor.getLectures().values().stream().toList();
+        return lectures;
     }
 
-    public List<Lecture> findAll() {
-        return lectureRepository.findAll();
+    @Transactional
+    public void updateLecture(Instructor instructor, UpdateLectureDto updateLectureDto, int updateRemainingPersonnel) {
+        Lecture lecture = instructor.getLectures().get(updateLectureDto.getLectureId());
+
+        lecture.setPersonnel(updateLectureDto.getPersonnel());
+        lecture.setRemainingPersonnel(updateRemainingPersonnel);
+        lecture.setLectureStatus(updateLectureDto.getLectureStatus());
+
+        if (updateLectureDto.getImageFile() != null && !updateLectureDto.getImageFile().isEmpty()) {
+            try {
+                saveLectureImageFile(updateLectureDto.getImageFile(), lecture);
+            } catch (IOException e) {
+                throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
+            }
+        }
     }
 
-//    ==================== Student에서 요청하는 Service ==========================
+//    =================================================================================
+//    ========================= Student에서 요청하는 Service ============================
+//    =================================================================================
     public List<Lecture> findPersonalizedLectures(SearchConditionDto searchConditionDto) {
         String status = searchConditionDto.getStatus();
         String condition = searchConditionDto.getCondition();
@@ -150,6 +178,7 @@ public class LectureService {
         List<Lecture> lectures = student.findAllLectures();
         return lectures;
     }
+//    ======================================================================
 //    ======================================================================
 
     public List<Student> findAllStudents(Long id) {
