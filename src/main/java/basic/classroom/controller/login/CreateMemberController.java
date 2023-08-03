@@ -6,6 +6,7 @@ import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.CreateMemberDto;
 import basic.classroom.service.InstructorService;
+import basic.classroom.service.MemberService;
 import basic.classroom.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class CreateMemberController {
 
     private final InstructorService instructorService;
     private final StudentService studentService;
+    private final MemberService memberService;
 
     @GetMapping("/create/member")
     public String createMemberForm(Model model) {
@@ -41,15 +43,28 @@ public class CreateMemberController {
             return "login/createMemberForm";
         }
 
+//        Long memberId;
+
         // 성공 로직
         if (createMemberDto.getMemberStatus() == MemberStatus.INSTRUCTOR) {
             Instructor instructor = Instructor.createInstructor(new Member(createMemberDto));
-            instructorService.join(instructor);
+//            instructorService.join(instructor);
+            memberService.join(instructor);
+//            memberId = instructorService.join(instructor);
+
         }
         else {
             Student student = Student.createStudent(new Member(createMemberDto));
-            studentService.join(student);
+//            studentService.join(student);
+            memberService.join(student);
+//            memberId = studentService.join(student);
         }
+
+//        if (memberId == -1) {
+//            bindingResult.reject("notCreateDuplicatedMember", "중복 회원 Id 입니다. 다시 입력해주세요.");
+//            addModelMemberStatus(model);
+//            return "login/createMemberForm";
+//        }
 
         return "redirect:/create/member/result";
     }
