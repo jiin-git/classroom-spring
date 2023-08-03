@@ -10,13 +10,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.text.Normalizer;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static basic.classroom.service.ProfileImageService.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,53 +53,18 @@ public class StudentService {
 
         if (updateMemberDto.getImageFile() != null && !updateMemberDto.getImageFile().isEmpty()) {
             try {
-                saveStudentImageFile(updateMemberDto.getImageFile(), student);
+                saveImageFile(updateMemberDto.getImageFile(), student);
             } catch (IOException e) {
                 throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
             }
         }
     }
 
-    private static void saveStudentImageFile(MultipartFile imageFile, Student student) throws IOException {
-        ProfileImage profileImage = validProfileImage(imageFile);
-        student.setProfileImage(profileImage);
-    }
-
-    private static ProfileImage validProfileImage(MultipartFile imageFile) throws IOException {
-        ProfileImage profileImage = getProfileImage(imageFile);
-        List<String> validImageTypes = getValidImageTypes();
-        if (!validImageTypes.contains(imageFile.getContentType())) {
-            throw new StoreImageException();
-        }
-
-        return profileImage;
-    }
-
-    private static ProfileImage getProfileImage(MultipartFile imageFile) throws IOException {
-        String imageName = Normalizer.normalize(imageFile.getOriginalFilename(), Normalizer.Form.NFC);
-        String contentType = imageFile.getContentType();
-        byte[] imageBytes = imageFile.getBytes();
-
-        return new ProfileImage(imageName, contentType, imageBytes);
-    }
-
-    private static List<String> getValidImageTypes() {
-        List<String> validImageTypes = new ArrayList<>();
-        ValidImageType[] values = ValidImageType.values();
-        for (ValidImageType value : values) {
-            String dataType = "image/" + value.toString().toLowerCase();
-            validImageTypes.add(dataType);
-        }
-        return validImageTypes;
-    }
-
     @Transactional
     public void initializeProfile(Long id) {
         Student student = studentRepository.findOne(id);
         if (student.getProfileImage() != null) {
-            student.getProfileImage().setImageName(null);
-            student.getProfileImage().setDataType(null);
-            student.getProfileImage().setImageData(null);
+            initializeMemberProfile(student);
         }
     }
 
