@@ -1,23 +1,40 @@
 package basic.classroom.service;
 
 import basic.classroom.domain.*;
+import basic.classroom.dto.AddLectureDto;
 import basic.classroom.dto.SearchConditionDto;
+import basic.classroom.exception.StoreImageException;
 import basic.classroom.repository.LectureRepository;
 import basic.classroom.repository.LectureStudentMapperRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
+
+import static basic.classroom.service.ProfileImageService.*;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LectureService {
 
     private final LectureRepository lectureRepository;
-
     @Transactional
-    public Long create(Lecture lecture) {
+    public Long create(Instructor instructor, AddLectureDto addLectureDto) {
+        Lecture lecture = Lecture.createLecture(addLectureDto.getName(), instructor, addLectureDto.getPersonnel(), addLectureDto.getLectureStatus());
+        if (addLectureDto.getImageFile() != null && !addLectureDto.getImageFile().isEmpty()) {
+            try {
+                saveLectureImageFile(addLectureDto.getImageFile(), lecture);
+            } catch (IOException e) {
+                throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
+            }
+        }
+
         lectureRepository.save(lecture);
+        instructor.addLectures(lecture);
         return lecture.getId();
     }
 

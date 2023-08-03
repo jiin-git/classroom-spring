@@ -66,25 +66,6 @@ public class InstructorService {
     }
 
     @Transactional
-    public Long addLecture(Long instructorId, AddLectureDto addLectureDto) {
-        Instructor instructor = instructorRepository.findOne(instructorId);
-        Lecture lecture = Lecture.createLecture(addLectureDto.getName(), instructor, addLectureDto.getPersonnel(), addLectureDto.getLectureStatus());
-
-        if (addLectureDto.getImageFile() != null && !addLectureDto.getImageFile().isEmpty()) {
-            try {
-                saveLectureImageFile(addLectureDto.getImageFile(), lecture);
-            } catch (IOException e) {
-                throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
-            }
-        }
-
-        lectureRepository.save(lecture);
-        instructor.addLectures(lecture);
-
-        return lecture.getId();
-    }
-
-    @Transactional
     public void updateLecture(Long instructorId, UpdateLectureDto updateLectureDto, int updateRemainingPersonnel) {
         Instructor instructor = instructorRepository.findOne(instructorId);
         Lecture lecture = instructor.getLectures().get(updateLectureDto.getLectureId());

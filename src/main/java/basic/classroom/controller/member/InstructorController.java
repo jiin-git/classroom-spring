@@ -114,10 +114,9 @@ public class InstructorController {
         }
 
         // 성공 로직
-        instructorService.addLecture(instructor.getId(), lectureDto);
+        lectureService.create(instructor, lectureDto);
         return "redirect:/instructor/lectures";
     }
-
 
     @GetMapping("/instructor/edit/lecture/{lectureId}")
     public String editLectureForm(@PathVariable Long lectureId, Model model) {
