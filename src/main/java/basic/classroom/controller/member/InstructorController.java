@@ -49,7 +49,8 @@ public class InstructorController {
     @GetMapping("/instructor/lectures")
     public String pagingMyLecture(@RequestParam(required = false) Long page, HttpSession session, Model model) {
         Instructor instructor = findInstructor(session);
-        List<Lecture> lectures = instructorService.findLectures(instructor.getId());
+//        List<Lecture> lectures = instructorService.findLectures(instructor.getId());
+        List<Lecture> lectures = lectureService.findAllLectures(instructor);
 
         int lecturesCnt = lectures.size();
         int pageSize = pagingService.getPageSize(lecturesCnt);
@@ -138,7 +139,7 @@ public class InstructorController {
     @PostMapping("/instructor/edit/lecture/{lectureId}")
     public String editLecture(@PathVariable Long lectureId,
                               @Validated @ModelAttribute("lecture") UpdateLectureDto lectureDto, BindingResult bindingResult, Model model) {
-
+        Instructor instructor = memberService.findInstructor(lectureDto.getInstructorId());
         Lecture lecture = lectureService.findOne(lectureId);
         LectureStatus lectureStatus = lectureDto.getLectureStatus();
 
@@ -180,7 +181,8 @@ public class InstructorController {
         }
 
         // 성공 로직
-        instructorService.updateLecture(lectureDto.getInstructorId(), lectureDto, updateRemainingPersonnel);
+//        instructorService.updateLecture(lectureDto.getInstructorId(), lectureDto, updateRemainingPersonnel);
+        lectureService.updateLecture(instructor, lectureDto, updateRemainingPersonnel);
         return "redirect:/instructor/lectures";
     }
 
