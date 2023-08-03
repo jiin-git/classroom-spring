@@ -26,58 +26,7 @@ public class StudentService {
     private final LectureRepository lectureRepository;
     private final LectureStudentMapperRepository mapperRepository;
 
-    @Transactional
-    public Long join(Student student) {
-        String studentLoginId = student.getMember().getLoginId();
-        Optional<Student> duplicateStudent = studentRepository.findByLoginId(studentLoginId);
-
-        // 중복 회원 존재시 에러
-        if (duplicateStudent.isPresent()) {
-            log.info("duplicated!");
-            throw new IllegalStateException();
-        }
-
-        // 성공 로직
-        studentRepository.save(student);
-        return student.getId();
-    }
-
-    public Student findOne(Long id) {
-        return studentRepository.findOne(id);
-    }
-
-    @Transactional
-    public void update(Long id, UpdateMemberDto updateMemberDto) {
-        Student student = studentRepository.findOne(id);
-        student.getMember().setEmail(updateMemberDto.getEmail());
-
-        if (updateMemberDto.getImageFile() != null && !updateMemberDto.getImageFile().isEmpty()) {
-            try {
-                saveImageFile(updateMemberDto.getImageFile(), student);
-            } catch (IOException e) {
-                throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
-            }
-        }
-    }
-
-    @Transactional
-    public void initializeProfile(Long id) {
-        Student student = studentRepository.findOne(id);
-        if (student.getProfileImage() != null) {
-            initializeMemberProfile(student);
-        }
-    }
-
-    @Transactional
-    public void updatePassword(Long id, String password) {
-        Student student = studentRepository.findOne(id);
-        student.getMember().setPassword(password);
-    }
-
-    public List<Student> findByName(String name) {
-        return studentRepository.findByName(name);
-    }
-
+//    ===== lecture service =====
     @Transactional
     public Long addLecture(Long studentId, Long lectureId) {
         // 엔티티 조회

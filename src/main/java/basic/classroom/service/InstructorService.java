@@ -25,46 +25,7 @@ public class InstructorService {
     private final InstructorRepository instructorRepository;
     private final LectureRepository lectureRepository;
 
-    @Transactional
-    public Long join(Instructor instructor) {
-        Optional<Instructor> duplicateInstructor = instructorRepository.findByLoginId(instructor.getMember().getLoginId());
-
-        // 중복 회원 존재시 에러
-        if (duplicateInstructor.isPresent()) {
-//            Long error = -1L;
-//            return error;
-            throw new CreateDuplicatedMemberException("중복 가입 ID 입니다. 다시 가입해주세요.");
-        }
-
-        // 성공 로직
-        instructorRepository.save(instructor);
-        return instructor.getId();
-    }
-
-    public Instructor findOne(Long id) {
-        return instructorRepository.findOne(id);
-    }
-
-    @Transactional
-    public void update(Long id, UpdateMemberDto updateMemberDto) {
-        Instructor instructor = instructorRepository.findOne(id);
-        instructor.getMember().setEmail(updateMemberDto.getEmail());
-
-        if (updateMemberDto.getImageFile() != null && !updateMemberDto.getImageFile().isEmpty()) {
-            try {
-                saveImageFile(updateMemberDto.getImageFile(), instructor);
-            } catch (IOException e) {
-                throw new StoreImageException("프로필 이미지를 저장할 수 없습니다. 이미지 형식과 사이즈를 다시 확인해주세요.", e);
-            }
-        }
-    }
-
-    @Transactional
-    public void updatePassword(Long id, String password) {
-        Instructor instructor = instructorRepository.findOne(id);
-        instructor.getMember().setPassword(password);
-    }
-
+// === lecture Service ====
     @Transactional
     public void updateLecture(Long instructorId, UpdateLectureDto updateLectureDto, int updateRemainingPersonnel) {
         Instructor instructor = instructorRepository.findOne(instructorId);
@@ -87,13 +48,4 @@ public class InstructorService {
         List<Lecture> lectures = instructorRepository.findOne(id).getLectures().values().stream().toList();
         return lectures;
     }
-
-    @Transactional
-    public void initializeProfile(Long id) {
-        Instructor instructor = instructorRepository.findOne(id);
-        if (instructor.getProfileImage() != null) {
-            initializeMemberProfile(instructor);
-        }
-    }
-
 }
