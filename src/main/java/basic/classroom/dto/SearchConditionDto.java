@@ -12,11 +12,4 @@ public class SearchConditionDto {
     private String condition;
     private String text;
     private Long page;
-
-    public SearchConditionDto(String status, String condition, String text, Long page) {
-        this.status = status;
-        this.condition = condition;
-        this.text = text;
-        this.page = page;
-    }
 }

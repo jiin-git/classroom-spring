@@ -19,10 +19,4 @@ public class LoginDto {
 
     @NotNull(message = "회원 상태를 설정해주세요.")
     private MemberStatus memberStatus;
-
-    public LoginDto(String loginId, String loginPw, MemberStatus memberStatus) {
-        this.loginId = loginId;
-        this.loginPw = loginPw;
-        this.memberStatus = memberStatus;
-    }
 }
