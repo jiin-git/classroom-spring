@@ -5,9 +5,7 @@ import basic.classroom.domain.Member;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.CreateMemberDto;
-import basic.classroom.service.InstructorService;
 import basic.classroom.service.MemberService;
-import basic.classroom.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,8 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class CreateMemberController {
 
-    private final InstructorService instructorService;
-    private final StudentService studentService;
     private final MemberService memberService;
 
     @GetMapping("/create/member")
@@ -48,16 +44,12 @@ public class CreateMemberController {
         // 성공 로직
         if (createMemberDto.getMemberStatus() == MemberStatus.INSTRUCTOR) {
             Instructor instructor = Instructor.createInstructor(new Member(createMemberDto));
-//            instructorService.join(instructor);
             memberService.join(instructor);
-//            memberId = instructorService.join(instructor);
 
         }
         else {
             Student student = Student.createStudent(new Member(createMemberDto));
-//            studentService.join(student);
             memberService.join(student);
-//            memberId = studentService.join(student);
         }
 
 //        if (memberId == -1) {

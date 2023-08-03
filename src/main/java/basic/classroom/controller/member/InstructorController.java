@@ -6,7 +6,6 @@ import basic.classroom.dto.AddLectureDto;
 import basic.classroom.dto.UpdateLectureDto;
 import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.dto.UpdatePwDto;
-import basic.classroom.service.InstructorService;
 import basic.classroom.service.LectureService;
 import basic.classroom.service.MemberService;
 import basic.classroom.service.PagingService;
@@ -40,8 +39,6 @@ import java.util.concurrent.TimeUnit;
 @Controller
 @RequiredArgsConstructor
 public class InstructorController {
-
-    private final InstructorService instructorService;
     private final LectureService lectureService;
     private final PagingService pagingService;
     private final MemberService memberService;
@@ -49,7 +46,6 @@ public class InstructorController {
     @GetMapping("/instructor/lectures")
     public String pagingMyLecture(@RequestParam(required = false) Long page, HttpSession session, Model model) {
         Instructor instructor = findInstructor(session);
-//        List<Lecture> lectures = instructorService.findLectures(instructor.getId());
         List<Lecture> lectures = lectureService.findAllLectures(instructor);
 
         int lecturesCnt = lectures.size();
@@ -181,7 +177,6 @@ public class InstructorController {
         }
 
         // 성공 로직
-//        instructorService.updateLecture(lectureDto.getInstructorId(), lectureDto, updateRemainingPersonnel);
         lectureService.updateLecture(instructor, lectureDto, updateRemainingPersonnel);
         return "redirect:/instructor/lectures";
     }
@@ -223,7 +218,6 @@ public class InstructorController {
         }
 
         // 성공 로직
-//        instructorService.update(instructor.getId(), updateParam);
         memberService.update(instructor, updateParam);
         return "redirect:/instructor/mypage";
     }
@@ -249,7 +243,6 @@ public class InstructorController {
         }
 
         // 성공 로직
-//        instructorService.updatePassword(instructor.getId(), updateParam.getPassword());
         memberService.updatePassword(instructor, updateParam.getPassword());
         return "redirect:/instructor/mypage";
     }
@@ -316,7 +309,6 @@ public class InstructorController {
 
     private Instructor findInstructor(HttpSession session) {
         Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
-//        Instructor instructor = instructorService.findOne(memberId);
         Instructor instructor = memberService.findInstructor(memberId);
 
         return instructor;

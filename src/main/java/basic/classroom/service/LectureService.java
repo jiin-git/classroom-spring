@@ -180,12 +180,4 @@ public class LectureService {
     }
 //    ======================================================================
 //    ======================================================================
-
-    public List<Student> findAllStudents(Long id) {
-        Lecture lecture = lectureRepository.findOne(id);
-        List<Student> students = lecture.findAppliedStudents();
-
-        return students;
-    }
-
 }
