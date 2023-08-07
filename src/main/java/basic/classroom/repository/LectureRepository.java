@@ -27,6 +27,56 @@ public class LectureRepository {
                 .getResultList();
     }
 
+    public List<Lecture> findByPage(int page, int pageSize) {
+        return em.createQuery("select l from Lecture l", Lecture.class)
+                .setFirstResult((page - 1) * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
+    }
+    public List<Lecture> findByPageByLectureStatus(int page, int pageSize, LectureStatus lectureStatus) {
+        return em.createQuery("select l from Lecture l where l.lectureStatus = :lectureStatus", Lecture.class)
+                .setParameter("lectureStatus", lectureStatus)
+                .setFirstResult((page - 1) * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
+    }
+
+    public List<Lecture> findByPageByName(int page, int pageSize, String name) {
+        return em.createQuery("select l from Lecture l where l.name = :name", Lecture.class)
+                .setParameter("name", name)
+                .setFirstResult((page - 1) * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
+    }
+
+    public List<Lecture> findByPageByInstructorName(int page, int pageSize, String instructorName) {
+        return em.createQuery("select l from Lecture l where l.instructor.member.name = :instructorName", Lecture.class)
+                .setParameter("instructorName", instructorName)
+                .setFirstResult((page - 1) * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
+    }
+
+    public List<Lecture> findByPageByLectureStatusByName(int page, int pageSize, LectureStatus lectureStatus, String name) {
+        return em.createQuery("select l from Lecture l " +
+                        "where l.lectureStatus = :lectureStatus and l.name = :name", Lecture.class)
+                .setParameter("lectureStatus", lectureStatus)
+                .setParameter("name", name)
+                .setFirstResult((page - 1) * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
+    }
+
+    public List<Lecture> findByPageByLectureStatusByInstructorName(int page, int pageSize, LectureStatus lectureStatus, String instructorName) {
+        return em.createQuery("select l from Lecture l " +
+                        "where l.lectureStatus = :lectureStatus and l.instructor.member.name = :instructorName", Lecture.class)
+                .setParameter("lectureStatus", lectureStatus)
+                .setParameter("instructorName", instructorName)
+                .setFirstResult((page - 1) * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
+    }
+
     public List<Lecture> findByName(String name) {
         return em.createQuery("select l from Lecture l where l.name =: name", Lecture.class)
                 .setParameter("name", name)
