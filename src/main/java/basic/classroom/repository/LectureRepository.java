@@ -77,6 +77,21 @@ public class LectureRepository {
                 .getResultList();
     }
 
+    public List<Lecture> findByLectureStatusByInstructorName(LectureStatus lectureStatus, String instructorName) {
+        return em.createQuery("select l from Lecture l " +
+                        "where l.lectureStatus = :lectureStatus and l.instructor.member.name = :instructorName", Lecture.class)
+                .setParameter("lectureStatus", lectureStatus)
+                .setParameter("instructorName", instructorName)
+                .getResultList();
+    }
+    public List<Lecture> findByLectureStatusByName(LectureStatus lectureStatus, String name) {
+        return em.createQuery("select l from Lecture l " +
+                        "where l.lectureStatus = :lectureStatus and l.name = :name", Lecture.class)
+                .setParameter("lectureStatus", lectureStatus)
+                .setParameter("name", name)
+                .getResultList();
+    }
+
     public List<Lecture> findByName(String name) {
         return em.createQuery("select l from Lecture l where l.name =: name", Lecture.class)
                 .setParameter("name", name)
