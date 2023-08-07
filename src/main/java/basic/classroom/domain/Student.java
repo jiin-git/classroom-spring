@@ -42,7 +42,7 @@ public class Student {
         getApplyingLectures().put(lectureId, applyingLecture);
         applyingLecture.setStudent(this);
 
-        lecture.getAppliedStudents().put(getId(), applyingLecture);
+        lecture.addStudent(applyingLecture);
         applyingLecture.setLecture(lecture);
     }
 
