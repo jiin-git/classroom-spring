@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -86,27 +87,47 @@ public class LectureService {
 //    =================================================================================
 //    ========================= Student에서 요청하는 Service ============================
 //    =================================================================================
+
+//    public List<Lecture> findPersonalizedLectures(SearchConditionDto searchConditionDto) {
+//        String status = searchConditionDto.getStatus();
+//        String condition = searchConditionDto.getCondition();
+//        String text = searchConditionDto.getText();
+//
+//        if (status != null && !status.isBlank() && !status.equals("ALL")) {
+//            List<Lecture> findByLectureStatusList = findByLectureStatus(status);
+//
+//            if (condition != null && !condition.isBlank()) {
+//                return findByAllConditions(condition, text, findByLectureStatusList);
+//            }
+//
+//            return findByLectureStatusList;
+//        }
+//
+//        if (condition != null && !condition.isBlank()) {
+//            return findByCondition(condition, text);
+//        }
+//
+//        List<Lecture> lectures = findAll();
+//        return lectures;
+//    }
+
     public List<Lecture> findPersonalizedLectures(SearchConditionDto searchConditionDto) {
         String status = searchConditionDto.getStatus();
         String condition = searchConditionDto.getCondition();
         String text = searchConditionDto.getText();
 
         if (status != null && !status.isBlank() && !status.equals("ALL")) {
-            List<Lecture> findByLectureStatusList = findByLectureStatus(status);
-
             if (condition != null && !condition.isBlank()) {
-                return findByAllConditions(condition, text, findByLectureStatusList);
+                return findByAllConditions(condition, text, status);
             }
-
-            return findByLectureStatusList;
+            return findByLectureStatus(status);
         }
 
         if (condition != null && !condition.isBlank()) {
             return findByCondition(condition, text);
         }
 
-        List<Lecture> lectures = findAll();
-        return lectures;
+        return findAll();
     }
 
     public List<Lecture> findByPageMyLectures(Student student, int page, int pageSize) {
@@ -114,18 +135,17 @@ public class LectureService {
         return lectures;
     }
 
-    private static List<Lecture> findByAllConditions(String condition, String text, List<Lecture> findByLectureStatusList) {
+    private List<Lecture> findByAllConditions(String condition, String text, String status) {
         LectureSearchCondition searchCondition = LectureSearchCondition.valueOf(condition);
+        LectureStatus lectureStatus = LectureStatus.valueOf(status);
 
         if (searchCondition == LectureSearchCondition.INSTRUCTOR) {
-            List<Lecture> filterInstructor = findByLectureStatusList.stream()
-                    .filter(l -> l.getInstructor().getMember().getName().equals(text)).toList();
-            return filterInstructor;
+            List<Lecture> allConditionLectures = lectureRepository.findByLectureStatusByInstructorName(lectureStatus, text);
+            return allConditionLectures;
         }
 
-        List<Lecture> filterLectureName = findByLectureStatusList.stream()
-                .filter(l -> l.getName().equals(text)).toList();
-        return filterLectureName;
+        List<Lecture> allConditionLectures = lectureRepository.findByLectureStatusByName(lectureStatus, text);
+        return allConditionLectures;
     }
 
     private List<Lecture> findByLectureStatus(String status) {
