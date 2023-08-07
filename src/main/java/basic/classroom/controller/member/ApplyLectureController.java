@@ -28,19 +28,57 @@ public class ApplyLectureController {
     private final LectureService lectureService;
     private final PagingService pagingService;
 
+//    @GetMapping("/student/find/lectures")
+//    public String findLectures(@ModelAttribute SearchConditionDto searchConditionDto, BindingResult bindingResult, HttpSession session, Model model) {
+//        Student student = findStudent(session);
+//        List<Lecture> lectures = lectureService.findPersonalizedLectures(searchConditionDto);
+//
+//        int lecturesCnt = lectures.size();
+//        int pageSize = pagingService.getPageSize(lectures.size());
+//        int currentPage = searchConditionDto.getPage() == null ? 1 : searchConditionDto.getPage().intValue();
+//
+//        List<Lecture> showLectures = pagingService.filteringLectures(lectures, currentPage);
+//        List<Integer> showPages = pagingService.getShowPages(lecturesCnt, currentPage);
+//
+//        ShowFindLecturesDto showFindLecturesDto = new ShowFindLecturesDto(pageSize, showLectures, showPages);
+//
+//        // Validation
+//        String condition = searchConditionDto.getCondition();
+//        String text = searchConditionDto.getText();
+//        if (condition != null && !condition.isBlank()) {
+//            if (text.isBlank()) {
+//                bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색명을 함께 입력해주세요.");
+//                return AddModelToShowFindLecturesDto(model, student, searchConditionDto, showFindLecturesDto);
+//            }
+//        }
+//
+//        if (text != null && !text.isBlank()) {
+//            if (condition == null || condition.isBlank()) {
+//                bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색 조건을 설정해주세요.");
+//                return AddModelToShowFindLecturesDto(model, student, searchConditionDto, showFindLecturesDto);
+//            }
+//        }
+//
+//        return AddModelToShowFindLecturesDto(model, student, searchConditionDto, showFindLecturesDto);
+//    }
+
+    public int getEndPage(int lecturesCnt) {
+        return (int) Math.ceil((double) lecturesCnt / 10);
+    }
+
     @GetMapping("/student/find/lectures")
     public String findLectures(@ModelAttribute SearchConditionDto searchConditionDto, BindingResult bindingResult, HttpSession session, Model model) {
         Student student = findStudent(session);
         List<Lecture> lectures = lectureService.findPersonalizedLectures(searchConditionDto);
 
         int lecturesCnt = lectures.size();
-        int pageSize = pagingService.getPageSize(lectures.size());
+        int endPage = lectures.isEmpty() ? 1 : getEndPage(lectures.size());
         int currentPage = searchConditionDto.getPage() == null ? 1 : searchConditionDto.getPage().intValue();
 
         List<Lecture> showLectures = pagingService.filteringLectures(lectures, currentPage);
         List<Integer> showPages = pagingService.getShowPages(lecturesCnt, currentPage);
 
-        ShowFindLecturesDto showFindLecturesDto = new ShowFindLecturesDto(pageSize, showLectures, showPages);
+        ShowFindLecturesDto showFindLecturesDto = new ShowFindLecturesDto(endPage, showLectures, showPages);
 
         // Validation
         String condition = searchConditionDto.getCondition();
@@ -67,7 +105,7 @@ public class ApplyLectureController {
         lectureService.applyLecture(student, lectureId);
         return "redirect:/student/lectures";
     }
-    
+
     @PostMapping("/student/cancel/lecture/{lectureId}")
     public String cancelLecture(@PathVariable Long lectureId, HttpSession session) {
         Student student = findStudent(session);
@@ -75,14 +113,26 @@ public class ApplyLectureController {
         return "redirect:/student/lectures";
     }
 
+//    @Getter
+//    private class ShowFindLecturesDto {
+//        private int pageSize;
+//        private List<Lecture> showLectures;
+//        private List<Integer> showPages;
+//
+//        public ShowFindLecturesDto(int pageSize, List<Lecture> showLectures, List<Integer> showPages) {
+//            this.pageSize = pageSize;
+//            this.showLectures = showLectures;
+//            this.showPages = showPages;
+//        }
+//    }
     @Getter
     private class ShowFindLecturesDto {
-        private int pageSize;
+        private int endPage;
         private List<Lecture> showLectures;
         private List<Integer> showPages;
 
-        public ShowFindLecturesDto(int pageSize, List<Lecture> showLectures, List<Integer> showPages) {
-            this.pageSize = pageSize;
+        public ShowFindLecturesDto(int endPage, List<Lecture> showLectures, List<Integer> showPages) {
+            this.endPage = endPage;
             this.showLectures = showLectures;
             this.showPages = showPages;
         }
@@ -94,9 +144,17 @@ public class ApplyLectureController {
         return student;
     }
 
+//    private static String AddModelToShowFindLecturesDto(Model model, Student student, SearchConditionDto searchConditionDto, ShowFindLecturesDto showFindLecturesDto) {
+//        addModelToStudentAndLectures(model, student, showFindLecturesDto.getShowLectures());
+//        addModelToPages(model, showFindLecturesDto.getShowPages(), showFindLecturesDto.getPageSize());
+//        addModelToLectureStatus(model);
+//        addModelToSearchCondition(searchConditionDto, model);
+//
+//        return "member/student/findLecture";
+//    }
     private static String AddModelToShowFindLecturesDto(Model model, Student student, SearchConditionDto searchConditionDto, ShowFindLecturesDto showFindLecturesDto) {
         addModelToStudentAndLectures(model, student, showFindLecturesDto.getShowLectures());
-        addModelToPages(model, showFindLecturesDto.getShowPages(), showFindLecturesDto.getPageSize());
+        addModelToPages(model, showFindLecturesDto.getShowPages(), showFindLecturesDto.getEndPage());
         addModelToLectureStatus(model);
         addModelToSearchCondition(searchConditionDto, model);
 
