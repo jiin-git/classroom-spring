@@ -5,14 +5,17 @@ import basic.classroom.dto.AddLectureDto;
 import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.dto.UpdateLectureDto;
 import basic.classroom.exception.StoreImageException;
+import basic.classroom.repository.InstructorRepository;
 import basic.classroom.repository.LectureRepository;
 import basic.classroom.repository.LectureStudentMapperRepository;
+import basic.classroom.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import static basic.classroom.service.ProfileImageService.*;
@@ -24,6 +27,8 @@ public class LectureService {
 
     private final LectureRepository lectureRepository;
     private final LectureStudentMapperRepository mapperRepository;
+    private final InstructorRepository instructorRepository;
+    private final StudentRepository studentRepository;
 
     public Lecture findOne(Long id){
         return lectureRepository.findOne(id);
@@ -53,6 +58,11 @@ public class LectureService {
 
     public List<Lecture> findAllLectures(Instructor instructor) {
         List<Lecture> lectures = instructor.getLectures().values().stream().toList();
+        return lectures;
+    }
+
+    public List<Lecture> findByPageMyLectures(Instructor instructor, int page, int pageSize) {
+        List<Lecture> lectures = instructorRepository.findByPageMyLectures(instructor.getId(), page, pageSize);
         return lectures;
     }
 
@@ -96,6 +106,11 @@ public class LectureService {
         }
 
         List<Lecture> lectures = findAll();
+        return lectures;
+    }
+
+    public List<Lecture> findByPageMyLectures(Student student, int page, int pageSize) {
+        List<Lecture> lectures = studentRepository.findByPageMyLectures(student.getId(), page, pageSize);
         return lectures;
     }
 
@@ -188,6 +203,7 @@ public class LectureService {
         List<Lecture> lectures = student.findAllLectures();
         return lectures;
     }
+
 //    ======================================================================
 //    ======================================================================
 }
