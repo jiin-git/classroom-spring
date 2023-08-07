@@ -206,6 +206,18 @@ public class LectureService {
         return lectureId;
     }
 
+//    @Transactional
+//    public void cancelLecture(Student student, Long lectureId) {
+//        // 엔티티 조회
+//        Lecture lecture = lectureRepository.findOne(lectureId);
+//
+//        // mapper 제거
+//        LectureStudentMapper mapper = student.getApplyingLectures().get(lectureId);
+//        mapperRepository.cancel(mapper);
+//
+//        student.cancelLecture(lectureId);
+//        lecture.removeStudent(student.getId());
+//    }
     @Transactional
     public void cancelLecture(Student student, Long lectureId) {
         // 엔티티 조회
@@ -215,8 +227,7 @@ public class LectureService {
         LectureStudentMapper mapper = student.getApplyingLectures().get(lectureId);
         mapperRepository.cancel(mapper);
 
-        student.cancelLecture(lectureId);
-        lecture.removeStudent(student.getId());
+        student.cancelLecture(lecture);
     }
 
     public List<Lecture> findAllLectures(Student student) {
