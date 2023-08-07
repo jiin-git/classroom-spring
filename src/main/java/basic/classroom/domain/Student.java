@@ -30,19 +30,26 @@ public class Student {
 
     // 1:n
     /* 강의 신청 메서드 */
-    public void applyLecture(LectureStudentMapper applyingLecture) {
-        Long lectureId = applyingLecture.getLecture().getId();
+//    public void applyLecture(LectureStudentMapper applyingLecture) {
+//        Long lectureId = applyingLecture.getLecture().getId();
+//        getApplyingLectures().put(lectureId, applyingLecture);
+//    }
+
+    // n:n(n:1 - 1:n)
+    public void applyLecture(LectureStudentMapper applyingLecture, Lecture lecture) {
+        Long lectureId = lecture.getId();
+
         getApplyingLectures().put(lectureId, applyingLecture);
+        applyingLecture.setStudent(this);
+
+        lecture.getAppliedStudents().put(getId(), applyingLecture);
+        applyingLecture.setLecture(lecture);
     }
 
     /* 생성 메서드 */
-    public static Student createStudent(Member member, LectureStudentMapper... applyLectures) {
+    public static Student createStudent(Member member) {
         Student student = new Student();
         student.setMember(member);
-        for (LectureStudentMapper applyLecture : applyLectures) {
-            student.applyLecture(applyLecture);
-        }
-
         return student;
     }
 
