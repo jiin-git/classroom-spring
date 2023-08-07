@@ -54,8 +54,12 @@ public class Student {
     }
 
     /* 강의 취소 메서드 */
-    public void cancelLecture(Long applyingLectureId) {
-        applyingLectures.remove(applyingLectureId);
+//    public void cancelLecture(Long applyingLectureId) {
+//        applyingLectures.remove(applyingLectureId);
+//    }
+    public void cancelLecture(Lecture lecture) {
+        applyingLectures.remove(lecture.getId());
+        lecture.removeStudent(this.id);
     }
 
 
