@@ -143,21 +143,31 @@ public class LectureService {
         return lectureRepository.findByLectureStatus(lectureStatus);
     }
 
+//    @Transactional
+//    public Long applyLecture(Student student, Long lectureId) {
+//        // 엔티티 조회
+//        Lecture lecture = findOne(lectureId);
+//
+//        // mapper 생성
+//        LectureStudentMapper mapper = new LectureStudentMapper();
+//        mapper.setStudent(student);
+//        mapper.setLecture(lecture);
+//
+//        // mapper 저장 및 설정
+//        mapperRepository.save(mapper);
+//        student.applyLecture(mapper);
+//        lecture.addStudent(mapper);
+//
+//        return lectureId;
+//    }
     @Transactional
     public Long applyLecture(Student student, Long lectureId) {
-        // 엔티티 조회
         Lecture lecture = findOne(lectureId);
 
-        // mapper 생성
         LectureStudentMapper mapper = new LectureStudentMapper();
-        mapper.setStudent(student);
-        mapper.setLecture(lecture);
-
-        // mapper 저장 및 설정
         mapperRepository.save(mapper);
-        student.applyLecture(mapper);
-        lecture.addStudent(mapper);
 
+        student.applyLecture(mapper, lecture);
         return lectureId;
     }
 
