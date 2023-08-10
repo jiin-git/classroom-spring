@@ -5,10 +5,10 @@ import basic.classroom.dto.AddLectureDto;
 import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.dto.UpdateLectureDto;
 import basic.classroom.exception.StoreImageException;
-import basic.classroom.repository.InstructorRepository;
-import basic.classroom.repository.LectureRepository;
-import basic.classroom.repository.LectureStudentMapperRepository;
-import basic.classroom.repository.StudentRepository;
+import basic.classroom.repository.jpa.InstructorRepository;
+import basic.classroom.repository.jpa.LectureRepository;
+import basic.classroom.repository.jpa.LectureStudentMapperRepository;
+import basic.classroom.repository.jpa.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class LectureService {
         return lectureRepository.findAll();
     }
 
-//  ===================================================================================
+    //  ===================================================================================
 //  =========================== Instructor에서 요청하는 Service =========================
     @Transactional
     public Long create(Instructor instructor, AddLectureDto addLectureDto) {
@@ -156,7 +156,7 @@ public class LectureService {
 
     private List<Lecture> findByCondition(String condition, String text) {
         LectureSearchCondition searchCondition = LectureSearchCondition.valueOf(condition);
-        
+
         if (searchCondition == LectureSearchCondition.INSTRUCTOR) {
             List<Lecture> findByInstructorList = findByInstructorName(text);
             return findByInstructorList;
@@ -165,7 +165,7 @@ public class LectureService {
         List<Lecture> findByLectureList = findByName(text);
         return findByLectureList;
     }
-    
+
     public List<Lecture> findByName(String name) {
         return lectureRepository.findByName(name);
     }
@@ -178,7 +178,7 @@ public class LectureService {
         return lectureRepository.findByLectureStatus(lectureStatus);
     }
 
-//    @Transactional
+    //    @Transactional
 //    public Long applyLecture(Student student, Long lectureId) {
 //        // 엔티티 조회
 //        Lecture lecture = findOne(lectureId);
@@ -206,7 +206,7 @@ public class LectureService {
         return lectureId;
     }
 
-//    @Transactional
+    //    @Transactional
 //    public void cancelLecture(Student student, Long lectureId) {
 //        // 엔티티 조회
 //        Lecture lecture = lectureRepository.findOne(lectureId);
