@@ -21,4 +21,10 @@ public class FindPwDto {
 
     @NotNull(message = "회원 상태를 설정해주세요.")
     private MemberStatus memberStatus;
+
+    public FindPwDto(String loginId, String email, MemberStatus memberStatus) {
+        this.loginId = loginId;
+        this.email = email;
+        this.memberStatus = memberStatus;
+    }
 }
