@@ -47,12 +47,6 @@ public class CreateMemberController {
             memberService.join(student);
         }
 
-//        if (memberId == -1) {
-//            bindingResult.reject("notCreateDuplicatedMember", "중복 회원 Id 입니다. 다시 입력해주세요.");
-//            addModelMemberStatus(model);
-//            return "login/createMemberForm";
-//        }
-
         return "redirect:/create/member/result";
     }
 
