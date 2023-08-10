@@ -1,4 +1,4 @@
-package basic.classroom.repository;
+package basic.classroom.repository.jpa;
 
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Lecture;
