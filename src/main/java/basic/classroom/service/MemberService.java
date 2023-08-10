@@ -5,8 +5,10 @@ import basic.classroom.domain.Student;
 import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.exception.CreateDuplicatedMemberException;
 import basic.classroom.exception.StoreImageException;
-import basic.classroom.repository.InstructorRepository;
-import basic.classroom.repository.StudentRepository;
+import basic.classroom.repository.dataJpa.InstructorJpaRepository;
+import basic.classroom.repository.dataJpa.StudentJpaRepository;
+import basic.classroom.repository.jpa.InstructorRepository;
+import basic.classroom.repository.jpa.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,26 +27,31 @@ public class MemberService {
     private final StudentRepository studentRepository;
     private final InstructorRepository instructorRepository;
 
+    private final StudentJpaRepository studentJpaRepository;
+    private final InstructorJpaRepository instructorJpaRepository;
+
     @Transactional
     public Long join(Student student) {
         String loginId = student.getMember().getLoginId();
-        Optional<Student> duplicateStudent = studentRepository.findByLoginId(loginId);
+//        Optional<Student> duplicateStudent = studentRepository.findByLoginId(loginId);
+        Optional<Student> duplicateStudent = studentJpaRepository.findByMember_LoginId(loginId);
 
         // 중복 회원 존재시 에러
         if (duplicateStudent.isPresent()) {
-            log.info("duplicated!");
-            throw new IllegalStateException();
+            throw new CreateDuplicatedMemberException("중복 가입 ID 입니다. 다시 가입해주세요.");
         }
 
         // 성공 로직
-        studentRepository.save(student);
+//        studentRepository.save(student);
+        studentJpaRepository.save(student);
         return student.getId();
     }
 
     @Transactional
     public Long join(Instructor instructor) {
         String loginId = instructor.getMember().getLoginId();
-        Optional<Instructor> duplicateInstructor = instructorRepository.findByLoginId(loginId);
+//        Optional<Instructor> duplicateInstructor = instructorRepository.findByLoginId(loginId);
+        Optional<Instructor> duplicateInstructor = instructorJpaRepository.findByMember_LoginId(loginId);
 
         // 중복 회원 존재시 에러
         if (duplicateInstructor.isPresent()) {
@@ -52,15 +59,18 @@ public class MemberService {
         }
 
         // 성공 로직
-        instructorRepository.save(instructor);
+//        instructorRepository.save(instructor);
+        instructorJpaRepository.save(instructor);
         return instructor.getId();
     }
 
     public Instructor findInstructor(Long id) {
-        return instructorRepository.findOne(id);
+//        return instructorRepository.findOne(id);
+        return instructorJpaRepository.findById(id).get();
     }
     public Student findStudent(Long id) {
-        return studentRepository.findOne(id);
+//        return studentRepository.findOne(id);
+        return studentJpaRepository.findById(id).get();
     }
 
     @Transactional

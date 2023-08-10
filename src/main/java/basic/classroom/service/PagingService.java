@@ -99,5 +99,4 @@ public class PagingService {
 
         return (int) Math.ceil((double) lecturesCnt / 10);
     }
-
 }

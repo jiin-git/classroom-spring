@@ -5,8 +5,10 @@ import basic.classroom.dto.FindPwDto;
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
-import basic.classroom.repository.InstructorRepository;
-import basic.classroom.repository.StudentRepository;
+import basic.classroom.repository.dataJpa.InstructorJpaRepository;
+import basic.classroom.repository.dataJpa.StudentJpaRepository;
+import basic.classroom.repository.jpa.InstructorRepository;
+import basic.classroom.repository.jpa.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,6 +25,21 @@ public class LoginHelpService {
     private final InstructorRepository instructorRepository;
     private final StudentRepository studentRepository;
 
+    private final InstructorJpaRepository instructorJpaRepository;
+    private final StudentJpaRepository studentJpaRepository;
+
+//    @Transactional
+//    public List<String> findLoginIds(FindIdDto findIdDto) {
+//        String name = findIdDto.getName();
+//        String email = findIdDto.getEmail();
+//        MemberStatus memberStatus = findIdDto.getMemberStatus();
+//
+//        if (memberStatus == MemberStatus.INSTRUCTOR) {
+//            return getInstructorIds(name, email);
+//        }
+//
+//        return getStudentIds(name, email);
+//    }
     @Transactional
     public List<String> findLoginIds(FindIdDto findIdDto) {
         String name = findIdDto.getName();
@@ -30,10 +47,10 @@ public class LoginHelpService {
         MemberStatus memberStatus = findIdDto.getMemberStatus();
 
         if (memberStatus == MemberStatus.INSTRUCTOR) {
-            return getInstructorIds(name, email);
+            return instructorJpaRepository.findLoginIdByNameAndEmail(name, email);
         }
 
-        return getStudentIds(name, email);
+        return studentJpaRepository.findLoginIdByNameAndEmail(name, email);
     }
 
     private List<String> getStudentIds(String name, String email) {
@@ -64,14 +81,26 @@ public class LoginHelpService {
         return getStudentPassword(loginId, email);
     }
 
+//    private String getStudentPassword(String loginId, String email) {
+//        Optional<Student> findStudent = studentRepository.findByLoginId(loginId);
+//        if (findStudent.isEmpty()) {
+//            return null;
+//        }
+//
+//        String findEmail = findStudent.get().getMember().getEmail();
+//        if (!findEmail.equals(email)) {
+//            return null;
+//        }
+//
+//        String randomPassword = RandomStringUtils.random(8, true, true);
+//        Student student = findStudent.get();
+//        student.getMember().setPassword(randomPassword);
+//
+//        return randomPassword;
+//    }
     private String getStudentPassword(String loginId, String email) {
-        Optional<Student> findStudent = studentRepository.findByLoginId(loginId);
+        Optional<Student> findStudent = studentJpaRepository.findByMember_LoginIdAndMember_Email(loginId, email);
         if (findStudent.isEmpty()) {
-            return null;
-        }
-
-        String findEmail = findStudent.get().getMember().getEmail();
-        if (!findEmail.equals(email)) {
             return null;
         }
 
@@ -82,14 +111,26 @@ public class LoginHelpService {
         return randomPassword;
     }
 
+//    private String getInstructorPassword(String loginId, String email) {
+//        Optional<Instructor> findInstructor = instructorRepository.findByLoginId(loginId);
+//        if (findInstructor.isEmpty()) {
+//            return null;
+//        }
+//
+//        String findEmail = findInstructor.get().getMember().getEmail();
+//        if (!findEmail.equals(email)) {
+//            return null;
+//        }
+//
+//        String randomPassword = RandomStringUtils.random(8, true, true);
+//        Instructor instructor = findInstructor.get();
+//        instructor.getMember().setPassword(randomPassword);
+//
+//        return randomPassword;
+//    }
     private String getInstructorPassword(String loginId, String email) {
-        Optional<Instructor> findInstructor = instructorRepository.findByLoginId(loginId);
+        Optional<Instructor> findInstructor = instructorJpaRepository.findByMember_LoginIdAndMember_Email(loginId, email);
         if (findInstructor.isEmpty()) {
-            return null;
-        }
-
-        String findEmail = findInstructor.get().getMember().getEmail();
-        if (!findEmail.equals(email)) {
             return null;
         }
 
