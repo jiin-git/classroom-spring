@@ -4,15 +4,14 @@ import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Lecture;
 import basic.classroom.domain.LectureStatus;
 import basic.classroom.domain.Member;
-import basic.classroom.repository.InstructorRepository;
+import basic.classroom.repository.jpa.InstructorRepository;
+import basic.classroom.repository.jpa.LectureRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

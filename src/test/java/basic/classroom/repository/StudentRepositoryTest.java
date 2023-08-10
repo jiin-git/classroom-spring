@@ -1,6 +1,10 @@
 package basic.classroom.repository;
 
 import basic.classroom.domain.*;
+import basic.classroom.repository.jpa.InstructorRepository;
+import basic.classroom.repository.jpa.LectureRepository;
+import basic.classroom.repository.jpa.LectureStudentMapperRepository;
+import basic.classroom.repository.jpa.StudentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

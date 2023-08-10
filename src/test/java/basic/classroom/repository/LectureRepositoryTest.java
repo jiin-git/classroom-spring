@@ -1,7 +1,10 @@
 package basic.classroom.repository;
 
 import basic.classroom.domain.*;
-import org.assertj.core.api.Assertions;
+import basic.classroom.repository.jpa.InstructorRepository;
+import basic.classroom.repository.jpa.LectureRepository;
+import basic.classroom.repository.jpa.LectureStudentMapperRepository;
+import basic.classroom.repository.jpa.StudentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
