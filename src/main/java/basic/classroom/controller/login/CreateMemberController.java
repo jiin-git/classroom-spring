@@ -26,7 +26,7 @@ public class CreateMemberController {
     @GetMapping("/create/member")
     public String createMemberForm(Model model) {
         model.addAttribute("createMemberForm", new CreateMemberDto());
-        addModelMemberStatus(model);
+        addMemberStatusToModel(model);
         return "login/createMemberForm";
     }
 
@@ -34,18 +34,13 @@ public class CreateMemberController {
     public String createMember(@Validated @ModelAttribute("createMemberForm") CreateMemberDto createMemberDto, BindingResult bindingResult, Model model) {
         // 검증 로직
         if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            addModelMemberStatus(model);
+            addMemberStatusToModel(model);
             return "login/createMemberForm";
         }
-
-//        Long memberId;
-
         // 성공 로직
         if (createMemberDto.getMemberStatus() == MemberStatus.INSTRUCTOR) {
             Instructor instructor = Instructor.createInstructor(new Member(createMemberDto));
             memberService.join(instructor);
-
         }
         else {
             Student student = Student.createStudent(new Member(createMemberDto));
@@ -66,7 +61,7 @@ public class CreateMemberController {
         return "login/createMemberResult";
     }
 
-    private static void addModelMemberStatus(Model model) {
+    private static void addMemberStatusToModel(Model model) {
         model.addAttribute("student", MemberStatus.STUDENT);
         model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
     }

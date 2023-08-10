@@ -19,14 +19,12 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class LoginHelpController {
-
     private final LoginHelpService loginHelpService;
 
     @GetMapping("/find/ids")
     public String findLoginIdsForm(Model model) {
         model.addAttribute("findIdsForm", new FindIdDto());
-        addModelMemberStatus(model);
-
+        addMemberStatusToModel(model);
         return "login/findIdsForm";
     }
 
@@ -36,7 +34,7 @@ public class LoginHelpController {
 
         // 검증 로직
         if (bindingResult.hasErrors()) {
-            addModelMemberStatus(model);
+            addMemberStatusToModel(model);
             return "login/findIdsForm";
         }
 
@@ -55,7 +53,7 @@ public class LoginHelpController {
     @GetMapping("/find/pw")
     public String findPwForm(Model model) {
         model.addAttribute("findPwForm", new FindPwDto());
-        addModelMemberStatus(model);
+        addMemberStatusToModel(model);
 
         return "login/findPwForm";
     }
@@ -65,7 +63,7 @@ public class LoginHelpController {
                               BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         // 검증 로직
         if (bindingResult.hasErrors()) {
-            addModelMemberStatus(model);
+            addMemberStatusToModel(model);
             return "login/findPwForm";
         }
 
@@ -81,7 +79,7 @@ public class LoginHelpController {
         return "login/findPwResult";
     }
 
-    private static void addModelMemberStatus(Model model) {
+    private void addMemberStatusToModel(Model model) {
         model.addAttribute("student", MemberStatus.STUDENT);
         model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
     }

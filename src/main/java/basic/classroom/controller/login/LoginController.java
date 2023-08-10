@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
-
     private final LoginService loginService;
 
     @GetMapping("/login")
@@ -33,10 +32,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute("loginForm") LoginDto loginDto,
-                        BindingResult bindingResult,
-                        HttpServletRequest request,
-                        Model model) {
+    public String login(@Validated @ModelAttribute("loginForm") LoginDto loginDto, BindingResult bindingResult, HttpServletRequest request, Model model) {
 
         // 검증 코드
         if (bindingResult.hasErrors()) {
@@ -65,7 +61,13 @@ public class LoginController {
         return "redirect:/student/lectures";
     }
 
-    private static String goToLoginForm(Model model) {
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        expireCookie(request, response);
+        return "redirect:/";
+    }
+
+    private String goToLoginForm(Model model) {
         model.addAttribute("student", MemberStatus.STUDENT);
         model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
 
@@ -76,13 +78,6 @@ public class LoginController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_ID, id);
         session.setAttribute(SessionConst.MEMBER_STATUS, memberStatus);
-    }
-
-    // logout
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        expireCookie(request, response);
-        return "redirect:/";
     }
 
     private void expireCookie(HttpServletRequest request, HttpServletResponse response) {
