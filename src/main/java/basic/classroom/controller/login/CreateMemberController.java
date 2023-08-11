@@ -5,7 +5,7 @@ import basic.classroom.domain.Member;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.CreateMemberDto;
-import basic.classroom.service.MemberService;
+import basic.classroom.service.datajpa.MemberJpaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 public class CreateMemberController {
-
-    private final MemberService memberService;
+    private final MemberJpaService memberService;
 
     @GetMapping("/create/member")
     public String createMemberForm(Model model) {
@@ -55,7 +54,7 @@ public class CreateMemberController {
         return "login/createMemberResult";
     }
 
-    private static void addMemberStatusToModel(Model model) {
+    private void addMemberStatusToModel(Model model) {
         model.addAttribute("student", MemberStatus.STUDENT);
         model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
     }

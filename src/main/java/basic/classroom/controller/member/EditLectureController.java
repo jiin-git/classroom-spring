@@ -1,13 +1,11 @@
 package basic.classroom.controller.member;
 
-import basic.classroom.controller.login.SessionConst;
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Lecture;
 import basic.classroom.domain.LectureStatus;
 import basic.classroom.dto.UpdateLectureDto;
-import basic.classroom.service.LectureService;
-import basic.classroom.service.MemberService;
-import jakarta.servlet.http.HttpSession;
+import basic.classroom.service.datajpa.LectureJpaService;
+import basic.classroom.service.datajpa.MemberJpaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,8 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 public class EditLectureController {
-    private final LectureService lectureService;
-    private final MemberService memberService;
+    private final LectureJpaService lectureService;
+    private final MemberJpaService memberService;
 
     @GetMapping("/instructor/edit/lecture/{lectureId}")
     public String editLectureForm(@PathVariable Long lectureId, Model model) {
@@ -89,7 +87,7 @@ public class EditLectureController {
         return "redirect:/instructor/lectures";
     }
 
-    private static String rejectRequest(BindingResult bindingResult, Model model, String errorCode, String message) {
+    private String rejectRequest(BindingResult bindingResult, Model model, String errorCode, String message) {
         LectureStatus[] lectureStatusList = LectureStatus.values();
         bindingResult.reject(errorCode, message);
         model.addAttribute("lectureStatusList", lectureStatusList);

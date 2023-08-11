@@ -5,7 +5,7 @@ import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.UpdateMemberDto;
 import basic.classroom.dto.UpdatePwDto;
-import basic.classroom.service.MemberService;
+import basic.classroom.service.datajpa.MemberJpaService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 public class MyPageController {
-    private final MemberService memberService;
+    private final MemberJpaService memberService;
 
     @GetMapping("/instructor/mypage")
     public String instructorMyPage(HttpSession session, Model model) {
@@ -29,6 +29,7 @@ public class MyPageController {
         model.addAttribute("instructor", instructor);
         return "member/instructor/myPage";
     }
+
     @GetMapping("/student/mypage")
     public String studentMyPage(HttpSession session, Model model) {
         Student student = findStudent(session);
@@ -47,6 +48,7 @@ public class MyPageController {
         }
         return "member/instructor/updateMyPage";
     }
+
     @GetMapping("/student/update/mypage")
     public String updateStudentMyPageForm(HttpSession session, Model model) {
         Student student = findStudent(session);
@@ -72,6 +74,7 @@ public class MyPageController {
         memberService.update(instructor, updateParam);
         return "redirect:/instructor/mypage";
     }
+
     @PostMapping("/student/update/mypage")
     public String UpdateStudentMyPage(@Validated @ModelAttribute("student") UpdateMemberDto updateParam, BindingResult bindingResult, HttpSession session) {
         Student student = findStudent(session);
@@ -91,6 +94,7 @@ public class MyPageController {
         model.addAttribute("pwForm", new UpdatePwDto());
         return "member/instructor/updatePw";
     }
+
     @GetMapping("/student/update/pw")
     public String updateStudentPwForm(Model model) {
         model.addAttribute("pwForm", new UpdatePwDto());
@@ -115,6 +119,7 @@ public class MyPageController {
         memberService.updatePassword(instructor, updateParam.getPassword());
         return "redirect:/instructor/mypage";
     }
+
     @PostMapping("/student/update/pw")
     public String updateStudentPw(@Validated @ModelAttribute("pwForm") UpdatePwDto updateParam, BindingResult bindingResult, HttpSession session) {
         Student student = findStudent(session);
@@ -138,7 +143,6 @@ public class MyPageController {
         Student student = memberService.findStudent(memberId);
         return student;
     }
-
     private Instructor findInstructor(HttpSession session) {
         Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
         Instructor instructor = memberService.findInstructor(memberId);

@@ -6,8 +6,8 @@ import basic.classroom.domain.Lecture;
 import basic.classroom.domain.ProfileImage;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.UpdateMemberDto;
-import basic.classroom.service.LectureService;
-import basic.classroom.service.MemberService;
+import basic.classroom.service.datajpa.LectureJpaService;
+import basic.classroom.service.datajpa.MemberJpaService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +27,8 @@ import java.util.concurrent.TimeUnit;
 @Controller
 @RequiredArgsConstructor
 public class ImageController {
-    private final LectureService lectureService;
-    private final MemberService memberService;
+    private final LectureJpaService lectureService;
+    private final MemberJpaService memberService;
 
     @GetMapping("/instructor/profile/image")
     public ResponseEntity<byte[]> instructorProfileImage(HttpSession session) {
@@ -83,7 +83,7 @@ public class ImageController {
         return student;
     }
 
-    private static ResponseEntity<byte[]> responseImageData(ProfileImage profileImage, CacheControl cache) {
+    private ResponseEntity<byte[]> responseImageData(ProfileImage profileImage, CacheControl cache) {
         byte[] imageData = profileImage.getImageData();
         String dataType = profileImage.getDataType();
 

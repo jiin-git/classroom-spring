@@ -4,7 +4,7 @@ import basic.classroom.domain.Instructor;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.LoginDto;
-import basic.classroom.service.LoginService;
+import basic.classroom.service.datajpa.LoginJpaService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
-    private final LoginService loginService;
+    private final LoginJpaService loginService;
 
     @GetMapping("/login")
     public String loginForm(Model model) {

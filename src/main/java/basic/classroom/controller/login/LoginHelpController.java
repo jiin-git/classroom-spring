@@ -3,7 +3,7 @@ package basic.classroom.controller.login;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.dto.FindIdDto;
 import basic.classroom.dto.FindPwDto;
-import basic.classroom.service.LoginHelpService;
+import basic.classroom.service.datajpa.LoginHelpJpaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class LoginHelpController {
-    private final LoginHelpService loginHelpService;
+    private final LoginHelpJpaService loginHelpService;
 
     @GetMapping("/find/ids")
     public String findLoginIdsForm(Model model) {

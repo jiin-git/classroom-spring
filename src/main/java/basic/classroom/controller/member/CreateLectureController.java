@@ -4,8 +4,8 @@ import basic.classroom.controller.login.SessionConst;
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.LectureStatus;
 import basic.classroom.dto.AddLectureDto;
-import basic.classroom.service.LectureService;
-import basic.classroom.service.MemberService;
+import basic.classroom.service.datajpa.LectureJpaService;
+import basic.classroom.service.datajpa.MemberJpaService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 public class CreateLectureController {
-    private final LectureService lectureService;
-    private final MemberService memberService;
+    private final LectureJpaService lectureService;
+    private final MemberJpaService memberService;
 
     @GetMapping("/instructor/create/lecture")
     public String createLectureForm(HttpSession session, Model model) {
@@ -51,7 +51,7 @@ public class CreateLectureController {
         return "redirect:/instructor/lectures";
     }
 
-    private static void addModeTolLectureStatus(Model model) {
+    private void addModeTolLectureStatus(Model model) {
         LectureStatus[] lectureStatusList = LectureStatus.values();
         model.addAttribute("lectureStatusList", lectureStatusList);
         model.addAttribute("lectureStatusReady", LectureStatus.READY);
