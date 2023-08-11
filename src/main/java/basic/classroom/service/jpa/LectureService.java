@@ -1,4 +1,4 @@
-package basic.classroom.service;
+package basic.classroom.service.jpa;
 
 import basic.classroom.domain.*;
 import basic.classroom.dto.AddLectureDto;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static basic.classroom.service.ProfileImageService.*;
@@ -25,7 +23,6 @@ import static basic.classroom.service.ProfileImageService.*;
 @Service
 @RequiredArgsConstructor
 public class LectureService {
-
     private final LectureRepository lectureRepository;
     private final LectureStudentMapperRepository mapperRepository;
     private final InstructorRepository instructorRepository;
@@ -39,7 +36,6 @@ public class LectureService {
         return lectureRepository.findAll();
     }
 
-    //  ===================================================================================
 //  =========================== Instructor에서 요청하는 Service =========================
     @Transactional
     public Long create(Instructor instructor, AddLectureDto addLectureDto) {
@@ -84,32 +80,34 @@ public class LectureService {
         }
     }
 
-//    =================================================================================
 //    ========================= Student에서 요청하는 Service ============================
-//    =================================================================================
+    @Transactional
+    public Long applyLecture(Student student, Long lectureId) {
+        Lecture lecture = findOne(lectureId);
 
-//    public List<Lecture> findPersonalizedLectures(SearchConditionDto searchConditionDto) {
-//        String status = searchConditionDto.getStatus();
-//        String condition = searchConditionDto.getCondition();
-//        String text = searchConditionDto.getText();
-//
-//        if (status != null && !status.isBlank() && !status.equals("ALL")) {
-//            List<Lecture> findByLectureStatusList = findByLectureStatus(status);
-//
-//            if (condition != null && !condition.isBlank()) {
-//                return findByAllConditions(condition, text, findByLectureStatusList);
-//            }
-//
-//            return findByLectureStatusList;
-//        }
-//
-//        if (condition != null && !condition.isBlank()) {
-//            return findByCondition(condition, text);
-//        }
-//
-//        List<Lecture> lectures = findAll();
-//        return lectures;
-//    }
+        LectureStudentMapper mapper = new LectureStudentMapper();
+        mapperRepository.save(mapper);
+
+        student.applyLecture(mapper, lecture);
+        return lectureId;
+    }
+
+    @Transactional
+    public void cancelLecture(Student student, Long lectureId) {
+        // 엔티티 조회
+        Lecture lecture = lectureRepository.findOne(lectureId);
+
+        // mapper 제거
+        LectureStudentMapper mapper = student.getApplyingLectures().get(lectureId);
+        mapperRepository.cancel(mapper);
+
+        student.cancelLecture(lecture);
+    }
+
+    public List<Lecture> findAllLectures(Student student) {
+        List<Lecture> lectures = student.findAllLectures();
+        return lectures;
+    }
 
     public List<Lecture> findPersonalizedLectures(SearchConditionDto searchConditionDto) {
         String status = searchConditionDto.getStatus();
@@ -133,25 +131,6 @@ public class LectureService {
     public List<Lecture> findByPageMyLectures(Student student, int page, int pageSize) {
         List<Lecture> lectures = studentRepository.findByPageMyLectures(student.getId(), page, pageSize);
         return lectures;
-    }
-
-    private List<Lecture> findByAllConditions(String condition, String text, String status) {
-        LectureSearchCondition searchCondition = LectureSearchCondition.valueOf(condition);
-        LectureStatus lectureStatus = LectureStatus.valueOf(status);
-
-        if (searchCondition == LectureSearchCondition.INSTRUCTOR) {
-            List<Lecture> allConditionLectures = lectureRepository.findByLectureStatusByInstructorName(lectureStatus, text);
-            return allConditionLectures;
-        }
-
-        List<Lecture> allConditionLectures = lectureRepository.findByLectureStatusByName(lectureStatus, text);
-        return allConditionLectures;
-    }
-
-    private List<Lecture> findByLectureStatus(String status) {
-        LectureStatus lectureStatus = LectureStatus.valueOf(status);
-        List<Lecture> findByLectureStatusList = findByLectureStatus(lectureStatus);
-        return findByLectureStatusList;
     }
 
     private List<Lecture> findByCondition(String condition, String text) {
@@ -178,63 +157,22 @@ public class LectureService {
         return lectureRepository.findByLectureStatus(lectureStatus);
     }
 
-    //    @Transactional
-//    public Long applyLecture(Student student, Long lectureId) {
-//        // 엔티티 조회
-//        Lecture lecture = findOne(lectureId);
-//
-//        // mapper 생성
-//        LectureStudentMapper mapper = new LectureStudentMapper();
-//        mapper.setStudent(student);
-//        mapper.setLecture(lecture);
-//
-//        // mapper 저장 및 설정
-//        mapperRepository.save(mapper);
-//        student.applyLecture(mapper);
-//        lecture.addStudent(mapper);
-//
-//        return lectureId;
-//    }
-    @Transactional
-    public Long applyLecture(Student student, Long lectureId) {
-        Lecture lecture = findOne(lectureId);
+    private List<Lecture> findByAllConditions(String condition, String text, String status) {
+        LectureSearchCondition searchCondition = LectureSearchCondition.valueOf(condition);
+        LectureStatus lectureStatus = LectureStatus.valueOf(status);
 
-        LectureStudentMapper mapper = new LectureStudentMapper();
-        mapperRepository.save(mapper);
+        if (searchCondition == LectureSearchCondition.INSTRUCTOR) {
+            List<Lecture> allConditionLectures = lectureRepository.findByLectureStatusByInstructorName(lectureStatus, text);
+            return allConditionLectures;
+        }
 
-        student.applyLecture(mapper, lecture);
-        return lectureId;
+        List<Lecture> allConditionLectures = lectureRepository.findByLectureStatusByName(lectureStatus, text);
+        return allConditionLectures;
     }
 
-    //    @Transactional
-//    public void cancelLecture(Student student, Long lectureId) {
-//        // 엔티티 조회
-//        Lecture lecture = lectureRepository.findOne(lectureId);
-//
-//        // mapper 제거
-//        LectureStudentMapper mapper = student.getApplyingLectures().get(lectureId);
-//        mapperRepository.cancel(mapper);
-//
-//        student.cancelLecture(lectureId);
-//        lecture.removeStudent(student.getId());
-//    }
-    @Transactional
-    public void cancelLecture(Student student, Long lectureId) {
-        // 엔티티 조회
-        Lecture lecture = lectureRepository.findOne(lectureId);
-
-        // mapper 제거
-        LectureStudentMapper mapper = student.getApplyingLectures().get(lectureId);
-        mapperRepository.cancel(mapper);
-
-        student.cancelLecture(lecture);
+    private List<Lecture> findByLectureStatus(String status) {
+        LectureStatus lectureStatus = LectureStatus.valueOf(status);
+        List<Lecture> findByLectureStatusList = findByLectureStatus(lectureStatus);
+        return findByLectureStatusList;
     }
-
-    public List<Lecture> findAllLectures(Student student) {
-        List<Lecture> lectures = student.findAllLectures();
-        return lectures;
-    }
-
-//    ======================================================================
-//    ======================================================================
 }
