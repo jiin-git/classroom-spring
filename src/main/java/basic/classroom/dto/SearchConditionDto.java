@@ -12,19 +12,12 @@ public class SearchConditionDto {
     private String status;
     private String condition;
     private String text;
-    private Integer page;
-    private Pageable pageable;
+    private Integer page = 1;
 
     public SearchConditionDto(String status, String condition, String text, Integer page) {
         this.status = status;
         this.condition = condition;
         this.text = text;
         this.page = page;
-    }
-    public SearchConditionDto(String status, String condition, String text, Pageable pageable) {
-        this.status = status;
-        this.condition = condition;
-        this.text = text;
-        this.pageable = pageable;
     }
 }
