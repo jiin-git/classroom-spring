@@ -1,11 +1,11 @@
 package basic.classroom.service;
 
-import basic.classroom.domain.LectureStatus;
 import basic.classroom.domain.Member;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.LoginDto;
 import basic.classroom.repository.dataJpa.StudentJpaRepository;
+import basic.classroom.service.datajpa.LoginJpaService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class LoginServiceTest {
-
-    @Autowired LoginService loginService;
+class LoginJpaServiceTest {
+    @Autowired LoginJpaService loginService;
     @Autowired StudentJpaRepository studentJpaRepository;
 
     @Test

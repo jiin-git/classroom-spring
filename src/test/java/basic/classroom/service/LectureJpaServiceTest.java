@@ -6,8 +6,7 @@ import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.repository.dataJpa.InstructorJpaRepository;
 import basic.classroom.repository.dataJpa.LectureStudentMapperJpaRepository;
 import basic.classroom.repository.dataJpa.StudentJpaRepository;
-import org.apache.coyote.Request;
-import org.assertj.core.api.Assertions;
+import basic.classroom.service.datajpa.LectureJpaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,12 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 class LectureJpaServiceTest {
-
     @Autowired LectureJpaService lectureJpaService;
     @Autowired LectureStudentMapperJpaRepository mapperJpaRepository;
     @Autowired InstructorJpaRepository instructorJpaRepository;
@@ -85,26 +82,27 @@ class LectureJpaServiceTest {
             }
         }
 
-        SearchConditionDto lectureStatusCondition = new SearchConditionDto(LectureStatus.OPEN.name(), null, null, PageRequest.of(1, 2));
-        Page<Lecture> findByLectureStatus = lectureJpaService.findPersonalizedLectures(lectureStatusCondition);
+        int pageSize = 2;
+        SearchConditionDto lectureStatusCondition = new SearchConditionDto(LectureStatus.OPEN.name(), null, null, 2);
+        Page<Lecture> findByLectureStatus = lectureJpaService.findPersonalizedLectures(lectureStatusCondition, pageSize);
         assertThat(findByLectureStatus.getTotalPages()).isEqualTo(2);
         assertThat(findByLectureStatus.getTotalElements()).isEqualTo(3);
         assertThat(findByLectureStatus.getNumberOfElements()).isEqualTo(1);
 
-        SearchConditionDto InstructorNameCondition = new SearchConditionDto(null, LectureSearchCondition.INSTRUCTOR.name(), instructorA.getMember().getName(), PageRequest.of(1, 2));
-        Page<Lecture> findByInstructorNameCondition = lectureJpaService.findPersonalizedLectures(InstructorNameCondition);
+        SearchConditionDto InstructorNameCondition = new SearchConditionDto(null, LectureSearchCondition.INSTRUCTOR.name(), instructorA.getMember().getName(), 2);
+        Page<Lecture> findByInstructorNameCondition = lectureJpaService.findPersonalizedLectures(InstructorNameCondition, pageSize);
         assertThat(findByInstructorNameCondition.getTotalPages()).isEqualTo(2);
         assertThat(findByInstructorNameCondition.getTotalElements()).isEqualTo(4);
         assertThat(findByInstructorNameCondition.getNumberOfElements()).isEqualTo(2);
 
-        SearchConditionDto LectureStatusAndInstructorNameCondition = new SearchConditionDto(LectureStatus.OPEN.name(), LectureSearchCondition.INSTRUCTOR.name(), instructorA.getMember().getName(), PageRequest.of(0, 2));
-        Page<Lecture> findByLectureStatusAndInstructorNameCondition = lectureJpaService.findPersonalizedLectures(LectureStatusAndInstructorNameCondition);
+        SearchConditionDto LectureStatusAndInstructorNameCondition = new SearchConditionDto(LectureStatus.OPEN.name(), LectureSearchCondition.INSTRUCTOR.name(), instructorA.getMember().getName(), 1);
+        Page<Lecture> findByLectureStatusAndInstructorNameCondition = lectureJpaService.findPersonalizedLectures(LectureStatusAndInstructorNameCondition, pageSize);
         assertThat(findByLectureStatusAndInstructorNameCondition.getTotalPages()).isEqualTo(1);
         assertThat(findByLectureStatusAndInstructorNameCondition.getTotalElements()).isEqualTo(2);
         assertThat(findByLectureStatusAndInstructorNameCondition.getNumberOfElements()).isEqualTo(2);
 
-        SearchConditionDto LectureStatusAndLectureNameCondition = new SearchConditionDto(LectureStatus.READY.name(), LectureSearchCondition.LECTURE.name(), "lecture1", PageRequest.of(0, 2));
-        Page<Lecture> findByLectureStatusAndLectureNameCondition = lectureJpaService.findPersonalizedLectures(LectureStatusAndLectureNameCondition);
+        SearchConditionDto LectureStatusAndLectureNameCondition = new SearchConditionDto(LectureStatus.READY.name(), LectureSearchCondition.LECTURE.name(), "lecture1", 1);
+        Page<Lecture> findByLectureStatusAndLectureNameCondition = lectureJpaService.findPersonalizedLectures(LectureStatusAndLectureNameCondition, pageSize);
         assertThat(findByLectureStatusAndLectureNameCondition.getTotalPages()).isEqualTo(1);
         assertThat(findByLectureStatusAndLectureNameCondition.getTotalElements()).isEqualTo(1);
         assertThat(findByLectureStatusAndLectureNameCondition.getNumberOfElements()).isEqualTo(1);

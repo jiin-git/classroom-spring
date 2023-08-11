@@ -6,6 +6,7 @@ import basic.classroom.domain.Student;
 import basic.classroom.dto.FindIdDto;
 import basic.classroom.dto.FindPwDto;
 import basic.classroom.repository.dataJpa.StudentJpaRepository;
+import basic.classroom.service.datajpa.LoginHelpJpaService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ import java.util.List;
 
 @SpringBootTest
 @Transactional
-class LoginHelpServiceTest {
+class LoginHelpJpaServiceTest {
 
-    @Autowired LoginHelpService loginHelpService;
+    @Autowired LoginHelpJpaService loginHelpService;
     @Autowired StudentJpaRepository studentJpaRepository;
 
     @Test
