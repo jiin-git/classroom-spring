@@ -1,4 +1,4 @@
-package basic.classroom.service;
+package basic.classroom.service.datajpa;
 
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Student;
@@ -7,8 +7,6 @@ import basic.classroom.exception.CreateDuplicatedMemberException;
 import basic.classroom.exception.StoreImageException;
 import basic.classroom.repository.dataJpa.InstructorJpaRepository;
 import basic.classroom.repository.dataJpa.StudentJpaRepository;
-import basic.classroom.repository.jpa.InstructorRepository;
-import basic.classroom.repository.jpa.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,17 +21,13 @@ import static basic.classroom.service.ProfileImageService.saveImageFile;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberService {
-    private final StudentRepository studentRepository;
-    private final InstructorRepository instructorRepository;
-
+public class MemberJpaService {
     private final StudentJpaRepository studentJpaRepository;
     private final InstructorJpaRepository instructorJpaRepository;
 
     @Transactional
     public Long join(Student student) {
         String loginId = student.getMember().getLoginId();
-//        Optional<Student> duplicateStudent = studentRepository.findByLoginId(loginId);
         Optional<Student> duplicateStudent = studentJpaRepository.findByMember_LoginId(loginId);
 
         // 중복 회원 존재시 에러
@@ -42,7 +36,6 @@ public class MemberService {
         }
 
         // 성공 로직
-//        studentRepository.save(student);
         studentJpaRepository.save(student);
         return student.getId();
     }
@@ -50,7 +43,6 @@ public class MemberService {
     @Transactional
     public Long join(Instructor instructor) {
         String loginId = instructor.getMember().getLoginId();
-//        Optional<Instructor> duplicateInstructor = instructorRepository.findByLoginId(loginId);
         Optional<Instructor> duplicateInstructor = instructorJpaRepository.findByMember_LoginId(loginId);
 
         // 중복 회원 존재시 에러
@@ -59,18 +51,8 @@ public class MemberService {
         }
 
         // 성공 로직
-//        instructorRepository.save(instructor);
         instructorJpaRepository.save(instructor);
         return instructor.getId();
-    }
-
-    public Instructor findInstructor(Long id) {
-//        return instructorRepository.findOne(id);
-        return instructorJpaRepository.findById(id).get();
-    }
-    public Student findStudent(Long id) {
-//        return studentRepository.findOne(id);
-        return studentJpaRepository.findById(id).get();
     }
 
     @Transactional
@@ -121,5 +103,12 @@ public class MemberService {
         if (student.getProfileImage() != null) {
             initializeMemberProfile(student);
         }
+    }
+
+    public Instructor findInstructor(Long id) {
+        return instructorJpaRepository.findById(id).get();
+    }
+    public Student findStudent(Long id) {
+        return studentJpaRepository.findById(id).get();
     }
 }

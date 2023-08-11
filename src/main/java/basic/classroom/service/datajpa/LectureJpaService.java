@@ -1,4 +1,4 @@
-package basic.classroom.service;
+package basic.classroom.service.datajpa;
 
 import basic.classroom.domain.*;
 import basic.classroom.dto.AddLectureDto;
@@ -31,10 +31,12 @@ public class LectureJpaService {
     private final InstructorJpaRepository instructorJpaRepository;
     private final StudentJpaRepository studentJpaRepository;
 
+    @Transactional
     public Lecture findOne(Long id){
         return lectureJpaRepository.findById(id).get();
     }
 
+    @Transactional
     public List<Lecture> findAll() {
         return lectureJpaRepository.findAll();
     }
@@ -55,15 +57,19 @@ public class LectureJpaService {
         return lecture.getId();
     }
 
+    @Transactional
     public List<Lecture> findAllLectures(Instructor instructor) {
         List<Lecture> lectures = instructor.getLectures().values().stream().toList();
         return lectures;
     }
 
-    public Page<Lecture> findMyLecturesByPage(Instructor instructor, int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        Page<Lecture> findLecturesByPage = instructorJpaRepository.findLecturesById(instructor.getId(), pageable);
-        return findLecturesByPage;
+    @Transactional
+    public Page<Lecture> findMyLecturesByPage(Instructor instructor, Pageable pageable) {
+        Page<Lecture> lectures = instructorJpaRepository.findLecturesById(instructor.getId(), pageable);
+        log.info("total pages = {}", lectures.getTotalPages());
+        log.info("total elements = {}", lectures.getTotalElements());
+        log.info("Content size = {}", lectures.getContent().size());
+        return lectures;
     }
 
     @Transactional
@@ -108,19 +114,19 @@ public class LectureJpaService {
         student.cancelLecture(lecture);
     }
 
-    public Page<Lecture> findMyLecturesByPage(Student student, int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page -1, pageSize);
+    @Transactional
+    public Page<Lecture> findMyLecturesByPage(Student student, Pageable pageable) {
         Page<Lecture> lectures = studentJpaRepository.findLecturesByApplyingLectures_Student_Id(student.getId(), pageable);
+
         return lectures;
     }
 
-    public Page<Lecture> findPersonalizedLectures(SearchConditionDto searchConditionDto) {
+    @Transactional
+    public Page<Lecture> findPersonalizedLectures(SearchConditionDto searchConditionDto, int pageSize) {
         String status = searchConditionDto.getStatus();
         String condition = searchConditionDto.getCondition();
         String text = searchConditionDto.getText();
-//        int pageSize = 10;
-//        Pageable pageable = getPageable(searchConditionDto.getPage(), pageSize);
-        Pageable pageable = searchConditionDto.getPageable();
+        Pageable pageable = PageRequest.of(searchConditionDto.getPage() - 1, pageSize);
 
         if (status != null && !status.isBlank() && !status.equals("ALL")) {
             LectureStatus lectureStatus = LectureStatus.valueOf(searchConditionDto.getStatus());
@@ -154,10 +160,6 @@ public class LectureJpaService {
 
     private Page<Lecture> findByLectureStatus(LectureStatus lectureStatus, Pageable pageable) {
         return lectureJpaRepository.findByLectureStatus(lectureStatus, pageable);
-    }
-
-    private static Pageable getPageable(int page, int pageSize) {
-        return PageRequest.of(page - 1, pageSize);
     }
 
     private Page<Lecture> findByCondition(String condition, String text, Pageable pageable) {

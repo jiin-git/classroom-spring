@@ -1,4 +1,4 @@
-package basic.classroom.service;
+package basic.classroom.service.datajpa;
 
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Student;
@@ -15,20 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LoginService {
-
-    private final StudentRepository studentRepository;
-    private final InstructorRepository instructorRepository;
-
+public class LoginJpaService {
     private final StudentJpaRepository studentJpaRepository;
     private final InstructorJpaRepository instructorJpaRepository;
 
-//    @Transactional
-//    public Student studentLogin(LoginDto loginDto) {
-//        return studentRepository.findByLoginId(loginDto.getLoginId())
-//                .filter(s -> s.getMember().getPassword().equals(loginDto.getLoginPw()))
-//                .orElse(null);
-//    }
     @Transactional
     public Student studentLogin(LoginDto loginDto) {
         return studentJpaRepository.findByMember_LoginIdAndMember_Password(loginDto.getLoginId(), loginDto.getLoginPw())
