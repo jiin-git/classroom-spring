@@ -18,7 +18,8 @@ public interface StudentJpaRepository extends JpaRepository<Student, Long> {
     List<Student> findByMember_Name(String name);
 
     //    @EntityGraph
-    @Query("select al.lecture from Student s join s.applyingLectures al where s.id = :id")
+    @Query(value = "select al.lecture from Student s join s.applyingLectures al where s.id = :id",
+            countQuery = "select count(al) from LectureStudentMapper al where al.student.id = :id")
     Page<Lecture> findLecturesByApplyingLectures_Student_Id(@Param("id") Long studentId, Pageable pageable);
 
     @Query("select s.member.loginId from Student s where s.member.name = :name and s.member.email = :email")

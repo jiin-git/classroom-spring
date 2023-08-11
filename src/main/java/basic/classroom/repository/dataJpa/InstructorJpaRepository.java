@@ -15,7 +15,8 @@ public interface InstructorJpaRepository extends JpaRepository<Instructor, Long>
     Optional<Instructor> findByMember_LoginId(String loginId);
     List<Instructor> findByMember_Name(String name);
 
-    @Query("select i.lectures from Instructor i where i.id = :id")
+    @Query(value = "select i.lectures from Instructor i where i.id = :id",
+            countQuery = "select count(l) from Lecture l where l.instructor.id = :id")
     Page<Lecture> findLecturesById(@Param("id") Long id, Pageable pageable);
 
     @Query("select i.member.loginId from Instructor i where i.member.name = :name and i.member.email = :email")
