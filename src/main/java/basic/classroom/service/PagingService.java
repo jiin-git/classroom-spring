@@ -3,13 +3,14 @@ package basic.classroom.service;
 import basic.classroom.domain.Lecture;
 import basic.classroom.dto.PageDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 @Slf4j
+@Service
 public class PagingService {
     public List<Lecture> filteringLectures(List<Lecture> lectures, int page) {
         List<Lecture> showLectures = new ArrayList<>();
@@ -69,6 +70,35 @@ public class PagingService {
         int startPage = pageDto.getStartPage();
         int endPage = pageDto.getEndPage();
         int showPageUnit = pageDto.getShowPageUnit();
+
+        List<Integer> pages = new ArrayList<>();
+        List<Integer> showPages = new ArrayList<>();
+
+        for (int i = 1; i <= endPage; i++) {
+            pages.add(i);
+        }
+        if (endPage > showPageUnit) {
+            if (page == startPage) {
+                showPages = pages.subList(startPage - 1, showPageUnit);
+            } else if (page == endPage) {
+                showPages = pages.subList(endPage - showPageUnit, endPage);
+            } else {
+                showPages = pages.subList(page - 2, page + 1);
+            }
+        }
+        else {
+            showPages = pages;
+        }
+
+        return showPages;
+    }
+
+    public List<Integer> getShowPages(Pageable pageable, int totalPages) {
+        final int startPage = 1;
+        final int showPageUnit = 3;
+
+        int page = pageable.getPageNumber() + 1;
+        int endPage = totalPages;
 
         List<Integer> pages = new ArrayList<>();
         List<Integer> showPages = new ArrayList<>();
