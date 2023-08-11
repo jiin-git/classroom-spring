@@ -7,7 +7,6 @@ import basic.classroom.service.datajpa.LectureJpaService;
 import basic.classroom.service.datajpa.MemberJpaService;
 import basic.classroom.service.PagingService;
 import jakarta.servlet.http.HttpSession;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,34 +36,18 @@ public class ApplyLectureJpaController {
         Page<Lecture> lectures = lectureService.findPersonalizedLectures(searchConditionDto, pageSize);
         List<Integer> showPages = pagingService.getShowPages(lectures.getPageable(), lectures.getTotalPages());
 
-//        List<Lecture> showLectures = lectures.getContent();
-
-//        ShowFindLecturesDto showFindLecturesDto = new ShowFindLecturesDto(endPage, showLectures, showPages);
-
         // Validation
         String condition = searchConditionDto.getCondition();
         String text = searchConditionDto.getText();
         if (condition != null && !condition.isBlank()) {
             if (text.isBlank()) {
                 bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색명을 함께 입력해주세요.");
-//                addStudentAndLecturesToModel(model, student, lectures.getContent());
-//                addPagesToModel(model, showPages, lectures.getTotalPages());
-//                addLectureStatusToModel(model);
-//                addSearchConditionToModel(searchConditionDto, model);
-//
-//                return "member/student/findLecture";
             }
         }
 
         if (text != null && !text.isBlank()) {
             if (condition == null || condition.isBlank()) {
                 bindingResult.reject("NoSuchFieldError", "조건 검색 시 검색 조건을 설정해주세요.");
-//                addStudentAndLecturesToModel(model, student, lectures.getContent());
-//                addPagesToModel(model, showPages, lectures.getTotalPages());
-//                addLectureStatusToModel(model);
-//                addSearchConditionToModel(searchConditionDto, model);
-//
-//                return "member/student/findLecture";
             }
         }
 
@@ -90,33 +73,11 @@ public class ApplyLectureJpaController {
         return "redirect:/student/lectures";
     }
 
-    @Getter
-    private class ShowFindLecturesDto {
-        private int endPage;
-        private List<Lecture> showLectures;
-        private List<Integer> showPages;
-
-        public ShowFindLecturesDto(int endPage, List<Lecture> showLectures, List<Integer> showPages) {
-            this.endPage = endPage;
-            this.showLectures = showLectures;
-            this.showPages = showPages;
-        }
-    }
-
     private Student findStudent(HttpSession session) {
         Long memberId = (Long) session.getAttribute(SessionConst.LOGIN_ID);
         Student student = memberService.findStudent(memberId);
         return student;
     }
-
-//    private String addShowFindLecturesDtoToModel(Model model, Student student, SearchConditionDto searchConditionDto, ShowFindLecturesDto showFindLecturesDto) {
-//        addStudentAndLecturesToModel(model, student, showFindLecturesDto.getShowLectures());
-//        addPagesToModel(model, showFindLecturesDto.getShowPages(), showFindLecturesDto.getEndPage());
-//        addLectureStatusToModel(model);
-//        addSearchConditionToModel(searchConditionDto, model);
-//
-//        return "member/student/findLecture";
-//    }
 
     private void addStudentAndLecturesToModel(Model model, Student student, List<Lecture> lectures) {
         model.addAttribute("student", student);
@@ -142,9 +103,5 @@ public class ApplyLectureJpaController {
         model.addAttribute("lectureStatusReady", LectureStatus.READY);
         model.addAttribute("lectureStatusOpen", LectureStatus.OPEN);
         model.addAttribute("lectureStatusFull", LectureStatus.FULL);
-    }
-
-    private int getEndPage(int lecturesCnt) {
-        return (int) Math.ceil((double) lecturesCnt / 10);
     }
 }
