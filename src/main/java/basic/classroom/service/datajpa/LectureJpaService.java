@@ -31,12 +31,10 @@ public class LectureJpaService {
     private final InstructorJpaRepository instructorJpaRepository;
     private final StudentJpaRepository studentJpaRepository;
 
-    @Transactional
     public Lecture findOne(Long id){
         return lectureJpaRepository.findById(id).get();
     }
 
-    @Transactional
     public List<Lecture> findAll() {
         return lectureJpaRepository.findAll();
     }
@@ -57,19 +55,21 @@ public class LectureJpaService {
         return lecture.getId();
     }
 
-    @Transactional
     public List<Lecture> findAllLectures(Instructor instructor) {
         List<Lecture> lectures = instructor.getLectures().values().stream().toList();
         return lectures;
     }
 
-    @Transactional
     public Page<Lecture> findMyLecturesByPage(Instructor instructor, Pageable pageable) {
         Page<Lecture> lectures = instructorJpaRepository.findLecturesById(instructor.getId(), pageable);
         log.info("total pages = {}", lectures.getTotalPages());
         log.info("total elements = {}", lectures.getTotalElements());
         log.info("Content size = {}", lectures.getContent().size());
         return lectures;
+    }
+
+    public List<Student> findApplicantsById(Long id) {
+        return lectureJpaRepository.findStudentsById(id);
     }
 
     @Transactional
@@ -114,14 +114,12 @@ public class LectureJpaService {
         student.cancelLecture(lecture);
     }
 
-    @Transactional
     public Page<Lecture> findMyLecturesByPage(Student student, Pageable pageable) {
         Page<Lecture> lectures = studentJpaRepository.findLecturesByApplyingLectures_Student_Id(student.getId(), pageable);
 
         return lectures;
     }
 
-    @Transactional
     public Page<Lecture> findPersonalizedLectures(SearchConditionDto searchConditionDto, int pageSize) {
         String status = searchConditionDto.getStatus();
         String condition = searchConditionDto.getCondition();
@@ -170,5 +168,4 @@ public class LectureJpaService {
         }
         return lectureJpaRepository.findByName(text, pageable);
     }
-
 }
