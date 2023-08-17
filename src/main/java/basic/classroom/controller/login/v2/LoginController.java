@@ -1,5 +1,6 @@
-package basic.classroom.controller.login;
+package basic.classroom.controller.login.v2;
 
+import basic.classroom.controller.SessionConst;
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
@@ -17,7 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @Controller
@@ -28,10 +28,12 @@ public class LoginController {
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("loginForm", new LoginDto());
-        return goToLoginForm(model);
+        model.addAttribute("student", MemberStatus.STUDENT);
+        model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
+        return "login/loginForm";
     }
 
-    @PostMapping("/login")
+//    @PostMapping("/login")
     public String login(@Validated @ModelAttribute("loginForm") LoginDto loginDto, BindingResult bindingResult, HttpServletRequest request, Model model) {
 
         // 검증 코드
@@ -61,7 +63,7 @@ public class LoginController {
         return "redirect:/student/lectures";
     }
 
-    @PostMapping("/logout")
+//    @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         expireCookie(request, response);
         return "redirect:/";
