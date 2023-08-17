@@ -1,6 +1,5 @@
 package basic.classroom.controller;
 
-import basic.classroom.controller.login.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;

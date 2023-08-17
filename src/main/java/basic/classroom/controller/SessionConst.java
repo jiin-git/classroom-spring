@@ -1,4 +1,4 @@
-package basic.classroom.controller.login;
+package basic.classroom.controller;
 
 public class SessionConst {
     public static final String LOGIN_ID = "loginId";

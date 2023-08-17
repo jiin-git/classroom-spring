@@ -1,6 +1,6 @@
-package basic.classroom.controller.member;
+package basic.classroom.controller.members.v0;
 
-import basic.classroom.controller.login.SessionConst;
+import basic.classroom.controller.SessionConst;
 import basic.classroom.domain.*;
 import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.service.jpa.LectureService;
@@ -9,14 +9,10 @@ import basic.classroom.service.PagingService;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 

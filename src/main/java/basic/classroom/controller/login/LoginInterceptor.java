@@ -1,5 +1,6 @@
 package basic.classroom.controller.login;
 
+import basic.classroom.controller.SessionConst;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.exception.AuthorizationNotAvailableException;
 import jakarta.servlet.http.HttpServletRequest;
