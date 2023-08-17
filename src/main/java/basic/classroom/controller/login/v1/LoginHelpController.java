@@ -1,4 +1,4 @@
-package basic.classroom.controller.login;
+package basic.classroom.controller.login.v1;
 
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.dto.FindIdDto;
@@ -16,19 +16,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Slf4j
-@Controller
+//@Controller
 @RequiredArgsConstructor
 public class LoginHelpController {
     private final LoginHelpJpaService loginHelpService;
 
-    @GetMapping("/find/ids")
+//    @GetMapping("/find/ids")
     public String findLoginIdsForm(Model model) {
         model.addAttribute("findIdsForm", new FindIdDto());
         addMemberStatusToModel(model);
         return "login/findIdsForm";
     }
 
-    @PostMapping("/find/ids")
+//    @PostMapping("/find/ids")
     public String findLoginIds(@Validated @ModelAttribute("findIdsForm") FindIdDto findIdDto,
                               BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
@@ -44,13 +44,13 @@ public class LoginHelpController {
         return "redirect:/find/ids/result";
     }
 
-    @GetMapping("/find/ids/result")
+//    @GetMapping("/find/ids/result")
     public String findLoginIdResult(@ModelAttribute("loginIds") List<String> loginIds, Model model) {
         model.addAttribute("loginIds", loginIds);
         return "login/findIdsResult";
     }
 
-    @GetMapping("/find/pw")
+//    @GetMapping("/find/pw")
     public String findPwForm(Model model) {
         model.addAttribute("findPwForm", new FindPwDto());
         addMemberStatusToModel(model);
@@ -58,7 +58,7 @@ public class LoginHelpController {
         return "login/findPwForm";
     }
 
-    @PostMapping("/find/pw")
+//    @PostMapping("/find/pw")
     public String findLoginPw(@Validated @ModelAttribute("findPwForm") FindPwDto findPwDto,
                               BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         // 검증 로직
@@ -73,7 +73,7 @@ public class LoginHelpController {
         return "redirect:/find/pw/result";
     }
 
-    @GetMapping("/find/pw/result")
+//    @GetMapping("/find/pw/result")
     public String findLoginPwResult(@ModelAttribute("loginPw") String loginPw, Model model) {
         model.addAttribute("loginPw", loginPw);
         return "login/findPwResult";
