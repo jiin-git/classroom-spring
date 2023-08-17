@@ -1,6 +1,6 @@
-package basic.classroom.controller.member;
+package basic.classroom.controller.members.v1;
 
-import basic.classroom.controller.login.SessionConst;
+import basic.classroom.controller.SessionConst;
 import basic.classroom.domain.*;
 import basic.classroom.dto.SearchConditionDto;
 import basic.classroom.service.datajpa.LectureJpaService;

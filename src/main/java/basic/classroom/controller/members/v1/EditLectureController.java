@@ -1,4 +1,4 @@
-package basic.classroom.controller.member;
+package basic.classroom.controller.members.v1;
 
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Lecture;
