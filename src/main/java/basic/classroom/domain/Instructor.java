@@ -1,18 +1,19 @@
 package basic.classroom.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Entity
+@Builder
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Instructor {
-
     @Id @GeneratedValue
     @Column(name = "instructor_id")
     private Long id;
@@ -24,27 +25,26 @@ public class Instructor {
     private ProfileImage profileImage;
 
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL)
-    private Map<Long, Lecture> lectures = new HashMap();
-
+//    @MapKey(name = "id")
+    private Map<Long, Lecture> lectures;
+    public void addLectures(Lecture lecture) {
+        log.info("lecture id = {}, lecture name = {}", lecture.getId(), lecture.getName());
+        lectures.put(lecture.getId(), lecture);
+        lecture.addInstructor(this);
+    }
     public Instructor(Member member) {
         this.member = member;
+    } // 삭제 예정
+    public static Instructor createInstructor(Member member) {
+        return Instructor.builder().member(member).lectures(new HashMap<>()).build();
     }
-
-    // 1:n 관계
-    public void addLectures(Lecture lecture) {
-        Long lectureId = lecture.getId();
-        lectures.put(lectureId, lecture);
-        lecture.setInstructor(this);
-    }
-
-    /* 생성 메서드 */
-    public static Instructor createInstructor(Member member, Lecture... lectures) {
-        Instructor instructor = new Instructor();
-        instructor.setMember(member);
-        for (Lecture lecture : lectures) {
-            instructor.addLectures(lecture);
+    public void updateInstructor(String email, ProfileImage profileImage) {
+        this.member.updateEmail(email);
+        if (profileImage != null) {
+            this.profileImage = profileImage;
         }
-
-        return instructor;
+    }
+    public void updateInstructorPassword(String password) {
+        this.member.updatePassword(password);
     }
 }

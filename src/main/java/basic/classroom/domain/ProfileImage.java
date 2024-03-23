@@ -1,25 +1,29 @@
 package basic.classroom.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @Embeddable
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProfileImage {
-
     private String imageName;
     private String dataType;
-
 //    BLob(Binary type 저장)
     @Lob
     private byte[] imageData;
 
-    public ProfileImage(String imageName, String dataType, byte[] imageData) {
-        this.imageName = imageName;
-        this.dataType = dataType;
-        this.imageData = imageData;
+    public static ProfileImage fromLecture(Lecture lecture) {
+        if (lecture.getProfileImage() == null) {
+            return ProfileImage.builder().build();
+        }
+
+        return ProfileImage.builder()
+                .imageName(lecture.getProfileImage().getImageName())
+                .dataType(lecture.getProfileImage().getDataType())
+                .imageData(lecture.getProfileImage().getImageData())
+                .build();
     }
 }

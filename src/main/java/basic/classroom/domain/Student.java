@@ -1,8 +1,7 @@
 package basic.classroom.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -12,9 +11,11 @@ import java.util.Map;
 
 @Slf4j
 @Entity
+@Builder
 @Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
-
     @Id @GeneratedValue
     @Column(name = "student_id")
     private Long id;
@@ -25,50 +26,42 @@ public class Student {
     @Embedded
     private ProfileImage profileImage;
 
+    // key : lecture id -> mapper id 변경(mapper를 통해서만이 강의 엔티티에 접근할 수 있다)
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private Map<Long, LectureStudentMapper> applyingLectures = new HashMap<>();
+    private Map<Long, LectureStudentMapper> applyingLectures;
 
-    // 1:n
-    /* 강의 신청 메서드 */
-//    public void applyLecture(LectureStudentMapper applyingLecture) {
-//        Long lectureId = applyingLecture.getLecture().getId();
-//        getApplyingLectures().put(lectureId, applyingLecture);
-//    }
+    public void applyLecture(LectureStudentMapper mapper, Lecture lecture) {
+//        Long lectureId = lecture.getId();
+//        applyingLectures.put(lectureId, mapper);
+        Long mapperId = mapper.getId();
+        applyingLectures.put(mapperId, mapper);
 
-    // n:n(n:1 - 1:n)
-    public void applyLecture(LectureStudentMapper applyingLecture, Lecture lecture) {
-        Long lectureId = lecture.getId();
-
-        getApplyingLectures().put(lectureId, applyingLecture);
-        applyingLecture.setStudent(this);
-
-        lecture.addStudent(applyingLecture);
-        applyingLecture.setLecture(lecture);
+        mapper.addStudent(this);
+        lecture.addStudent(mapper);
     }
-
-    /* 생성 메서드 */
-    public static Student createStudent(Member member) {
-        Student student = new Student();
-        student.setMember(member);
-        return student;
-    }
-
-    /* 강의 취소 메서드 */
-//    public void cancelLecture(Long applyingLectureId) {
-//        applyingLectures.remove(applyingLectureId);
-//    }
     public void cancelLecture(Lecture lecture) {
         applyingLectures.remove(lecture.getId());
-        lecture.removeStudent(this.id);
+        lecture.removeStudent(id);
     }
-
-
-    /* 전체 강의 조회 */
+    public Lecture getLecture(Long mapperId) {
+        return applyingLectures.get(mapperId).getLecture();
+    }
     public List<Lecture> findAllLectures() {
         List<Lecture> lectures = new ArrayList<>();
-        applyingLectures.forEach((k, m) -> lectures.add(m.getLecture()));
-
+        applyingLectures.forEach((key, mapper) -> lectures.add(mapper.getLecture()));
         return lectures;
     }
 
+    public static Student createStudent(Member member) {
+        return Student.builder().member(member).applyingLectures(new HashMap<>()).build();
+    }
+    public void updateStudent(String email, ProfileImage profileImage) {
+        member.updateEmail(email);
+        if (profileImage != null) {
+            this.profileImage = profileImage;
+        }
+    }
+    public void updateStudentPassword(String password) {
+        member.updatePassword(password);
+    }
 }

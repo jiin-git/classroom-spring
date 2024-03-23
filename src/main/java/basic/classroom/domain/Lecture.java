@@ -1,20 +1,24 @@
 package basic.classroom.domain;
 
+import basic.classroom.dto.AddLectureRequest;
+import basic.classroom.dto.ApplicantsResponse;
+import basic.classroom.dto.UpdateLecture.UpdateLectureDto;
+import basic.classroom.exception.ApplyLectureException;
+import basic.classroom.exception.ErrorCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
-@Data
+@Builder
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Lecture {
-
     @Id @GeneratedValue
     private Long id;
-
     private String name;
 
     @Embedded
@@ -22,6 +26,7 @@ public class Lecture {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id")
+    @JsonIgnore
     private Instructor instructor;
 
     private int personnel;
@@ -30,52 +35,93 @@ public class Lecture {
     @Enumerated(EnumType.STRING)
     private LectureStatus lectureStatus;
 
+    // key : student id -> mapper id(mapper를 통해서만이 학생 엔티티를 접근할 수 있다.)
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL)
-    private Map<Long, LectureStudentMapper> appliedStudents = new HashMap<>();
+    private Map<Long, LectureStudentMapper> appliedStudents;
 
-    // 1:n - lecture : appliedStudent
-    public void addStudent(LectureStudentMapper appliedStudent) {
-        Long studentId = appliedStudent.getStudent().getId();
-        getAppliedStudents().put(studentId, appliedStudent);
-
-        // 인원 초과시 에러
+    public void addStudent(LectureStudentMapper mapper) {
         if (remainingPersonnel <= 0) {
-            throw new IllegalStateException();
+            throw new ApplyLectureException(ErrorCode.FAILED_APPLY_LECTURE);
         }
 
-        setRemainingPersonnel(remainingPersonnel - 1);
-        // 정원이 다 차면 FULL
+        remainingPersonnel = remainingPersonnel - 1;
         if (remainingPersonnel == 0) {
-            setLectureStatus(LectureStatus.FULL);
+            lectureStatus = LectureStatus.FULL;
+        }
+
+//        Long studentId = mapper.getStudentId();
+//        appliedStudents.put(studentId, mapper);
+        Long mapperId = mapper.getId();
+        appliedStudents.put(mapperId, mapper);
+        mapper.addLecture(this);
+    }
+    public void removeStudent(Long mapperId) {
+        appliedStudents.remove(mapperId);
+        remainingPersonnel = remainingPersonnel + 1;
+
+        if (lectureStatus == LectureStatus.FULL) {
+            lectureStatus = LectureStatus.OPEN;
         }
     }
+    public List<Long> getAppliedStudentsIds() {
+        List<Long> appliedStudentsIds = new ArrayList<>();
+        appliedStudents.forEach((key, mapper) -> appliedStudentsIds.add(mapper.getStudentId()));
+        return appliedStudentsIds;
+    }
+    public List<ApplicantsResponse> getApplicantsResponse() {
+        List<ApplicantsResponse> applicants = new ArrayList<>();
+        appliedStudents.forEach((key, mapper) ->
+                applicants.add(ApplicantsResponse.fromStudent(mapper.getStudent())));
+        return applicants;
+    }
+    public void addInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
 
-    /* 생성 메서드 */
-    public static Lecture createLecture(String name, Instructor instructor, int personnel, LectureStatus lectureStatus, LectureStudentMapper... appliedStudents) {
+    public static Lecture createLecture(String name, Instructor instructor, int personnel, LectureStatus lectureStatus) {
         Lecture lecture = new Lecture();
         lecture.setName(name);
         lecture.setInstructor(instructor);
         lecture.setPersonnel(personnel);
         lecture.setRemainingPersonnel(personnel);
         lecture.setLectureStatus(lectureStatus);
-        for (LectureStudentMapper appliedStudent : appliedStudents) {
-            lecture.addStudent(appliedStudent);
-        }
+        lecture.setAppliedStudents(new HashMap<>());
 
         return lecture;
     }
+    public static Lecture createLecture(Instructor instructor, AddLectureRequest addLectureRequest) {
+        return Lecture.builder()
+                .name(addLectureRequest.getName())
+                .instructor(instructor)
+                .personnel(addLectureRequest.getPersonnel())
+                .remainingPersonnel(addLectureRequest.getPersonnel())
+                .lectureStatus(addLectureRequest.getLectureStatus())
+                .appliedStudents(new HashMap<>())
+                .build();
+    }
+    public static Lecture createLecture(Instructor instructor, AddLectureRequest addLectureRequest, ProfileImage profileImage) {
+        LectureBuilder lectureBuilder = Lecture.builder()
+                .name(addLectureRequest.getName())
+                .instructor(instructor)
+                .personnel(addLectureRequest.getPersonnel())
+                .remainingPersonnel(addLectureRequest.getPersonnel())
+                .lectureStatus(addLectureRequest.getLectureStatus())
+                .appliedStudents(new HashMap<>());
 
-    /* 수강 신청 취소 */
-    public void removeStudent(Long appliedStudentId) {
-        appliedStudents.remove(appliedStudentId);
-        setRemainingPersonnel(remainingPersonnel + 1);
-
-        if (lectureStatus == LectureStatus.FULL) {
-            setLectureStatus(LectureStatus.OPEN);
+        if (profileImage == null) {
+            return lectureBuilder.build();
+        }
+        return lectureBuilder.profileImage(profileImage).build();
+    }
+    public void updateLecture(UpdateLectureDto updateLectureDto) {
+        this.personnel = updateLectureDto.getPersonnel();
+        this.remainingPersonnel = updateLectureDto.getRemainingPersonnel();
+        this.lectureStatus = updateLectureDto.getLectureStatus();
+        if (updateLectureDto.getProfileImage() != null) {
+            this.profileImage = updateLectureDto.getProfileImage();
         }
     }
 
-    /* 학생 명단 조회 */
     public List<Student> findAppliedStudents() {
         List<Student> students = new ArrayList<>();
         appliedStudents.forEach((k, m) -> students.add(m.getStudent()));
