@@ -13,18 +13,12 @@ import java.util.Optional;
 
 public interface InstructorJpaRepository extends JpaRepository<Instructor, Long> {
     Optional<Instructor> findByMember_LoginId(String loginId);
-    List<Instructor> findByMember_Name(String name);
+    Optional<Instructor> findByMember_LoginIdAndMember_Email(String loginId, String email);
 
     @Query(value = "select i.lectures from Instructor i where i.id = :id",
             countQuery = "select count(l) from Lecture l where l.instructor.id = :id")
     Page<Lecture> findLecturesById(@Param("id") Long id, Pageable pageable);
 
     @Query("select i.member.loginId from Instructor i where i.member.name = :name and i.member.email = :email")
-    List<String> findLoginIdByNameAndEmail(@Param("name") String name, @Param("email") String email);
-
-    Optional<Instructor> findByMember_LoginIdAndMember_Email(String loginId, String email);
-    Optional<Instructor> findByMember_LoginIdAndMember_Password(String loginId, String password);
-
-
-
+    List<String> findLoginIdsByMember_NameAndMember_Email(@Param("name") String name, @Param("email") String email);
 }

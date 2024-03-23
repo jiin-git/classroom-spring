@@ -12,19 +12,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface LectureJpaRepository extends JpaRepository<Lecture, Long> {
-    List<Lecture> findByName(String name);
-    List<Lecture> findByLectureStatus(LectureStatus lectureStatus);
-    List<Lecture> findByInstructor_Member_Name(String instructorName);
-    List<Lecture> findByLectureStatusAndName(LectureStatus lectureStatus, String name);
-    List<Lecture> findByLectureStatusAndInstructor_Member_Name(LectureStatus lectureStatus, String instructorName);
-
-    @Query("select slist.student from Lecture l join l.appliedStudents slist where l.id = :id")
-    List<Student> findStudentsById(@Param("id") Long id);
-
     Page<Lecture> findByName(String name, Pageable pageable);
     Page<Lecture> findByLectureStatus(LectureStatus lectureStatus, Pageable pageable);
     Page<Lecture> findByInstructor_Member_Name(String instructorName, Pageable pageable);
     Page<Lecture> findByLectureStatusAndName(LectureStatus lectureStatus, String name, Pageable pageable);
     Page<Lecture> findByLectureStatusAndInstructor_Member_Name(LectureStatus lectureStatus, String instructorName, Pageable pageable);
 
+    @Query("select slist.student from Lecture l join l.appliedStudents slist where l.id = :id")
+    List<Student> findStudentsById(@Param("id") Long id);
 }
