@@ -1,47 +1,32 @@
 package basic.classroom.controller.api.login;
 
-import basic.classroom.domain.Instructor;
-import basic.classroom.domain.Member;
-import basic.classroom.domain.Student;
-import basic.classroom.dto.CreateMemberDto;
-import basic.classroom.service.datajpa.MemberJpaService;
+import basic.classroom.dto.CreateMember.CreateMemberRequest;
+import basic.classroom.service.datajpa.members.MemberJpaServiceV2;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/login")
+@RequestMapping("/api/login/members")
 public class CreateMemberApi {
-    private final MemberJpaService memberService;
+    private final MemberJpaServiceV2 memberService;
 
-    @PostMapping("/members/student")
-    public ResponseEntity<Student> createStudent(@Validated @ModelAttribute("createMemberForm") CreateMemberDto createMemberDto) {
-        Student student = Student.createStudent(new Member(createMemberDto));
-        Long id = memberService.join(student);
-
+    @PostMapping("")
+    public ResponseEntity<Void> createMemberV2(@Validated @RequestBody CreateMemberRequest createMemberRequest) {
+        memberService.createMember(createMemberRequest);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/create/member/result"));
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(memberService.findStudent(id));
-    }
-
-    @PostMapping("/members/instructor")
-    public ResponseEntity<Instructor> createInstructor(@Validated @ModelAttribute("createMemberForm") CreateMemberDto createMemberDto) {
-        Instructor instructor = Instructor.createInstructor(new Member(createMemberDto));
-        Long id = memberService.join(instructor);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/create/member/result"));
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(memberService.findInstructor(id));
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 }

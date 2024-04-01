@@ -1,96 +1,58 @@
 package basic.classroom.controller.api.login;
 
-import basic.classroom.controller.SessionConst;
-import basic.classroom.domain.Instructor;
-import basic.classroom.domain.MemberStatus;
-import basic.classroom.domain.Student;
-import basic.classroom.dto.LoginDto;
-import basic.classroom.service.datajpa.LoginJpaService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import basic.classroom.dto.LoginRequest;
+import basic.classroom.dto.ResponseToken;
+import basic.classroom.service.datajpa.login.LoginJpaServiceV2;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/login/auth/members")
+@RequestMapping("/api/login")
 public class LoginApi {
-    private final LoginJpaService loginService;
+    private final LoginJpaServiceV2 loginService;
 
-    @PostMapping("/instructor")
-    public ResponseEntity<Instructor> loginInstructor(@Validated @ModelAttribute("loginForm") LoginDto loginDto, HttpServletRequest request) {
-        Instructor instructor = loginService.instructorLogin(loginDto);
+    @PostMapping("")
+    public ResponseEntity<Void> loginMemberV2(@Validated @RequestBody LoginRequest loginRequest) {
+        log.info("call login Api.");
 
-        HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_ID, instructor.getId());
-        session.setAttribute(SessionConst.MEMBER_STATUS, MemberStatus.INSTRUCTOR);
+        ResponseToken responseToken = loginService.login(loginRequest);
+        String jwt = responseToken.getTokenType() + "_" + responseToken.getAccessToken();
 
-//        createSession(request, instructor.getId(), MemberStatus.INSTRUCTOR);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/instructor/lectures"));
+        ResponseCookie responseCookie = getResponseCookie(jwt);
+        String role = loginRequest.getMemberStatus().toString().toLowerCase();
+        HttpHeaders headers = getHttpHeaders(responseCookie, role);
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(instructor);
+        log.info("responseCookie = {}", responseCookie.toString());
+        log.info("Redirect Url = {}", headers.getLocation());
+
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 
-    @PostMapping("/student")
-    public ResponseEntity<Student> loginStudent(@Validated @ModelAttribute("loginForm") LoginDto loginDto, HttpServletRequest request) {
-        Student student = loginService.studentLogin(loginDto);
-
-        HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_ID, student.getId());
-        session.setAttribute(SessionConst.MEMBER_STATUS, MemberStatus.STUDENT);
-
+    private static HttpHeaders getHttpHeaders(ResponseCookie responseCookie, String role) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/student/lectures"));
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(student);
-//        createSession(request, student.getId(), MemberStatus.STUDENT);
+        String redirectUrl = "/" + role + "/lectures";
+        headers.setLocation(URI.create(redirectUrl));
+        headers.set(HttpHeaders.SET_COOKIE, responseCookie.toString());
+        return headers;
     }
-
-    @DeleteMapping(value = {"/instructor", "/student"})
-    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-        expireCookie(request, response);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/"));
-
-        return ResponseEntity.noContent()
-                .headers(headers)
+    private static ResponseCookie getResponseCookie(String jwt) {
+        return ResponseCookie.from("Authorization", jwt)
+                .httpOnly(true)
+                .maxAge(3600)
+                .path("/")
                 .build();
-//        return "redirect:/";
-    }
-//
-//    @DeleteMapping("/student")
-//    public ResponseEntity<Void> logoutStudent(HttpServletRequest request, HttpServletResponse response) {
-//        expireCookie(request, response);
-//        return ResponseEntity.noContent().build();
-////        return "redirect:/";
-//    }
-
-    private void createSession(HttpServletRequest request, Long id, MemberStatus memberStatus) {
-        HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_ID, id);
-        session.setAttribute(SessionConst.MEMBER_STATUS, memberStatus);
-    }
-
-    private void expireCookie(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession(false);
-        Cookie sessionCookie = new Cookie("JSESSIONID", null);
-        if (session != null) {
-            session.invalidate();
-        }
-        sessionCookie.setMaxAge(0);
-        response.addCookie(sessionCookie);
     }
 }

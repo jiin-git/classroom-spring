@@ -1,33 +1,39 @@
 package basic.classroom.controller.api.login;
 
-import basic.classroom.dto.FindIdDto;
-import basic.classroom.dto.FindPwDto;
-import basic.classroom.service.datajpa.LoginHelpJpaService;
+import basic.classroom.dto.FindIds.FindIdsRequest;
+import basic.classroom.dto.FindIds.FindIdsResponse;
+import basic.classroom.dto.FindPassword.FindPasswordRequest;
+import basic.classroom.dto.FindPassword.FindPasswordResponse;
+import basic.classroom.service.datajpa.login.LoginJpaServiceV2;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/login/help")
 public class LoginHelpApi {
-    private final LoginHelpJpaService loginHelpService;
+    private final LoginJpaServiceV2 loginService;
 
     @GetMapping("/ids")
-    public ResponseEntity<List<String>> findLoginIds(@Validated @ModelAttribute("findIdsForm") FindIdDto findIdDto) {
-        List<String> loginIds = loginHelpService.findLoginIds(findIdDto);
-        return ResponseEntity.ok(loginIds);
+    public ResponseEntity<FindIdsResponse> findLoginIds(@Validated @ModelAttribute FindIdsRequest findIdsRequest) {
+        List<String> loginIds = loginService.findLoginIds(findIdsRequest);
+        FindIdsResponse findIdsResponse = FindIdsResponse.builder().status(302).loginIds(loginIds).build();
+
+//        return ResponseEntity.status(HttpStatus.FOUND).body(findIdsResponse);
+        return new ResponseEntity<>(findIdsResponse, HttpStatus.FOUND);
     }
 
-    @GetMapping("/pw")
-    public ResponseEntity<String> findLoginPw(@Validated @ModelAttribute("findPwForm") FindPwDto findPwDto) {
-        String loginPw = loginHelpService.findLoginPw(findPwDto);
-        return ResponseEntity.ok(loginPw);
+    @PutMapping("/password")
+    public ResponseEntity<FindPasswordResponse> findLoginPassword(@Validated @RequestBody FindPasswordRequest findPasswordRequest) {
+        String randomPassword = loginService.findLoginPassword(findPasswordRequest);
+        FindPasswordResponse findPasswordResponse = FindPasswordResponse.builder().status(200).password(randomPassword).build();
+        return ResponseEntity.ok(findPasswordResponse);
     }
 }
