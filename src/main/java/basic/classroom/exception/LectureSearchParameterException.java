@@ -3,10 +3,10 @@ package basic.classroom.exception;
 import lombok.Getter;
 
 @Getter
-public class CreateDuplicatedMemberException extends RuntimeException {
+public class LectureSearchParameterException extends RuntimeException{
     private ErrorCode errorCode;
 
-    public CreateDuplicatedMemberException(ErrorCode errorCode) {
+    public LectureSearchParameterException(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
 }

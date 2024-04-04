@@ -3,10 +3,10 @@ package basic.classroom.exception;
 import lombok.Getter;
 
 @Getter
-public class CreateDuplicatedMemberException extends RuntimeException {
+public class ConvertImageException extends RuntimeException {
     private ErrorCode errorCode;
 
-    public CreateDuplicatedMemberException(ErrorCode errorCode) {
+    public ConvertImageException(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
 }
