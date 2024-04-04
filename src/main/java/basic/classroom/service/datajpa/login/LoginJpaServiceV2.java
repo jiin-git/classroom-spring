@@ -161,7 +161,7 @@ public class LoginJpaServiceV2 {
 
         String randomPassword = RandomStringUtils.random(8, true, true);
         Student student = findStudent.get();
-        student.getMember().setPassword(passwordEncoder.encode(randomPassword));
+        student.updatePassword(passwordEncoder.encode(randomPassword));
         return randomPassword;
     }
     private String getInstructorPassword(String loginId, String email) {
@@ -172,7 +172,7 @@ public class LoginJpaServiceV2 {
 
         String randomPassword = RandomStringUtils.random(8, true, true);
         Instructor instructor = findInstructor.get();
-        instructor.getMember().setPassword(passwordEncoder.encode(randomPassword));
+        instructor.updatePassword(passwordEncoder.encode(randomPassword));
         return randomPassword;
     }
 }
