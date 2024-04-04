@@ -1,28 +1,29 @@
-package basic.classroom.controller.members.v2;
+package basic.classroom.controller.mvc.members.v1;
 
-import basic.classroom.domain.LectureStatus;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-@Slf4j
-@Controller
-@RequiredArgsConstructor
-public class EditLectureController {
-
-    @GetMapping("/instructor/edit/lectures/{lectureId}")
-    public String editLectureForm(@PathVariable Long lectureId, Model model) {
-        model.addAttribute("lectureStatusList", LectureStatus.values());
-        return "member/instructor/editLectureForm";
-    }
-
-//    @PostMapping("/instructor/edit/lecture/{lectureId}")
+//@Slf4j
+//@Controller
+//@RequiredArgsConstructor
+//public class EditLectureController {
+//    private final LectureJpaService lectureService;
+//    private final MemberJpaService memberService;
+//
+////    @GetMapping("/instructor/edit/lecture/{lectureId}")
+//    public String editLectureForm(@PathVariable Long lectureId, Model model) {
+//        Lecture lecture = lectureService.findOne(lectureId);
+//        UpdateLectureRequest lectureDto = new UpdateLectureRequest(lecture);
+//        LectureStatus[] lectureStatusList = LectureStatus.values();
+//
+//        model.addAttribute("lecture", lectureDto);
+//        model.addAttribute("lectureStatusList", lectureStatusList);
+//        if (lecture.getProfileImage() != null) {
+//            model.addAttribute("profileImage", lecture.getProfileImage());
+//        }
+//        return "member/instructor/editLectureForm";
+//    }
+//
+////    @PostMapping("/instructor/edit/lecture/{lectureId}")
 //    public String editLecture(@PathVariable Long lectureId,
-//                              @Validated @ModelAttribute("lecture") UpdateLectureDto lectureDto, BindingResult bindingResult, Model model) {
+//                              @Validated @ModelAttribute("lecture") UpdateLectureRequest lectureDto, BindingResult bindingResult, Model model) {
 //        Instructor instructor = memberService.findInstructor(lectureDto.getInstructorId());
 //        Lecture lecture = lectureService.findOne(lectureId);
 //        LectureStatus lectureStatus = lectureDto.getLectureStatus();
@@ -68,11 +69,11 @@ public class EditLectureController {
 //        lectureService.updateLecture(instructor, lectureDto, updateRemainingPersonnel);
 //        return "redirect:/instructor/lectures";
 //    }
-
-    private String rejectRequest(BindingResult bindingResult, Model model, String errorCode, String message) {
-        LectureStatus[] lectureStatusList = LectureStatus.values();
-        bindingResult.reject(errorCode, message);
-        model.addAttribute("lectureStatusList", lectureStatusList);
-        return "member/instructor/editLectureForm";
-    }
-}
+//
+//    private String rejectRequest(BindingResult bindingResult, Model model, String errorCode, String message) {
+//        LectureStatus[] lectureStatusList = LectureStatus.values();
+//        bindingResult.reject(errorCode, message);
+//        model.addAttribute("lectureStatusList", lectureStatusList);
+//        return "member/instructor/editLectureForm";
+//    }
+//}

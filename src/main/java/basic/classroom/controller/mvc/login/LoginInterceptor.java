@@ -1,8 +1,9 @@
-package basic.classroom.controller.login;
+package basic.classroom.controller.mvc.login;
 
 import basic.classroom.controller.SessionConst;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.exception.AuthorizationNotAvailableException;
+import basic.classroom.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -13,8 +14,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String requestURI = request.getRequestURI();
-        log.info("Request URI = {}", requestURI);
+        String requestUrl = request.getRequestURI();
+        log.info("Request URI = {}", requestUrl);
 
         HttpSession session = request.getSession(false);
         // 로그인 x
@@ -29,9 +30,9 @@ public class LoginInterceptor implements HandlerInterceptor {
             String memberStatusToString = memberStatus.toString().toLowerCase();
             log.info("memberStatus = {}", memberStatusToString);
 
-            if (requestURI.indexOf(memberStatusToString) == -1) {
+            if (requestUrl.indexOf(memberStatusToString) == -1) {
                 log.info("memberStatus is not match URI.");
-                throw new AuthorizationNotAvailableException();
+                throw new AuthorizationNotAvailableException(ErrorCode.INVALID_MEMBER_STATUS);
             }
         }
 

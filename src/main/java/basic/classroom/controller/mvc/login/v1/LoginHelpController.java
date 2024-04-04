@@ -1,12 +1,11 @@
-package basic.classroom.controller.login.v1;
+package basic.classroom.controller.mvc.login.v1;
 
 import basic.classroom.domain.MemberStatus;
-import basic.classroom.dto.FindIdDto;
-import basic.classroom.dto.FindPwDto;
+import basic.classroom.dto.FindIds;
+import basic.classroom.dto.FindPassword.*;
 import basic.classroom.service.datajpa.LoginHelpJpaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -23,13 +22,13 @@ public class LoginHelpController {
 
 //    @GetMapping("/find/ids")
     public String findLoginIdsForm(Model model) {
-        model.addAttribute("findIdsForm", new FindIdDto());
+        model.addAttribute("findIdsForm", new FindIds.FindIdsRequest());
         addMemberStatusToModel(model);
         return "login/findIdsForm";
     }
 
 //    @PostMapping("/find/ids")
-    public String findLoginIds(@Validated @ModelAttribute("findIdsForm") FindIdDto findIdDto,
+    public String findLoginIds(@Validated @ModelAttribute("findIdsForm") FindIds.FindIdsRequest findIdsRequest,
                               BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         // 검증 로직
@@ -39,7 +38,7 @@ public class LoginHelpController {
         }
 
         // 성공 로직
-        List<String> loginIds = loginHelpService.findLoginIds(findIdDto);
+        List<String> loginIds = loginHelpService.findLoginIds(findIdsRequest);
         redirectAttributes.addFlashAttribute("loginIds", loginIds);
         return "redirect:/find/ids/result";
     }
@@ -52,14 +51,14 @@ public class LoginHelpController {
 
 //    @GetMapping("/find/pw")
     public String findPwForm(Model model) {
-        model.addAttribute("findPwForm", new FindPwDto());
+        model.addAttribute("findPwForm", new FindPasswordRequest());
         addMemberStatusToModel(model);
 
         return "login/findPwForm";
     }
 
 //    @PostMapping("/find/pw")
-    public String findLoginPw(@Validated @ModelAttribute("findPwForm") FindPwDto findPwDto,
+    public String findLoginPassword(@Validated @ModelAttribute("findPwForm") FindPasswordRequest findPasswordDto,
                               BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         // 검증 로직
         if (bindingResult.hasErrors()) {
@@ -68,13 +67,13 @@ public class LoginHelpController {
         }
 
         // 성공 로직
-        String loginPw = loginHelpService.findLoginPw(findPwDto);
+        String loginPw = loginHelpService.findLoginPassword(findPasswordDto);
         redirectAttributes.addFlashAttribute("loginPw", loginPw);
         return "redirect:/find/pw/result";
     }
 
 //    @GetMapping("/find/pw/result")
-    public String findLoginPwResult(@ModelAttribute("loginPw") String loginPw, Model model) {
+    public String findLoginPasswordResult(@ModelAttribute("loginPw") String loginPw, Model model) {
         model.addAttribute("loginPw", loginPw);
         return "login/findPwResult";
     }

@@ -1,10 +1,10 @@
-package basic.classroom.controller.login.v1;
+package basic.classroom.controller.mvc.login.v1;
 
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Member;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
-import basic.classroom.dto.CreateMemberDto;
+import basic.classroom.dto.CreateMember.*;
 import basic.classroom.service.datajpa.MemberJpaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,25 +21,25 @@ public class CreateMemberController {
 
 //    @GetMapping("/create/member")
     public String createMemberForm(Model model) {
-        model.addAttribute("createMemberForm", new CreateMemberDto());
+        model.addAttribute("createMemberForm", new CreateMemberRequest());
         addMemberStatusToModel(model);
         return "login/createMemberForm";
     }
 
 //    @PostMapping("/create/member")
-    public String createMember(@Validated @ModelAttribute("createMemberForm") CreateMemberDto createMemberDto, BindingResult bindingResult, Model model) {
+    public String createMember(@Validated @ModelAttribute("createMemberForm") CreateMemberRequest createMemberRequest, BindingResult bindingResult, Model model) {
         // 검증 로직
         if (bindingResult.hasErrors()) {
             addMemberStatusToModel(model);
             return "login/createMemberForm";
         }
         // 성공 로직
-        if (createMemberDto.getMemberStatus() == MemberStatus.INSTRUCTOR) {
-            Instructor instructor = Instructor.createInstructor(new Member(createMemberDto));
+        if (createMemberRequest.getMemberStatus() == MemberStatus.INSTRUCTOR) {
+            Instructor instructor = Instructor.createInstructor(Member.fromCreateMemberRequest(createMemberRequest));
             memberService.join(instructor);
         }
         else {
-            Student student = Student.createStudent(new Member(createMemberDto));
+            Student student = Student.createStudent(Member.fromCreateMemberRequest(createMemberRequest));
             memberService.join(student);
         }
 

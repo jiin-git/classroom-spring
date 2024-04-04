@@ -1,4 +1,4 @@
-package basic.classroom.controller.members.v1;
+package basic.classroom.controller.mvc.members.v1;
 
 import basic.classroom.controller.SessionConst;
 import basic.classroom.domain.Instructor;
@@ -15,22 +15,19 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@Controller
+//@Controller
 @RequiredArgsConstructor
 public class ImageController {
     private final LectureJpaService lectureService;
     private final MemberJpaService memberService;
 
-    @GetMapping("/instructor/profile/image")
+//    @GetMapping("/instructor/profile/image")
     public ResponseEntity<byte[]> instructorProfileImage(HttpSession session) {
         Instructor instructor = findInstructor(session);
         ProfileImage profileImage = instructor.getProfileImage();
@@ -39,7 +36,7 @@ public class ImageController {
         return responseImageData(profileImage, cache);
     }
 
-    @GetMapping("/student/profile/image")
+//    @GetMapping("/student/profile/image")
     public ResponseEntity<byte[]> studentProfileImage(HttpSession session) {
         Student student = findStudent(session);
         ProfileImage profileImage = student.getProfileImage();
@@ -48,7 +45,7 @@ public class ImageController {
         return responseImageData(profileImage, cache);
     }
 
-    @GetMapping(value = {"/instructor/lecture/image/{lectureId}", "/student/lecture/image/{lectureId}"})
+//    @GetMapping(value = {"/instructor/lecture/image/{lectureId}", "/student/lecture/image/{lectureId}"})
     public ResponseEntity<byte[]> lectureImg(@PathVariable Long lectureId) {
         Lecture lecture = lectureService.findOne(lectureId);
         ProfileImage profileImage = lecture.getProfileImage();
@@ -57,14 +54,14 @@ public class ImageController {
         return responseImageData(profileImage, cache);
     }
 
-    @PostMapping("/instructor/initialize/profile")
+//    @PostMapping("/instructor/initialize/profile")
     public String initializeInstructorProfile(@ModelAttribute("instructor") UpdateMemberDto updateMemberDto, HttpSession session) {
         Instructor instructor = findInstructor(session);
         memberService.initializeProfile(instructor);
         return "redirect:/instructor/update/mypage";
     }
 
-    @PostMapping("/student/initialize/profile")
+//    @PostMapping("/student/initialize/profile")
     public String initializeStudentProfile(@ModelAttribute("student") UpdateMemberDto updateMemberDto, HttpSession session) {
         Student student = findStudent(session);
         memberService.initializeProfile(student);
