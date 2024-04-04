@@ -1,16 +1,19 @@
 package basic.classroom.domain;
 
+import basic.classroom.exception.ErrorCode;
+import basic.classroom.exception.LectureNotFoundException;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Entity
 @Builder
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Instructor {
@@ -25,26 +28,46 @@ public class Instructor {
     private ProfileImage profileImage;
 
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL)
-//    @MapKey(name = "id")
     private Map<Long, Lecture> lectures;
+
     public void addLectures(Lecture lecture) {
         log.info("lecture id = {}, lecture name = {}", lecture.getId(), lecture.getName());
         lectures.put(lecture.getId(), lecture);
         lecture.addInstructor(this);
     }
+    public Lecture getLecture(Long lectureId) {
+        boolean containsKey = lectures.containsKey(lectureId);
+        if (!containsKey) {
+            throw new LectureNotFoundException(ErrorCode.LECTURE_NOT_FOUND);
+        }
+        return lectures.get(lectureId);
+    }
+    public List<Lecture> getAllLectures() {
+        return lectures.values().stream().toList();
+    }
+
     public Instructor(Member member) {
         this.member = member;
     } // 삭제 예정
     public static Instructor createInstructor(Member member) {
         return Instructor.builder().member(member).lectures(new HashMap<>()).build();
     }
+
     public void updateInstructor(String email, ProfileImage profileImage) {
-        this.member.updateEmail(email);
+        member.updateEmail(email);
         if (profileImage != null) {
             this.profileImage = profileImage;
         }
     }
-    public void updateInstructorPassword(String password) {
-        this.member.updatePassword(password);
+    public void updateInstructor(ProfileImage profileImage) {
+        if (profileImage != null) {
+            this.profileImage = profileImage;
+        }
+    }
+    public void updatePassword(String password) {
+        member.updatePassword(password);
+    }
+    public void clearProfileImage() {
+        this.profileImage = null;
     }
 }

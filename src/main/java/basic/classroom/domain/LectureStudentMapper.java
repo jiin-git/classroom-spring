@@ -8,7 +8,7 @@ import lombok.*;
 // student / lecture에서 조회 시 mapper에 연결된 lecture / student를 조회할 수 있게 변경?
 @Entity
 @Builder
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class LectureStudentMapper {

@@ -8,12 +8,14 @@ import basic.classroom.exception.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
+@Slf4j
 @Entity
 @Builder
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Lecture {
@@ -35,12 +37,12 @@ public class Lecture {
     @Enumerated(EnumType.STRING)
     private LectureStatus lectureStatus;
 
-    // key : student id -> mapper id(mapper를 통해서만이 학생 엔티티를 접근할 수 있다.)
+    // key : student id -> mapper id(mapper를 통해서만 학생 엔티티를 접근할 수 있다.)
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL)
     private Map<Long, LectureStudentMapper> appliedStudents;
 
     public void addStudent(LectureStudentMapper mapper) {
-        if (remainingPersonnel <= 0) {
+        if (remainingPersonnel <= 0 || lectureStatus != LectureStatus.OPEN) {
             throw new ApplyLectureException(ErrorCode.FAILED_APPLY_LECTURE);
         }
 
@@ -49,8 +51,6 @@ public class Lecture {
             lectureStatus = LectureStatus.FULL;
         }
 
-//        Long studentId = mapper.getStudentId();
-//        appliedStudents.put(studentId, mapper);
         Long mapperId = mapper.getId();
         appliedStudents.put(mapperId, mapper);
         mapper.addLecture(this);
@@ -74,20 +74,23 @@ public class Lecture {
                 applicants.add(ApplicantsResponse.fromStudent(mapper.getStudent())));
         return applicants;
     }
+
     public void addInstructor(Instructor instructor) {
         this.instructor = instructor;
     }
+    public Long getInstructorId() {
+        return this.instructor.getId();
+    }
 
     public static Lecture createLecture(String name, Instructor instructor, int personnel, LectureStatus lectureStatus) {
-        Lecture lecture = new Lecture();
-        lecture.setName(name);
-        lecture.setInstructor(instructor);
-        lecture.setPersonnel(personnel);
-        lecture.setRemainingPersonnel(personnel);
-        lecture.setLectureStatus(lectureStatus);
-        lecture.setAppliedStudents(new HashMap<>());
-
-        return lecture;
+        return Lecture.builder()
+                .name(name)
+                .instructor(instructor)
+                .personnel(personnel)
+                .remainingPersonnel(personnel)
+                .lectureStatus(lectureStatus)
+                .appliedStudents(new HashMap<>())
+                .build();
     }
     public static Lecture createLecture(Instructor instructor, AddLectureRequest addLectureRequest) {
         return Lecture.builder()
@@ -119,6 +122,12 @@ public class Lecture {
         this.lectureStatus = updateLectureDto.getLectureStatus();
         if (updateLectureDto.getProfileImage() != null) {
             this.profileImage = updateLectureDto.getProfileImage();
+        }
+    }
+
+    public void updateLecture(ProfileImage profileImage) {
+        if (profileImage != null) {
+            this.profileImage = profileImage;
         }
     }
 

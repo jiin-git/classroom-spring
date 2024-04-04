@@ -6,7 +6,7 @@ import lombok.*;
 
 @Embeddable
 @Builder
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
@@ -22,14 +22,6 @@ public class Member {
         this.email = email;
     }
 
-    public static Member fromMember(Member member) {
-        return Member.builder()
-                .name(member.getName())
-                .loginId(member.getLoginId())
-                .password(member.getPassword())
-                .email(member.getEmail())
-                .build();
-    }
     public static Member fromCreateMemberRequest(CreateMemberRequest createMemberRequest) {
         return Member.builder()
                 .name(createMemberRequest.getName())
@@ -37,11 +29,5 @@ public class Member {
                 .password(createMemberRequest.getPassword())
                 .email(createMemberRequest.getEmail())
                 .build();
-    }
-    public Member(CreateMemberRequest createMemberRequest) {
-        this.name = createMemberRequest.getName();
-        this.loginId = createMemberRequest.getLoginId();
-        this.password = createMemberRequest.getPassword();
-        this.email = createMemberRequest.getEmail();
     }
 }

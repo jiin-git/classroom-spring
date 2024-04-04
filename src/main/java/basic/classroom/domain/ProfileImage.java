@@ -5,13 +5,12 @@ import lombok.*;
 
 @Builder
 @Embeddable
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileImage {
     private String imageName;
     private String dataType;
-//    BLob(Binary type 저장)
     @Lob
     private byte[] imageData;
 
