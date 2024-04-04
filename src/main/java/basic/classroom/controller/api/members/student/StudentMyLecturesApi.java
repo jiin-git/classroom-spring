@@ -1,6 +1,5 @@
 package basic.classroom.controller.api.members.student;
 
-import basic.classroom.config.JwtTokenProvider;
 import basic.classroom.domain.Lecture;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.LectureResponse.LectureBasicResponse;
@@ -8,12 +7,13 @@ import basic.classroom.dto.LectureResponse.LectureDetailsResponse;
 import basic.classroom.dto.SearchLectureRequest;
 import basic.classroom.service.datajpa.members.MemberJpaServiceV2;
 import basic.classroom.service.datajpa.members.student.StudentLectureJpaService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,52 +26,57 @@ import java.util.Set;
 public class StudentMyLecturesApi {
     private final MemberJpaServiceV2 memberService;
     private final StudentLectureJpaService studentLectureService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/{lectureId}")
-    public ResponseEntity<Long> addLecture(@PathVariable Long lectureId, HttpServletRequest request) {
-        Student student = findStudent(request);
+    public ResponseEntity<Long> addLecture(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long lectureId) {
+        String loginId = userDetails.getUsername();
+        Student student = memberService.findStudentByLoginId(loginId);
         Long mapperId = studentLectureService.applyLecture(student, lectureId);
 
         return ResponseEntity.ok(mapperId);
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<LectureBasicResponse>> getMyLectures(@RequestParam(required = false) Long page, HttpServletRequest request) {
-        Student student = findStudent(request);
+    public ResponseEntity<Page<LectureBasicResponse>> getMyLectures(@AuthenticationPrincipal UserDetails userDetails, @RequestParam(required = false) Long page) {
+        String loginId = userDetails.getUsername();
+        Student student = memberService.findStudentByLoginId(loginId);
         Page<Lecture> lectures = studentLectureService.findMyLecturesByPage(student.getId(), page);
         Page<LectureBasicResponse> lectureResponseDtos = lectures.map(LectureBasicResponse::fromLecture);
         return new ResponseEntity<>(lectureResponseDtos, HttpStatus.OK);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Page<LectureDetailsResponse>> findLecturesBySearchCondition(@ModelAttribute SearchLectureRequest searchLectureRequest, HttpServletRequest request) {
+    public ResponseEntity<Page<LectureDetailsResponse>> findLecturesBySearchCondition(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute SearchLectureRequest searchLectureRequest) {
 //        CustomPage<LectureDetailsResponse> showLecturesInfo = getPagingLecturesInfo(searchLectureRequest);
-        Student student = findStudent(request);
+        String loginId = userDetails.getUsername();
+        Student student = memberService.findStudentByLoginId(loginId);
         Page<Lecture> personalizedLectures = studentLectureService.findPersonalizedLectures(searchLectureRequest);
         Page<LectureDetailsResponse> responsePersonalizedLectures = personalizedLectures.map(LectureDetailsResponse::fromLecture);
         return ResponseEntity.ok(responsePersonalizedLectures);
     }
 
     @GetMapping("/{mapperId}")
-    public ResponseEntity<LectureDetailsResponse> getMyLectureInfo(@PathVariable Long mapperId, HttpServletRequest request) {
-        Student student = findStudent(request);
+    public ResponseEntity<LectureDetailsResponse> getMyLectureInfo(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long mapperId) {
+        String loginId = userDetails.getUsername();
+        Student student = memberService.findStudentByLoginId(loginId);
         Lecture lecture = student.getLecture(mapperId);
         LectureDetailsResponse lectureDetailsResponse = LectureDetailsResponse.fromLecture(lecture);
         return ResponseEntity.ok(lectureDetailsResponse);
     }
 
     @GetMapping("/ids")
-    public ResponseEntity<Set<Long>> getMyLecturesMapperIds(HttpServletRequest request) {
-        Student student = findStudent(request);
+    public ResponseEntity<Set<Long>> getMyLecturesMapperIds(@AuthenticationPrincipal UserDetails userDetails) {
+        String loginId = userDetails.getUsername();
+        Student student = memberService.findStudentByLoginId(loginId);
         Set<Long> myLecturesMapperIds = student.getApplyingLectures().keySet();
         log.info("myLecturesIds = {}", myLecturesMapperIds);
         return ResponseEntity.ok(myLecturesMapperIds);
     }
 
     @DeleteMapping("/{mapperId}")
-    public ResponseEntity<Void> cancelLecture(@PathVariable Long mapperId, HttpServletRequest request) {
-        Student student = findStudent(request);
+    public ResponseEntity<Void> cancelLecture(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long mapperId) {
+        String loginId = userDetails.getUsername();
+        Student student = memberService.findStudentByLoginId(loginId);
         studentLectureService.cancelLecture(student, mapperId);
         return ResponseEntity.noContent().build();
     }
@@ -124,11 +129,4 @@ public class StudentMyLecturesApi {
 //            this.list = myLecturesIds;
 //        }
 //    }
-
-    private Student findStudent(HttpServletRequest request) {
-        String jwtToken = jwtTokenProvider.getJWTToken(request);
-        String loginId = jwtTokenProvider.getLoginId(jwtToken);
-        Student student = memberService.findStudentByLoginId(loginId);
-        return student;
-    }
 }

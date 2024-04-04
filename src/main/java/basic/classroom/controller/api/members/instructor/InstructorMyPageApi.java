@@ -1,16 +1,16 @@
 package basic.classroom.controller.api.members.instructor;
 
-import basic.classroom.config.JwtTokenProvider;
 import basic.classroom.domain.Instructor;
 import basic.classroom.dto.MyPageResponse;
 import basic.classroom.dto.UpdateMyPageRequest;
 import basic.classroom.dto.UpdatePasswordRequest;
 import basic.classroom.service.datajpa.members.MemberJpaServiceV2;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +21,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/members/instructor/my-page")
 public class InstructorMyPageApi {
     private final MemberJpaServiceV2 memberService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("")
-    public ResponseEntity<MyPageResponse> getInstructorMyPage(HttpServletRequest request) {
-        Instructor instructor = findInstructor(request);
+    public ResponseEntity<MyPageResponse> getInstructorMyPage(@AuthenticationPrincipal UserDetails userDetails) {
+        String loginId = userDetails.getUsername();
+        Instructor instructor = memberService.findInstructorByLoginId(loginId);
         MyPageResponse myPageResponse = MyPageResponse.fromInstructor(instructor);
         return ResponseEntity.ok(myPageResponse);
     }
 
 //    @GetMapping("/profile")
-//    public ResponseEntity<byte[]> getInstructorProfileImage(HttpServletRequest request) {
-//        Instructor instructor = findInstructor(request);
+//    public ResponseEntity<byte[]> getInstructorProfileImage(@AuthenticationPrincipal UserDetails userDetails) {
+//        String loginId = userDetails.getUsername();
+//        Instructor instructor = memberService.findInstructorByLoginId(loginId);
 //        ProfileImage profileImage = instructor.getProfileImage();
 //        CacheControl cache = CacheControl.noCache().mustRevalidate().cachePrivate();
 //
@@ -40,22 +41,25 @@ public class InstructorMyPageApi {
 //    }
 
     @PutMapping("")
-    public ResponseEntity<Void> updateInstructorMyPage(@Validated @RequestBody UpdateMyPageRequest updateMyPageRequest, HttpServletRequest request) {
-        Instructor instructor = findInstructor(request);
+    public ResponseEntity<Void> updateInstructorMyPage(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UpdateMyPageRequest updateMyPageRequest) {
+        String loginId = userDetails.getUsername();
+        Instructor instructor = memberService.findInstructorByLoginId(loginId);
         memberService.update(instructor, updateMyPageRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/password")
-    public ResponseEntity<Void> updateInstructorPassword(@Validated @RequestBody UpdatePasswordRequest updatePasswordRequest, HttpServletRequest request) {
-        Instructor instructor = findInstructor(request);
+    public ResponseEntity<Void> updateInstructorPassword(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UpdatePasswordRequest updatePasswordRequest) {
+        String loginId = userDetails.getUsername();
+        Instructor instructor = memberService.findInstructorByLoginId(loginId);
         memberService.updatePassword(instructor, updatePasswordRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<Void> initializeInstructorProfileImage(HttpServletRequest request) {
-        Instructor instructor = findInstructor(request);
+    public ResponseEntity<Void> initializeInstructorProfileImage(@AuthenticationPrincipal UserDetails userDetails) {
+        String loginId = userDetails.getUsername();
+        Instructor instructor = memberService.findInstructorByLoginId(loginId);
         memberService.initializeProfile(instructor);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -76,10 +80,4 @@ public class InstructorMyPageApi {
 //                .contentType(MediaType.valueOf(dataType))
 //                .body(imageData);
 //    }
-    private Instructor findInstructor(HttpServletRequest request) {
-        String jwtToken = jwtTokenProvider.getJWTToken(request);
-        String loginId = jwtTokenProvider.getLoginId(jwtToken);
-        Instructor instructor = memberService.findInstructorByLoginId(loginId);
-        return instructor;
-    }
 }
