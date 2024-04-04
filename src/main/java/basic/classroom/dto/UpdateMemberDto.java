@@ -4,18 +4,16 @@ import basic.classroom.domain.Instructor;
 import basic.classroom.domain.Student;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Builder
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UpdateMemberDto {
-
     private String name;
     private String loginId;
-
     private String password;
     private String checkPassword;
 
@@ -31,12 +29,10 @@ public class UpdateMemberDto {
         this.password = student.getMember().getPassword();
         this.email = student.getMember().getEmail();
     }
-
     public UpdateMemberDto(Instructor instructor) {
         this.name = instructor.getMember().getName();
         this.loginId =  instructor.getMember().getLoginId();
         this.password = instructor.getMember().getPassword();
         this.email = instructor.getMember().getEmail();
     }
-
 }
