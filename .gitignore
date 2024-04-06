@@ -5,6 +5,17 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### v1 ###
+/src/main/java/basic/classroom/controller/mvc/login/v1/
+/src/main/java/basic/classroom/controller/mvc/members/v1/
+/src/main/resources/templates/login/v1/
+/src/main/resources/templates/member/instructor/v1/
+/src/main/resources/templates/member/student/v1/
+/src/main/java/basic/classroom/service/jpa/
+/src/main/java/basic/classroom/service/datajpa/
+/src/main/java/basic/classroom/service/etc/
+
+
 ### STS ###
 .apt_generated
 .classpath
@@ -38,3 +49,4 @@ out/
 
 ### app.config ###
 /src/main/resources/application.properties
+/src/test/resources/application.properties
