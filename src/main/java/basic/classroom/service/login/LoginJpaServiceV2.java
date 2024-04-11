@@ -5,7 +5,6 @@ import basic.classroom.domain.Instructor;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
 import basic.classroom.dto.LoginRequest;
-import basic.classroom.dto.ResponseToken;
 import basic.classroom.exception.ErrorCode;
 import basic.classroom.exception.InvalidMemberStatusException;
 import basic.classroom.exception.MemberNotFoundException;

@@ -1,4 +1,4 @@
-package basic.classroom.dto;
+package basic.classroom.service.login;
 
 import lombok.AccessLevel;
 import lombok.Getter;
