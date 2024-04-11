@@ -14,8 +14,9 @@ public class UpdateLecture {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class UpdateLectureRequest {
-        @Range(min = 0, max = 100, message = "정원을 0 ~ 100명 사이로 입력해주세요.")
-        private int personnel;
+        @NotNull(message = "정원을 0 ~ 100명 이내로 입력해주세요")
+        @Range(min = 0, max = 100, message = "정원을 0 ~ 100명 이내로 입력해주세요.")
+        private Long personnel;
         @NotNull(message = "강의 상태를 설정해주세요.")
         private LectureStatus lectureStatus;
         private MultipartFile imageFile;
@@ -32,8 +33,9 @@ public class UpdateLecture {
         private ProfileImage profileImage;
 
         public static UpdateLectureDto fromRequest(UpdateLectureRequest updateLectureRequest, int remainingPersonnel, ProfileImage profileImage) {
+            int requestPersonnel = updateLectureRequest.getPersonnel().intValue();
             UpdateLectureDtoBuilder updateLectureDtoBuilder = UpdateLectureDto.builder()
-                    .personnel(updateLectureRequest.getPersonnel())
+                    .personnel(requestPersonnel)
                     .lectureStatus(updateLectureRequest.getLectureStatus())
                     .remainingPersonnel(remainingPersonnel);
 
