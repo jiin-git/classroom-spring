@@ -1,4 +1,4 @@
-package basic.classroom.service.datajpa.members;
+package basic.classroom.service.members;
 
 import basic.classroom.domain.*;
 import basic.classroom.dto.CreateMember.CreateMemberRequest;
