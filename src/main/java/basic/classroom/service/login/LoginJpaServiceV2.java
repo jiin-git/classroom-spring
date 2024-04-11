@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static basic.classroom.dto.FindIds.FindIdsRequest;
@@ -139,25 +138,23 @@ public class LoginJpaServiceV2 {
         }
     }
     private String getStudentPassword(String loginId, String email) {
-        Optional<Student> findStudent = studentJpaRepository.findByMember_LoginIdAndMember_Email(loginId, email);
-        if (findStudent.isEmpty()) {
+        Student findStudent = studentJpaRepository.findByMember_LoginIdAndMember_Email(loginId, email).orElse(null);
+        if (findStudent == null) {
             throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
         String randomPassword = RandomStringUtils.random(8, true, true);
-        Student student = findStudent.get();
-        student.updatePassword(passwordEncoder.encode(randomPassword));
+        findStudent.updatePassword(passwordEncoder.encode(randomPassword));
         return randomPassword;
     }
     private String getInstructorPassword(String loginId, String email) {
-        Optional<Instructor> findInstructor = instructorJpaRepository.findByMember_LoginIdAndMember_Email(loginId, email);
-        if (findInstructor.isEmpty()) {
+        Instructor findInstructor = instructorJpaRepository.findByMember_LoginIdAndMember_Email(loginId, email).orElse(null);
+        if (findInstructor == null) {
             throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
         String randomPassword = RandomStringUtils.random(8, true, true);
-        Instructor instructor = findInstructor.get();
-        instructor.updatePassword(passwordEncoder.encode(randomPassword));
+        findInstructor.updatePassword(passwordEncoder.encode(randomPassword));
         return randomPassword;
     }
 }
