@@ -174,19 +174,23 @@ public class MemberJpaServiceV2 {
         }
     }
 
+    @Transactional(readOnly = true)
     public Instructor findInstructor(Long id) {
         return instructorRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
+    @Transactional(readOnly = true)
     public Student findStudent(Long id) {
         return studentRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public Instructor findInstructorByLoginId(String loginId) {
         return instructorRepository.findByMember_LoginId(loginId)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
+    @Transactional(readOnly = true)
     public Student findStudentByLoginId(String loginId) {
         return studentRepository.findByMember_LoginId(loginId)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
