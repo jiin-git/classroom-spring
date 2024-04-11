@@ -1,5 +1,7 @@
 package basic.classroom.exception;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @RestControllerAdvice
@@ -21,6 +24,24 @@ public class ExceptionHandlers {
                 .forEach((error) -> {
                     String fieldName = ((FieldError) error).getField();
                     String errorMessage = error.getDefaultMessage();
+                    errors.put(fieldName, errorMessage);
+                });
+        ValidationErrorResponse errorResponse = ValidationErrorResponse.builder().status(400).errors(errors).build();
+
+        log.error("Error Messages = {}", errorResponse.getErrors());
+
+        return ResponseEntity
+                .status(errorResponse.getStatus())
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<ValidationErrorResponse> handleValidationException(ConstraintViolationException e) {
+        Map<String, String> errors = new HashMap<>();
+        Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+        violations.stream().forEach((violation) -> {
+                    String fieldName = violation.getPropertyPath().toString();
+                    String errorMessage = violation.getMessage();
                     errors.put(fieldName, errorMessage);
                 });
         ValidationErrorResponse errorResponse = ValidationErrorResponse.builder().status(400).errors(errors).build();
