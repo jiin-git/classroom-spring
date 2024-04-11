@@ -121,9 +121,6 @@ public class MemberJpaServiceV2 {
         }
     }
     private void validateImageDataType(MultipartFile imageFile) {
-//        String extension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename()).toUpperCase();
-//        List<ValidImageType> validImageTypes = Arrays.stream(ValidImageType.values()).toList();
-//        boolean validType = validImageTypes.contains(extension);
         try {
             String extension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename()).toUpperCase();
             ValidImageType validImageType = ValidImageType.valueOf(extension);
@@ -132,13 +129,6 @@ public class MemberJpaServiceV2 {
         } catch (IllegalArgumentException e) {
             throw new StoreImageException(ErrorCode.FAILED_STORE_IMAGE);
         }
-
-//        log.info("valid Image types = {}", validImageTypes);
-//        log.info("valid type = {}", validType);
-
-//        if (!validType) {
-//
-//        }
     }
 
     @Transactional
