@@ -46,11 +46,11 @@ public class MemberJpaServiceV2 {
 
         if (memberStatus == MemberStatus.INSTRUCTOR) {
             Instructor instructor = Instructor.createInstructor(member);
-            instructorJpaRepository.save(instructor);
+            instructorRepository.save(instructor);
             return instructor.getId();
         } else if (memberStatus == MemberStatus.STUDENT) {
             Student student = Student.createStudent(member);
-            studentJpaRepository.save(student);
+            studentRepository.save(student);
             return student.getId();
         } else {
             throw new InvalidMemberStatusException(ErrorCode.INVALID_MEMBER_STATUS);
@@ -67,8 +67,8 @@ public class MemberJpaServiceV2 {
         }
     }
     private void validateDuplicatedMember(String loginId) {
-        Optional<Student> duplicatedStudent = studentJpaRepository.findByMember_LoginId(loginId);
-        Optional<Instructor> duplicatedInstructor = instructorJpaRepository.findByMember_LoginId(loginId);
+        Optional<Student> duplicatedStudent = studentRepository.findByMember_LoginId(loginId);
+        Optional<Instructor> duplicatedInstructor = instructorRepository.findByMember_LoginId(loginId);
 
         if (duplicatedStudent.isPresent() || duplicatedInstructor.isPresent()) {
             throw new CreateDuplicatedMemberException(ErrorCode.DUPLICATED_LOGIN_ID);
@@ -199,20 +199,20 @@ public class MemberJpaServiceV2 {
     }
 
     public Instructor findInstructor(Long id) {
-        return instructorJpaRepository.findById(id)
+        return instructorRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
     public Student findStudent(Long id) {
-        return studentJpaRepository.findById(id)
+        return studentRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     public Instructor findInstructorByLoginId(String loginId) {
-        return instructorJpaRepository.findByMember_LoginId(loginId)
+        return instructorRepository.findByMember_LoginId(loginId)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
     public Student findStudentByLoginId(String loginId) {
-        return studentJpaRepository.findByMember_LoginId(loginId)
+        return studentRepository.findByMember_LoginId(loginId)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }
