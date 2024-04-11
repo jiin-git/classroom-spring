@@ -1,9 +1,8 @@
-package basic.classroom.service;
+package basic.classroom.service.members;
 
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.MemberStatus;
 import basic.classroom.domain.Student;
-import basic.classroom.dto.MemberDetails;
 import basic.classroom.repository.dataJpa.InstructorJpaRepository;
 import basic.classroom.repository.dataJpa.StudentJpaRepository;
 import lombok.RequiredArgsConstructor;

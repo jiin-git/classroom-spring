@@ -1,4 +1,4 @@
-package basic.classroom.dto;
+package basic.classroom.service.members;
 
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
