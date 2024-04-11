@@ -11,7 +11,7 @@ public class UpdateLecture {
 
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class UpdateLectureRequest {
         @Range(min = 0, max = 100, message = "정원을 0 ~ 100명 사이로 입력해주세요.")
@@ -23,7 +23,7 @@ public class UpdateLecture {
 
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class UpdateLectureDto {
         private int personnel;

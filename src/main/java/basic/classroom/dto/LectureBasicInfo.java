@@ -6,7 +6,7 @@ import lombok.*;
 
 @Builder
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class LectureBasicInfo {
     private Long id;

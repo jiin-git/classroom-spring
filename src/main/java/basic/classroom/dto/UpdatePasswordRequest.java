@@ -2,14 +2,11 @@ package basic.classroom.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class UpdatePasswordRequest {
     @Size(min = 2, max = 15, message = "비밀번호는 2~15자리 이내로 입력하세요.")

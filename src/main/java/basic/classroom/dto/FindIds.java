@@ -12,7 +12,7 @@ public class FindIds {
 
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class FindIdsRequest {
         @NotBlank(message = "이름을 입력해주세요.")
@@ -25,7 +25,7 @@ public class FindIds {
 
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class FindIdsResponse {
         private int status;

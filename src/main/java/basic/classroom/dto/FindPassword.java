@@ -10,7 +10,7 @@ public class FindPassword {
 
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class FindPasswordRequest {
         @NotBlank(message = "아이디를 입력해주세요.")
@@ -23,7 +23,7 @@ public class FindPassword {
 
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class FindPasswordResponse {
         private int status;

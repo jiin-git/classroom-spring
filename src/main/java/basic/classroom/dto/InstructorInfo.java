@@ -5,7 +5,7 @@ import lombok.*;
 
 @Builder
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class InstructorInfo {
     private Long id;

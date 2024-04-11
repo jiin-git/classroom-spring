@@ -3,14 +3,11 @@ package basic.classroom.dto;
 import basic.classroom.domain.Instructor;
 import basic.classroom.domain.ProfileImage;
 import basic.classroom.domain.Student;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class MyPageResponse {
     private String name;

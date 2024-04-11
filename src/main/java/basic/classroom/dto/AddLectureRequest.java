@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Builder
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class AddLectureRequest {
     @Size(min = 1, max = 15, message = "이름을 1 ~ 15자리 사이로 입력해주세요.")

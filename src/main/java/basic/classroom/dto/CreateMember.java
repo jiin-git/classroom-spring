@@ -12,7 +12,7 @@ public class CreateMember {
     @Builder
     @Getter
     @AllArgsConstructor
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateMemberRequest {
         @Size(min = 2, max = 20, message = "아이디는 2 ~ 20자리 사이로 입력해주세요.")
         private String loginId;
@@ -28,7 +28,7 @@ public class CreateMember {
 
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class CreateMemberResponse {
         private String loginId;
