@@ -86,7 +86,7 @@ public class LoginJpaServiceV2 {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<String> findLoginIds(FindIdsRequest findIdsRequest) {
         validateFindIdsRequest(findIdsRequest);
 
