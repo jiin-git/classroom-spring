@@ -79,8 +79,6 @@ public class LoginJpaServiceV2 {
         }
     }
     private ResponseToken getResponseToken(String loginId, String password, String findMemberPassword) {
-        log.info("password = {}", password);
-        log.info("findPassword = {}", findMemberPassword);
         if (passwordEncoder.matches(password, findMemberPassword)) {
             return new ResponseToken(jwtTokenProvider.createToken(loginId));
         } else {
