@@ -59,11 +59,7 @@ public class LoginJpaServiceV2 {
     private void validateLoginRequest(LoginRequest loginRequest) {
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(loginRequest);
         if (!violations.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ConstraintViolation<LoginRequest> violation : violations) {
-                stringBuilder.append(violation.getMessage());
-            }
-            throw new ConstraintViolationException("Error : " + stringBuilder.toString(), violations);
+            throw new ConstraintViolationException(violations);
         }
     }
     private ResponseToken getMemberResponseToken(String loginId, String password, Instructor findInstructor) {
@@ -118,11 +114,7 @@ public class LoginJpaServiceV2 {
     private void validateFindIdsRequest(FindIdsRequest findIdsRequest) {
         Set<ConstraintViolation<FindIdsRequest>> violations = validator.validate(findIdsRequest);
         if (!violations.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ConstraintViolation<FindIdsRequest> violation : violations) {
-                stringBuilder.append(violation.getMessage());
-            }
-            throw new ConstraintViolationException("Error : " + stringBuilder.toString(), violations);
+            throw new ConstraintViolationException(violations);
         }
     }
 
@@ -145,11 +137,7 @@ public class LoginJpaServiceV2 {
     private void validateLoginRequest(FindPasswordRequest findPasswordRequest) {
         Set<ConstraintViolation<FindPasswordRequest>> violations = validator.validate(findPasswordRequest);
         if (!violations.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ConstraintViolation<FindPasswordRequest> violation : violations) {
-                stringBuilder.append(violation.getMessage());
-            }
-            throw new ConstraintViolationException("Error : " + stringBuilder.toString(), violations);
+            throw new ConstraintViolationException(violations);
         }
     }
     private String getStudentPassword(String loginId, String email) {
