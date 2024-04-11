@@ -59,11 +59,7 @@ public class MemberJpaServiceV2 {
     private void validateCreateMemberRequest(CreateMemberRequest createMemberRequest) {
         Set<ConstraintViolation<CreateMemberRequest>> violations = validator.validate(createMemberRequest);
         if (!violations.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ConstraintViolation<CreateMemberRequest> violation : violations) {
-                stringBuilder.append(violation.getMessage());
-            }
-            throw new ConstraintViolationException("Error : " + stringBuilder.toString(), violations);
+            throw new ConstraintViolationException(violations);
         }
     }
     private void validateDuplicatedMember(String loginId) {
@@ -102,16 +98,12 @@ public class MemberJpaServiceV2 {
     private void validateUpdateMyPageRequest(UpdateMyPageRequest updateMyPageRequest) {
         Set<ConstraintViolation<UpdateMyPageRequest>> violations = validator.validate(updateMyPageRequest);
         if (!violations.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ConstraintViolation<UpdateMyPageRequest> violation : violations) {
-                stringBuilder.append(violation.getMessage());
-            }
-            throw new ConstraintViolationException("Error : " + stringBuilder.toString(), violations);
+            throw new ConstraintViolationException(violations);
         }
     }
-    public ProfileImage getProfileImage(MultipartFile imageFile) {
-        if (imageFile == null) {
-            return ProfileImage.builder().build();
+    private ProfileImage getProfileImage(MultipartFile imageFile) {
+        if (imageFile == null || imageFile.isEmpty()) {
+            return null;
         }
 
         try {
@@ -171,11 +163,7 @@ public class MemberJpaServiceV2 {
     private void validateUpdatePasswordRequest(UpdatePasswordRequest updatePasswordRequest) {
         Set<ConstraintViolation<UpdatePasswordRequest>> violations = validator.validate(updatePasswordRequest);
         if (!violations.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ConstraintViolation<UpdatePasswordRequest> violation : violations) {
-                stringBuilder.append(violation.getMessage());
-            }
-            throw new ConstraintViolationException("Error : " + stringBuilder.toString(), violations);
+            throw new ConstraintViolationException(violations);
         }
 
         String password = updatePasswordRequest.getPassword();
