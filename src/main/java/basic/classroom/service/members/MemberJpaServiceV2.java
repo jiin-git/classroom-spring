@@ -28,14 +28,13 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class MemberJpaServiceV2 {
-    private final InstructorJpaRepository instructorJpaRepository;
-    private final StudentJpaRepository studentJpaRepository;
+    private final InstructorJpaRepository instructorRepository;
+    private final StudentJpaRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
     private final Validator validator;
 
     @Transactional
-    public Long createMember(CreateMemberRequest createMemberRequest) {
-//        Member member = Member.fromCreateMemberRequest(createMemberRequest);
+    public Long create(CreateMemberRequest createMemberRequest) {
         validateCreateMemberRequest(createMemberRequest);
         Member member = Member.builder()
                 .loginId(createMemberRequest.getLoginId())
