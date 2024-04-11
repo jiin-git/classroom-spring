@@ -1,4 +1,4 @@
-package basic.classroom.service.datajpa.login;
+package basic.classroom.service.login;
 
 import basic.classroom.config.JwtTokenProvider;
 import basic.classroom.domain.Instructor;
