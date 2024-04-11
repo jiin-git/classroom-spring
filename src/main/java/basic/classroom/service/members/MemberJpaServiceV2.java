@@ -124,8 +124,6 @@ public class MemberJpaServiceV2 {
         try {
             String extension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename()).toUpperCase();
             ValidImageType validImageType = ValidImageType.valueOf(extension);
-            log.info("extension = {}", extension);
-            log.info("validImageType = {}", validImageType);
         } catch (IllegalArgumentException e) {
             throw new StoreImageException(ErrorCode.FAILED_STORE_IMAGE);
         }
