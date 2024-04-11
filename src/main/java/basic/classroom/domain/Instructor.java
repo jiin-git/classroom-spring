@@ -30,8 +30,24 @@ public class Instructor {
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL)
     private Map<Long, Lecture> lectures;
 
+    public static Instructor createInstructor(Member member) {
+        return Instructor.builder().member(member).lectures(new HashMap<>()).build();
+    }
+
+    public void updateInstructor(String email, ProfileImage profileImage) {
+        member.updateEmail(email);
+        if (profileImage != null) {
+            this.profileImage = profileImage;
+        }
+    }
+    public void updatePassword(String password) {
+        member.updatePassword(password);
+    }
+    public void clearProfileImage() {
+        this.profileImage = null;
+    }
+
     public void addLectures(Lecture lecture) {
-        log.info("lecture id = {}, lecture name = {}", lecture.getId(), lecture.getName());
         lectures.put(lecture.getId(), lecture);
         lecture.addInstructor(this);
     }
@@ -44,30 +60,5 @@ public class Instructor {
     }
     public List<Lecture> getAllLectures() {
         return lectures.values().stream().toList();
-    }
-
-    public Instructor(Member member) {
-        this.member = member;
-    } // 삭제 예정
-    public static Instructor createInstructor(Member member) {
-        return Instructor.builder().member(member).lectures(new HashMap<>()).build();
-    }
-
-    public void updateInstructor(String email, ProfileImage profileImage) {
-        member.updateEmail(email);
-        if (profileImage != null) {
-            this.profileImage = profileImage;
-        }
-    }
-    public void updateInstructor(ProfileImage profileImage) {
-        if (profileImage != null) {
-            this.profileImage = profileImage;
-        }
-    }
-    public void updatePassword(String password) {
-        member.updatePassword(password);
-    }
-    public void clearProfileImage() {
-        this.profileImage = null;
     }
 }
