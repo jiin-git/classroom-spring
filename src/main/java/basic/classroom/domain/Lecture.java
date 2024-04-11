@@ -1,7 +1,6 @@
 package basic.classroom.domain;
 
 import basic.classroom.dto.AddLectureRequest;
-import basic.classroom.dto.ApplicantsResponse;
 import basic.classroom.dto.UpdateLecture.UpdateLectureDto;
 import basic.classroom.exception.ApplyLectureException;
 import basic.classroom.exception.ErrorCode;
@@ -10,7 +9,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Entity
@@ -37,7 +37,6 @@ public class Lecture {
     @Enumerated(EnumType.STRING)
     private LectureStatus lectureStatus;
 
-    // key : student id -> mapper id(mapper를 통해서만 학생 엔티티를 접근할 수 있다.)
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL)
     private Map<Long, LectureStudentMapper> appliedStudents;
 
@@ -63,17 +62,6 @@ public class Lecture {
             lectureStatus = LectureStatus.OPEN;
         }
     }
-    public List<Long> getAppliedStudentsIds() {
-        List<Long> appliedStudentsIds = new ArrayList<>();
-        appliedStudents.forEach((key, mapper) -> appliedStudentsIds.add(mapper.getStudentId()));
-        return appliedStudentsIds;
-    }
-    public List<ApplicantsResponse> getApplicantsResponse() {
-        List<ApplicantsResponse> applicants = new ArrayList<>();
-        appliedStudents.forEach((key, mapper) ->
-                applicants.add(ApplicantsResponse.fromStudent(mapper.getStudent())));
-        return applicants;
-    }
 
     public void addInstructor(Instructor instructor) {
         this.instructor = instructor;
@@ -82,32 +70,24 @@ public class Lecture {
         return this.instructor.getId();
     }
 
-    public static Lecture createLecture(String name, Instructor instructor, int personnel, LectureStatus lectureStatus) {
-        return Lecture.builder()
-                .name(name)
-                .instructor(instructor)
-                .personnel(personnel)
-                .remainingPersonnel(personnel)
-                .lectureStatus(lectureStatus)
-                .appliedStudents(new HashMap<>())
-                .build();
-    }
     public static Lecture createLecture(Instructor instructor, AddLectureRequest addLectureRequest) {
+        int requestPersonnel = addLectureRequest.getPersonnel().intValue();
         return Lecture.builder()
                 .name(addLectureRequest.getName())
                 .instructor(instructor)
-                .personnel(addLectureRequest.getPersonnel())
-                .remainingPersonnel(addLectureRequest.getPersonnel())
+                .personnel(requestPersonnel)
+                .remainingPersonnel(requestPersonnel)
                 .lectureStatus(addLectureRequest.getLectureStatus())
                 .appliedStudents(new HashMap<>())
                 .build();
     }
     public static Lecture createLecture(Instructor instructor, AddLectureRequest addLectureRequest, ProfileImage profileImage) {
+        int requestPersonnel = addLectureRequest.getPersonnel().intValue();
         LectureBuilder lectureBuilder = Lecture.builder()
                 .name(addLectureRequest.getName())
                 .instructor(instructor)
-                .personnel(addLectureRequest.getPersonnel())
-                .remainingPersonnel(addLectureRequest.getPersonnel())
+                .personnel(requestPersonnel)
+                .remainingPersonnel(requestPersonnel)
                 .lectureStatus(addLectureRequest.getLectureStatus())
                 .appliedStudents(new HashMap<>());
 
@@ -123,18 +103,5 @@ public class Lecture {
         if (updateLectureDto.getProfileImage() != null) {
             this.profileImage = updateLectureDto.getProfileImage();
         }
-    }
-
-    public void updateLecture(ProfileImage profileImage) {
-        if (profileImage != null) {
-            this.profileImage = profileImage;
-        }
-    }
-
-    public List<Student> findAppliedStudents() {
-        List<Student> students = new ArrayList<>();
-        appliedStudents.forEach((k, m) -> students.add(m.getStudent()));
-
-        return students;
     }
 }
