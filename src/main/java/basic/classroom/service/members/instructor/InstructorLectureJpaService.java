@@ -1,4 +1,4 @@
-package basic.classroom.service.datajpa.members.instructor;
+package basic.classroom.service.members.instructor;
 
 import basic.classroom.domain.*;
 import basic.classroom.dto.AddLectureRequest;
