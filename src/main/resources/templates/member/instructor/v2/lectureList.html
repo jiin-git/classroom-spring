@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"/>
+<head th:replace="~{fragments/body :: bodycss}"/>
+<head><link rel="stylesheet" th:href="@{/css/lectureImage.css}"></head>
+
+<body>
+<div id="template-display">
+    <div th:replace="~{fragments/header :: loginInstructorHeader}"/>
+    <div th:replace="~{fragments/body :: instructorOffCanvas}"/>
+
+    <div class="member-container body-display">
+        <div th:replace="~{fragments/body :: instructorSideBar}"/>
+
+        <div class="body-container">
+            <div class="p-3 border-bottom-lightgray">
+                <nav aria-label="breadcrumb"  class="d-flex align-items-center">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item active">Home</li>
+                        <li class="breadcrumb-item active" aria-current="page">내 강의</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="container p-3">
+                <div class="container-fluid p-0">
+                    <div id="lecture-list" class="card mb-3 w-100"></div>
+                </div>
+
+                <nav class="d-flex justify-content-center mt-3" aria-label="Page navigation">
+                    <form method="get" action="/instructor/lectures">
+                        <ul id="pagination" class="pagination"></ul>
+                    </form>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"/>
+</div>
+<script src="/js/member/instructor/lectureList.js"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@
     <div th:replace="~{fragments/header :: loginInstructorHeader}"/>
     <div th:replace="~{fragments/body :: instructorOffCanvas}"/>
 
-    <div class="member-container body-display" th:object="${instructor}">
+    <div class="member-container body-display">
         <div th:replace="~{fragments/body :: instructorSideBar}"/>
 
         <div class="body-container">
@@ -40,30 +40,28 @@
                         </div>
 
                         <div class="col-md-8 display-vertical-center flex-row">
-                            <form method="post" class="form-container container-fluid bg-white" enctype="multipart/form-data" th:object="${createLectureForm}">
+                            <form method="post" id="create-lecture-form" class="form-container container-fluid bg-white" enctype="multipart/form-data">
                                 <div class="mb-3 mt-3">
-                                    <label for="lectureName" class="form-label gmarketSansFont">강의명</label>
-                                    <input type="text" class="form-control" id="lectureName" placeholder="강의명을 입력해주세요."
-                                           th:errorclass="field-error" th:field="*{name}">
-                                    <div class="field-error" th:errors="*{name}"></div>
+                                    <label for="name" class="form-label gmarketSansFont">강의명</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="강의명을 입력해주세요.">
+                                    <div id="name-error" class="field-error"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="personnel" class="form-label gmarketSansFont">정원</label>
-                                    <input type="text" class="form-control" id="personnel" placeholder="정원을 입력해주세요."
-                                           th:errorclass="field-error" th:field="*{personnel}">
-                                    <div class="field-error" th:errors="*{personnel}"></div>
+                                    <input type="text" id="personnel" class="form-control" name="personnel" placeholder="정원을 입력해주세요.">
+                                    <div id="personnel-error" class="field-error"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="lectureStatus" class="form-label gmarketSansFont">강의 상태</label>
-                                    <select id="lectureStatus" class="form-select" th:field="*{lectureStatus}" th:errorclass="field-error">
+                                    <select id="lectureStatus" class="form-select" name="lectureStatus">
                                         <option th:value="${lectureStatusReady}" th:text="${lectureStatusReady}"></option>
                                         <option th:value="${lectureStatusOpen}" th:text="${lectureStatusOpen}"></option>
                                     </select>
-                                    <div class="field-error" th:errors="*{lectureStatus}"></div>
+                                    <div id="lectureStatus-error" class="field-error"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="imageFile" class="form-label gmarketSansFont">프로필 이미지</label>
-                                    <input type="file" class="form-control mb-2" id="imageFile" onchange="loadFile()" th:field="*{imageFile}">
+                                    <input type="file" class="form-control mb-2" id="imageFile" name="imageFile" onchange="loadFile()">
                                 </div>
 
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLectureModal">강의 등록</button>
@@ -92,6 +90,7 @@
 
     <div th:replace="~{fragments/footer :: footer}"/>
 </div>
+<script src="/js/member/instructor/createLecture.js"></script>
 <script src="/js/loadFile.js"></script>
 </body>
 </html>
