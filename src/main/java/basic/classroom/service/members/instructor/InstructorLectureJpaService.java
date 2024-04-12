@@ -105,12 +105,9 @@ public class InstructorLectureJpaService {
     }
 
     @Transactional
-    public void updateLecture(Long lectureId, Long instructorId, UpdateLectureRequest updateLectureRequest) {
-        Lecture lecture = lectureJpaRepository.findById(lectureId).orElse(null);
-        if (!lecture.getInstructorId().equals(instructorId)) {
-            throw new UnauthorizedLectureAccessException(ErrorCode.LECTURE_ACCESS_DENIED);
-        }
-
+    public void updateLecture(String loginId, Long lectureId, UpdateLectureRequest updateLectureRequest) {
+        Instructor instructor = findInstructor(loginId);
+        Lecture lecture = instructor.getLecture(lectureId);
         validateUpdateLectureRequest(updateLectureRequest);
 
         // memberStatus and personnel validation
