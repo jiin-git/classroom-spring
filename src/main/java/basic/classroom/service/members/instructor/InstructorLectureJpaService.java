@@ -163,4 +163,8 @@ public class InstructorLectureJpaService {
 
         return updateRemainingPersonnel;
     }
+
+    private Instructor findInstructor(String loginId) {
+        return memberService.findInstructorByLoginId(loginId);
+    }
 }
