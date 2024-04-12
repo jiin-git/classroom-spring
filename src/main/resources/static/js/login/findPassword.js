@@ -12,7 +12,7 @@ findPasswordForm.addEventListener('submit', async function (e) {
         return res.json();
     }).then(res => {
         const resultURI = "/login/find/password/result";
-        if (res.status == 302) {
+        if (res.status == 200) {
             const password = JSON.stringify(res.password);
             localStorage.setItem("password", password);
             window.location.assign(encodeURI(resultURI));
