@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"/>
+<head th:replace="~{fragments/body :: bodycss}"/>
+<head><link rel="stylesheet" th:href="@{/css/lectureImage.css}"></head>
+
+<head>
+    <style>
+        .position-right {
+            margin-left: auto;
+            margin-right: 0;
+        }
+        .option-margin {
+            margin-right: 5px;
+        }
+
+        @media (max-width: 800px) {
+            .search-font {
+                font-size: 10px;
+            }
+            .option-margin {
+                margin-right: 0px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .card-title {
+                font-size: 17px;
+            }
+            .card-text {
+                font-size: 13px;
+                margin-bottom: 5px;
+            }
+            .apply-lecture-btn button, .cancel-lecture-btn button, .disable-apply-lecture-btn button{
+                font-size: 13px;
+                width: 80px;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="template-display">
+    <div th:replace="~{fragments/header :: loginStudentHeader}"/>
+    <div th:replace="~{fragments/body :: studentOffCanvas}"/>
+
+    <div class="member-container body-display">
+        <div th:replace="~{fragments/body :: studentSideBar}"/>
+
+        <div class="body-container">
+            <div class="p-3 border-bottom-lightgray">
+                <nav aria-label="breadcrumb"  class="d-flex align-items-center">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item active">Home</li>
+                        <li class="breadcrumb-item active" aria-current="page">강의 찾기</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="container p-3">
+                <nav class="navbar bg-body-tertiary mb-3" style="background-color: #e3f2fd;">
+                    <div class="container-fluid">
+                        <div id="searchBar">
+                            <form id="searchCondition" action="/student/find/lectures" class="d-flex" method="get">
+                                <select id="status" class="form-select-sm search-font option-margin" name="status">
+                                    <option th:value="null">강의 상태</option>
+                                    <option th:each="lectureStatus : ${lectureStatusList}" th:value="${lectureStatus}" th:text="${lectureStatus}"></option>
+                                </select>
+                                <select id="condition" class="form-select-sm search-font option-margin" name="condition">
+                                    <option th:value="null">검색 조건</option>
+                                    <option th:each="lectureSearchCondition : ${lectureSearchConditions}" th:value="${lectureSearchCondition}" th:text="${lectureSearchCondition}"></option>
+                                </select>
+                                <br/>
+                                <input id="text" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="text">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="container-fluid p-0">
+                    <div id="lecture-list" class="card mb-3 w-100"></div>
+                </div>
+
+                <nav class="d-flex justify-content-center mt-3" aria-label="Page navigation">
+                    <ul id="pagination" class="pagination"></ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"/>
+</div>
+<script src="/js/member/student/findLectures.js"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@
     <div th:replace="~{fragments/header :: loginStudentHeader}"/>
     <div th:replace="~{fragments/body :: studentOffCanvas}"/>
 
-    <div class="member-container body-display" th:object="${student}">
+    <div class="member-container body-display">
         <div th:replace="~{fragments/body :: studentSideBar}"/>
 
         <div class="body-container">
@@ -26,22 +26,15 @@
                 <div class="card justify-content-center mb-3 w-100">
                     <div class="row g-0">
                         <div class="col-md-4  text-center display-vertical-center p-3">
-                            <div class="circle-container">
-                                <img th:unless="*{profileImage == null}" th:src="@{/student/profile/image}" class="img-fluid">
-                                <div th:if="*{profileImage == null}" class="profile-img-container">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-person-fill default-profile-img" viewBox="0 0 16 16">
-                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
-                                    </svg>
-                                </div>
-                            </div>
+                            <div id="profile-image" class="circle-container"></div>
                         </div>
 
                         <div class="col-md-8 display-vertical-center flex-row">
-                            <div class="card-body">
-                                <h4 class="card-title gmarketSansFont" th:text="'이름: ' + *{member.name}">이름</h4>
-                                <p class="card-text gmarketSansFont mb-1" th:text="'아이디: ' + *{member.loginId}">id</p>
-                                <p class="card-text gmarketSansFont mb-1" th:text="'이메일: ' + *{member.email}">email</p>
-                                <a class="btn btn-primary" th:href="@{/student/update/mypage}">회원정보 변경</a>
+                            <div id="mypage-info" class="card-body">
+                                <h4 id="mypage-info-name" class="gmarketSansFont"></h4>
+                                <p id="mypage-info-id" class="gmarketSansFont mb-1"></p>
+                                <p id="mypage-info-email" class="gmarketSansFont mb-1"></p>
+                                <a id="change-mypage-button" class="btn btn-primary mt-3" href="/student/update/my-page">회원정보 변경</a>
                             </div>
                         </div>
                     </div>
@@ -52,5 +45,6 @@
 
     <div th:replace="~{fragments/footer :: footer}"/>
 </div>
+<script src="/js/member/student/myPage.js"></script>
 </body>
 </html>

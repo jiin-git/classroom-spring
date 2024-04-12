@@ -23,50 +23,40 @@
             </div>
 
             <div class="container p-3 h-100">
-                <form class="card justify-content-center mb-3 w-100" method="post" enctype="multipart/form-data">
+                <form id="update-mypage-form" class="card justify-content-center mb-3 w-100" method="post" enctype="multipart/form-data">
                     <div class="row g-0">
                         <div class="col-md-4  text-center display-vertical-center p-3">
                             <div id="previewImgContainer" class="circle-container d-none">
                                 <img id="previewProfileImg" class="img-fluid" src="">
                             </div>
-                            <div id="currentImgContainer" class="circle-container">
-                                <img th:unless="${profileImage == null}" id="profileImg" class="img-fluid" th:src="@{/student/profile/image}">
-                                <div th:if="${profileImage == null}" id="defaultProfileImg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-person-fill default-profile-img" viewBox="0 0 16 16">
-                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
-                                    </svg>
-                                </div>
-                            </div>
+                            <div id="currentImgContainer" class="circle-container"></div>
                         </div>
 
                         <div class="col-md-8">
-                            <div class="card-body" th:object="${student}">
+                            <div id="student-mypage-info" class="card-body">
                                 <div class="mb-3">
                                     <label for="name" class="form-label gmarketSansFont">이름</label>
-                                    <input type="text" class="form-control readonly" id="name" placeholder="이름을 입력해주세요."
-                                           th:field="*{name}" readonly>
+                                    <input type="text" class="form-control readonly" id="name" name="name" placeholder="이름을 입력해주세요." readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label for="loginId" class="form-label gmarketSansFont">아이디</label>
-                                    <input type="text" class="form-control readonly" id="loginId" placeholder="아이디를 입력해주세요."
-                                           th:errorclass="field-error" th:field="*{loginId}" readonly>
+                                    <input type="text" class="form-control readonly" id="loginId" name="loginId" placeholder="아이디를 입력해주세요." readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label for="loginPwBtn" class="form-label gmarketSansFont">비밀번호</label>
                                     <br/>
-                                    <a id="loginPwBtn" class="btn btn-secondary" type="button" th:href="@{/student/update/pw}">
+                                    <a id="loginPwBtn" class="btn btn-secondary" type="button" href="/student/update/my-page/password">
                                         비밀번호 변경
                                     </a>
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label gmarketSansFont">이메일</label>
-                                    <input type="text" class="form-control" id="email" placeholder="이메일을 입력해주세요."
-                                           th:errorclass="field-error" th:field="*{email}">
-                                    <div class="field-error" th:errors="*{email}"></div>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력해주세요." required>
+                                    <div id="email-error" class="field-error"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="imageFile" class="form-label gmarketSansFont">프로필 이미지</label>
-                                    <input type="file" class="form-control mb-2" id="imageFile" onchange="loadFile()" th:field="*{imageFile}">
+                                    <input type="file" id="imageFile" class="form-control mb-2" name="imageFile" onchange="loadFile()">
 
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#initializeProfileModal">프로필 초기화</button>
                                     <div class="modal fade" id="initializeProfileModal" tabindex="-1" aria-labelledby="initializeProfileModalLabel" aria-hidden="true">
@@ -79,14 +69,14 @@
                                                 <div class="modal-body" th:text="'정말로 프로필을 초기화하시겠습니까?'"></div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                                    <input type="submit" class="btn btn-success" value="프로필 초기화" th:formaction="@{/student/initialize/profile}">
+                                                    <button id="initialize-profile-btn" class="btn btn-success">프로필 초기화</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <input type="submit" class="btn btn-primary" value="회원정보 변경" th:formaction="@{/student/update/mypage}">
+                                <input type="submit" class="btn btn-primary" value="회원정보 변경">
                             </div>
                         </div>
                     </div>
@@ -98,30 +88,8 @@
 
     <div th:replace="~{fragments/footer :: footer}"/>
 </div>
-<!--<script>-->
-<!--    function loadFile() {-->
-<!--        let currentImgContainer = document.getElementById('currentImgContainer');-->
-<!--        let previewImgContainer = document.getElementById('previewImgContainer');-->
-<!--        let previewImg = document.getElementById('previewProfileImg');-->
-<!--        let imageFile = document.getElementById('imageFile');-->
-<!--        const [file] = imageFile.files;-->
 
-<!--        if (file) {-->
-<!--            previewImg.src = URL.createObjectURL(file);-->
-<!--            if (previewImgContainer.classList.contains('d-none')) {-->
-<!--                previewImgContainer.classList.remove('d-none');-->
-<!--                currentImgContainer.classList.add('d-none');-->
-<!--            }-->
-<!--        }-->
-<!--        else {-->
-<!--            previewImgContainer.classList.add("d-none");-->
-<!--            if (currentImgContainer.classList.contains("d-none")) {-->
-<!--                currentImgContainer.classList.remove("d-none");-->
-<!--            }-->
-<!--        }-->
-
-<!--    };-->
-<!--</script>-->
+<script src="/js/member/student/updateMyPage.js"></script>
 <script src="/js/loadFile.js"></script>
 </body>
 </html>
