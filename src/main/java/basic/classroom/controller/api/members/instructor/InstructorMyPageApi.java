@@ -4,7 +4,7 @@ import basic.classroom.domain.Instructor;
 import basic.classroom.dto.MyPageResponse;
 import basic.classroom.dto.UpdateMyPageRequest;
 import basic.classroom.dto.UpdatePasswordRequest;
-import basic.classroom.service.datajpa.members.MemberJpaServiceV2;
+import basic.classroom.service.members.MemberJpaServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,18 +30,8 @@ public class InstructorMyPageApi {
         return ResponseEntity.ok(myPageResponse);
     }
 
-//    @GetMapping("/profile")
-//    public ResponseEntity<byte[]> getInstructorProfileImage(@AuthenticationPrincipal UserDetails userDetails) {
-//        String loginId = userDetails.getUsername();
-//        Instructor instructor = memberService.findInstructorByLoginId(loginId);
-//        ProfileImage profileImage = instructor.getProfileImage();
-//        CacheControl cache = CacheControl.noCache().mustRevalidate().cachePrivate();
-//
-//        return responseImageData(profileImage, cache);
-//    }
-
     @PutMapping("")
-    public ResponseEntity<Void> updateInstructorMyPage(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UpdateMyPageRequest updateMyPageRequest) {
+    public ResponseEntity<Void> updateInstructorMyPage(@AuthenticationPrincipal UserDetails userDetails, @Validated @ModelAttribute UpdateMyPageRequest updateMyPageRequest) {
         String loginId = userDetails.getUsername();
         Instructor instructor = memberService.findInstructorByLoginId(loginId);
         memberService.update(instructor, updateMyPageRequest);
@@ -63,21 +53,4 @@ public class InstructorMyPageApi {
         memberService.initializeProfile(instructor);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-//    private void validatePassword(UpdatePasswordRequest updatePasswordRequest) {
-//        String password = updatePasswordRequest.getPassword();
-//        String checkPassword = updatePasswordRequest.getCheckPassword();
-//        if (!password.equals(checkPassword)) {
-//            throw new NotAcceptableStatusException("패스워드가 일치하지 않습니다. 패스워드를 다시 확인해주세요.");
-//        }
-//    }
-//    private ResponseEntity<byte[]> responseImageData(ProfileImage profileImage, CacheControl cache) {
-//        byte[] imageData = profileImage.getImageData();
-//        String dataType = profileImage.getDataType();
-//
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .cacheControl(cache)
-//                .contentType(MediaType.valueOf(dataType))
-//                .body(imageData);
-//    }
 }
