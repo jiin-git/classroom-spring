@@ -30,8 +30,8 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class InstructorLectureJpaService {
-    private final InstructorJpaRepository instructorJpaRepository;
-    private final LectureJpaRepository lectureJpaRepository;
+    private final MemberJpaServiceV2 memberService;
+    private final LectureJpaRepository lectureRepository;
     private final Validator validator;
 
     @Transactional
