@@ -1,6 +1,6 @@
 package basic.classroom.config;
 
-import basic.classroom.service.MemberDetailsService;
+import basic.classroom.service.members.MemberDetailsService;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,12 +43,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String loginId) {
+    public Authentication getAuthentication(String token) {
+        validateToken(token);
+        String loginId = getLoginId(token);
         UserDetails userDetails = memberDetailsService.loadUserByUsername(loginId);
-        return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 
-    public String getLoginId(String token) {
+    private String getLoginId(String token) {
         try {
             return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
         } catch (ExpiredJwtException e) {
@@ -55,9 +58,13 @@ public class JwtTokenProvider {
         }
     }
 
-    public boolean validateToken(String token) {
+    private void validateToken(String token) {
         Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
-        return !claimsJws.getBody().getExpiration().before(new Date());
+        boolean isExpiration = claimsJws.getBody().getExpiration().before(new Date());
+
+        if (isExpiration) {
+            throw new AccountExpiredException("토큰이 만료되었습니다.");
+        }
     }
 
     public String getJwt(HttpServletRequest request) {

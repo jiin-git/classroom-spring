@@ -23,7 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final String[] staticResources = new String[]{"/css/**", "/js/**", "/*.ico", "/img/**"};
     private final String[] loginURL = new String[]{"/login/**", "/logout", "/api/login/**"};
     private final String[] basicURL = new String[]{"/", "/error/**", "/ending/credit"};
     private final String[] instructorURL = new String[]{"/instructor/**", "/api/members/instructor/**"};
@@ -45,7 +44,6 @@ public class WebSecurityConfig {
         http
                 .csrf((httpSecurityCsrfConfigurer) -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                                .requestMatchers(staticResources).permitAll()
                                 .requestMatchers(basicURL).permitAll()
                                 .requestMatchers(loginURL).permitAll()
                                 .requestMatchers(instructorURL).hasAuthority("INSTRUCTOR")

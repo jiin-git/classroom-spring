@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/img/**", "/css/**") /*"/js/**"*/
+        registry.addResourceHandler("/images/**", "/css/**", "/js/**")
                 .addResourceLocations("classpath:/static/css/", "classpath:/static/img/", "classpath:/static/js/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS)
                 .noTransform()
@@ -28,13 +28,4 @@ public class WebConfig implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new MappingJackson2HttpMessageConverter());
     }
-
-    //    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new LoginInterceptor())
-//                .order(1)
-//                .addPathPatterns("/**")
-//                .excludePathPatterns("/css/**", "/js/**", "/*.ico", "/error", "/img/**", "/",
-//                        "/login", "/find/**", "/logout", "/create/member/**", "/ending/credit", "/error/**");
-//    }
 }
