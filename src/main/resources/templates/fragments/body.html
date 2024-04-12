@@ -8,13 +8,13 @@
 <div th:fragment="studentSideBar" id="student-side-bar" class="btn-group-vertical sidebar">
     <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/lectures}">내 강의</a>
     <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/find/lectures}">강의 찾기</a>
-    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/mypage}">My Page</a>
+    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/my-page}">My Page</a>
 </div>
 
 <div th:fragment="instructorSideBar" id="instructor-side-bar" class="btn-group-vertical sidebar">
     <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/lectures}">내 강의</a>
-    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture}">강의 등록</a>
-    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage}">My Page</a>
+    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lectures}">강의 등록</a>
+    <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/my-page}">My Page</a>
 </div>
 
 <div th:fragment="studentOffCanvas" id="student-offcanvas" class="offcanvas offcanvas-start" tabindex="-1" aria-labelledby="student-offcanvas-label"
@@ -33,7 +33,7 @@
                 <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/find/lectures}">강의 찾기</a>
             </li>
             <li class="nav-item border-opacity-50">
-                <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/mypage}">My Page</a>
+                <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/student/my-page}">My Page</a>
             </li>
         </ul>
     </div>
@@ -55,7 +55,7 @@
                 <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/create/lecture}">강의 등록</a>
             </li>
             <li class="nav-item border-opacity-50">
-                <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/mypage}">My Page</a>
+                <a class="btn btn-lg flex-grow-0 sidebar-btn oneMobileFont" th:href="@{/instructor/my-page}">My Page</a>
             </li>
         </ul>
     </div>
