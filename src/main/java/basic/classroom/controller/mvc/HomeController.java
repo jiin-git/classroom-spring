@@ -1,11 +1,12 @@
 package basic.classroom.controller.mvc;
 
 import basic.classroom.config.JwtTokenProvider;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -18,26 +19,23 @@ public class HomeController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/")
-    public String home(HttpServletRequest request) {
-        String token = jwtTokenProvider.getJwt(request);
-
-        if (token == null) {
+    public String home(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
             return "home";
         }
 
-        String loginId = jwtTokenProvider.getLoginId(token);
+        String loginId = userDetails.getUsername();
         Authentication authentication = jwtTokenProvider.getAuthentication(loginId);
         List<? extends GrantedAuthority> authorities = authentication.getAuthorities().stream().toList();
         String role = null;
 
         if (authorities.stream().anyMatch(auth -> auth.getAuthority().equals("STUDENT"))) {
-            role = "student";
+            return "redirect:/student/lectures";
         } else if (authorities.stream().anyMatch(auth -> auth.getAuthority().equals("INSTRUCTOR"))) {
-            role = "instructor";
+            return "redirect:/instructor/lectures";
         }
 
-        String redirectLoginHome = role + "/lectures";
-        return "redirect:/" + redirectLoginHome;
+        return "home";
     }
 
     @GetMapping("/ending/credit")
