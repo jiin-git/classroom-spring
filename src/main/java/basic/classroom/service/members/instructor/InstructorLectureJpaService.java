@@ -60,9 +60,17 @@ public class InstructorLectureJpaService {
             throw new ConstraintViolationException("Error : " + stringBuilder.toString(), violations);
         }
     }
-    public ProfileImage getProfileImage(MultipartFile imageFile) {
+    private void validateImageDataType(MultipartFile imageFile) {
+        try {
+            String extension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename()).toUpperCase();
+            ValidImageType validImageType = ValidImageType.valueOf(extension);
+        } catch (IllegalArgumentException e) {
+            throw new StoreImageException(ErrorCode.FAILED_STORE_IMAGE);
+        }
+    }
+    private ProfileImage getProfileImage(MultipartFile imageFile) {
         if (imageFile == null || imageFile.isEmpty()) {
-            return ProfileImage.builder().build();
+            return null;
         }
 
         try {
