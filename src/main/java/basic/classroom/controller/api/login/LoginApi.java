@@ -1,8 +1,8 @@
 package basic.classroom.controller.api.login;
 
 import basic.classroom.dto.LoginRequest;
-import basic.classroom.dto.ResponseToken;
-import basic.classroom.service.datajpa.login.LoginJpaServiceV2;
+import basic.classroom.service.login.LoginJpaServiceV2;
+import basic.classroom.service.login.ResponseToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,17 +26,12 @@ public class LoginApi {
 
     @PostMapping("")
     public ResponseEntity<Void> loginMemberV2(@Validated @RequestBody LoginRequest loginRequest) {
-        log.info("call login Api.");
-
         ResponseToken responseToken = loginService.login(loginRequest);
         String jwt = responseToken.getTokenType() + "_" + responseToken.getAccessToken();
 
         ResponseCookie responseCookie = getResponseCookie(jwt);
         String role = loginRequest.getMemberStatus().toString().toLowerCase();
         HttpHeaders headers = getHttpHeaders(responseCookie, role);
-
-        log.info("responseCookie = {}", responseCookie.toString());
-        log.info("Redirect Url = {}", headers.getLocation());
 
         return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }

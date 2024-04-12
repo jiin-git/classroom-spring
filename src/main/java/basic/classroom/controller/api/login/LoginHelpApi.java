@@ -4,7 +4,7 @@ import basic.classroom.dto.FindIds.FindIdsRequest;
 import basic.classroom.dto.FindIds.FindIdsResponse;
 import basic.classroom.dto.FindPassword.FindPasswordRequest;
 import basic.classroom.dto.FindPassword.FindPasswordResponse;
-import basic.classroom.service.datajpa.login.LoginJpaServiceV2;
+import basic.classroom.service.login.LoginJpaServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,8 +25,6 @@ public class LoginHelpApi {
     public ResponseEntity<FindIdsResponse> findLoginIds(@Validated @ModelAttribute FindIdsRequest findIdsRequest) {
         List<String> loginIds = loginService.findLoginIds(findIdsRequest);
         FindIdsResponse findIdsResponse = FindIdsResponse.builder().status(302).loginIds(loginIds).build();
-
-//        return ResponseEntity.status(HttpStatus.FOUND).body(findIdsResponse);
         return new ResponseEntity<>(findIdsResponse, HttpStatus.FOUND);
     }
 

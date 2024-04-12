@@ -1,7 +1,7 @@
 package basic.classroom.controller.api.login;
 
 import basic.classroom.dto.CreateMember.CreateMemberRequest;
-import basic.classroom.service.datajpa.members.MemberJpaServiceV2;
+import basic.classroom.service.members.MemberJpaServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +24,7 @@ public class CreateMemberApi {
 
     @PostMapping("")
     public ResponseEntity<Void> createMemberV2(@Validated @RequestBody CreateMemberRequest createMemberRequest) {
-        memberService.createMember(createMemberRequest);
+        memberService.create(createMemberRequest);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/create/member/result"));
         return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
