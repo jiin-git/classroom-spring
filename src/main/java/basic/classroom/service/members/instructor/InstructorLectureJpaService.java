@@ -10,7 +10,7 @@ import basic.classroom.exception.ErrorCode;
 import basic.classroom.exception.StoreImageException;
 import basic.classroom.exception.UpdateLectureException;
 import basic.classroom.repository.dataJpa.LectureJpaRepository;
-import basic.classroom.service.etc.ValidImageType;
+import basic.classroom.service.ValidImageType;
 import basic.classroom.service.members.MemberJpaServiceV2;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
