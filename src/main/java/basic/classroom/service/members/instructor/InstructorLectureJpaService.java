@@ -159,7 +159,7 @@ public class InstructorLectureJpaService {
         }
     }
     private int getUpdateRemainingPersonnel(Lecture lecture, UpdateLectureRequest updateLectureRequest) {
-        int updatePersonnel = updateLectureRequest.getPersonnel();
+        int updatePersonnel = updateLectureRequest.getPersonnel().intValue();
         int remainingPersonnel = lecture.getRemainingPersonnel();
         int personnel = lecture.getPersonnel();
         int appliedPersonnel = personnel - remainingPersonnel;
