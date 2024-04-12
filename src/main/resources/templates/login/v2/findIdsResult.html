@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"/>
+<head><link rel="stylesheet" href="/css/login.css"></head>
+
+<head>
+    <style>
+        .ids-result-container {
+            height: 300px;
+            border: 1px solid gray;
+            border-radius: 5px;
+            padding-top: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+<div id="template-display">
+    <div th:replace="~{fragments/header :: loginHeader}"/>
+
+    <div class="container login-result-container body-display display-vertical-center">
+        <div id="find-ids-result"></div>
+        <div id="support-login" class="w-100 text-center">
+            <a href="/login" class="btn btn-primary login-result-btn">로그인 화면</a>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"/>
+</div>
+<script src="/js/login/preventRefreshPage.js"></script>
+<script src="/js/login/findIdsResult.js"></script>
+</body>
+</html>
