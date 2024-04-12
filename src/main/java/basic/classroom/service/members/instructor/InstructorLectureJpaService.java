@@ -63,11 +63,7 @@ public class InstructorLectureJpaService {
     private void validateAddLectureRequest(AddLectureRequest addLectureRequest) {
         Set<ConstraintViolation<AddLectureRequest>> violations = validator.validate(addLectureRequest);
         if (!violations.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ConstraintViolation<AddLectureRequest> violation : violations) {
-                stringBuilder.append(violation.getMessage());
-            }
-            throw new ConstraintViolationException("Error : " + stringBuilder.toString(), violations);
+            throw new ConstraintViolationException(violations);
         }
     }
     private void validateImageDataType(MultipartFile imageFile) {
