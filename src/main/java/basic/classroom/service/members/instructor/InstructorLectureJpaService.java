@@ -35,7 +35,9 @@ public class InstructorLectureJpaService {
     private final Validator validator;
 
     @Transactional
-    public Long createLecture(Instructor instructor, AddLectureRequest addLectureRequest) {
+    public Long createLecture(String loginId, AddLectureRequest addLectureRequest) {
+        Instructor instructor = findInstructor(loginId);
+
         validateAddLectureRequest(addLectureRequest);
         MultipartFile imageFile = addLectureRequest.getImageFile();
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -44,7 +46,7 @@ public class InstructorLectureJpaService {
 
         ProfileImage profileImage = getProfileImage(imageFile);
         Lecture lecture = Lecture.createLecture(instructor, addLectureRequest, profileImage);
-        lectureJpaRepository.save(lecture);
+        lectureRepository.save(lecture);
         instructor.addLectures(lecture);
         return lecture.getId();
     }
