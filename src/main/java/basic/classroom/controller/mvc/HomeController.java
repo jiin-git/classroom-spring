@@ -27,7 +27,6 @@ public class HomeController {
         String loginId = userDetails.getUsername();
         Authentication authentication = jwtTokenProvider.getAuthentication(loginId);
         List<? extends GrantedAuthority> authorities = authentication.getAuthorities().stream().toList();
-        String role = null;
 
         if (authorities.stream().anyMatch(auth -> auth.getAuthority().equals("STUDENT"))) {
             return "redirect:/student/lectures";
