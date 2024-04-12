@@ -1,6 +1,5 @@
 package basic.classroom.controller.mvc.members.v2.instructor;
 
-import basic.classroom.dto.UpdatePasswordRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +22,6 @@ public class InstructorMyPageController {
 
     @GetMapping("/update/my-page/password")
     public String updatePasswordForm(Model model) {
-        model.addAttribute("updatePasswordForm", new UpdatePasswordRequest());
         return "member/instructor/v2/updatePassword";
     }
 }
