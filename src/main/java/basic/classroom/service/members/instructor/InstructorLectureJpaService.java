@@ -2,17 +2,23 @@ package basic.classroom.service.members.instructor;
 
 import basic.classroom.domain.*;
 import basic.classroom.dto.AddLectureRequest;
-import basic.classroom.dto.UpdateLecture.*;
-import basic.classroom.exception.*;
-import basic.classroom.repository.dataJpa.InstructorJpaRepository;
+import basic.classroom.dto.ApplicantsResponse;
+import basic.classroom.dto.UpdateLecture.UpdateLectureDto;
+import basic.classroom.dto.UpdateLecture.UpdateLectureRequest;
+import basic.classroom.exception.ConvertImageException;
+import basic.classroom.exception.ErrorCode;
+import basic.classroom.exception.StoreImageException;
+import basic.classroom.exception.UpdateLectureException;
 import basic.classroom.repository.dataJpa.LectureJpaRepository;
-import basic.classroom.service.ValidImageType;
+import basic.classroom.service.etc.ValidImageType;
+import basic.classroom.service.members.MemberJpaServiceV2;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,9 +28,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.Normalizer;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import static basic.classroom.dto.LectureResponse.InstructorLectureBasicResponse;
+import static basic.classroom.dto.LectureResponse.InstructorLectureDetailsResponse;
 
 @Slf4j
 @Service
