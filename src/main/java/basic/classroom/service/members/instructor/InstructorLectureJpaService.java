@@ -99,8 +99,23 @@ public class InstructorLectureJpaService {
 
         return lectureBasicResponses;
     }
-    public List<Student> findApplicantsByLectureId(Long lectureId) {
-        List<Student> applicants = lectureJpaRepository.findStudentsById(lectureId);
+    @Transactional(readOnly = true)
+    public InstructorLectureDetailsResponse getLectureInfo(String loginId, Long lectureId) {
+        Instructor instructor = findInstructor(loginId);
+        Lecture lecture = instructor.getLecture(lectureId);
+        InstructorLectureDetailsResponse lectureDetailsResponse = InstructorLectureDetailsResponse.fromLecture(lecture);
+        return lectureDetailsResponse;
+    }
+    @Transactional(readOnly = true)
+    public List<ApplicantsResponse> getApplicants(String loginId, Long lectureId) {
+        Instructor instructor = findInstructor(loginId);
+        Lecture lecture = instructor.getLecture(lectureId);
+
+        List<ApplicantsResponse> applicants = new ArrayList<>();
+        Map<Long, LectureStudentMapper> appliedStudents = lecture.getAppliedStudents();
+        appliedStudents.forEach((key, mapper) ->
+                applicants.add(ApplicantsResponse.fromStudent(mapper.getStudent())));
+
         return applicants;
     }
 
