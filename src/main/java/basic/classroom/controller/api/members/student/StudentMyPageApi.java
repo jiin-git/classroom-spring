@@ -4,7 +4,7 @@ import basic.classroom.domain.Student;
 import basic.classroom.dto.MyPageResponse;
 import basic.classroom.dto.UpdateMyPageRequest;
 import basic.classroom.dto.UpdatePasswordRequest;
-import basic.classroom.service.datajpa.members.MemberJpaServiceV2;
+import basic.classroom.service.members.MemberJpaServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,17 +30,8 @@ public class StudentMyPageApi {
         return ResponseEntity.ok(myPageResponse);
     }
 
-//    @GetMapping("/profile")
-//    public ResponseEntity<byte[]> getStudentProfileImage() {
-//        String loginId = userDetails.getUsername();
-//        Student student = memberService.findStudentByLoginId(loginId);
-//        ProfileImage profileImage = student.getProfileImage();
-//        CacheControl cache = CacheControl.noCache().mustRevalidate().cachePrivate();
-//        return responseImageData(profileImage, cache);
-//    }
-
     @PutMapping("")
-    public ResponseEntity<Void> updateStudentMyPage(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UpdateMyPageRequest updateMyPageRequest) {
+    public ResponseEntity<Void> updateStudentMyPage(@AuthenticationPrincipal UserDetails userDetails, @Validated @ModelAttribute UpdateMyPageRequest updateMyPageRequest) {
         String loginId = userDetails.getUsername();
         Student student = memberService.findStudentByLoginId(loginId);
         memberService.update(student, updateMyPageRequest);
@@ -62,21 +53,4 @@ public class StudentMyPageApi {
         memberService.initializeProfile(student);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-//    private ResponseEntity<byte[]> responseImageData(ProfileImage profileImage, CacheControl cache) {
-//        byte[] imageData = profileImage.getImageData();
-//        String dataType = profileImage.getDataType();
-//
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .cacheControl(cache)
-//                .contentType(MediaType.valueOf(dataType))
-//                .body(imageData);
-//    }
-//    private void validatePassword(UpdatePasswordRequest updateParam) {
-//        String password = updateParam.getPassword();
-//        String checkPassword = updateParam.getCheckPassword();
-//        if (!password.equals(checkPassword)) {
-//            throw new NotAcceptableStatusException("패스워드가 일치하지 않습니다. 패스워드를 다시 확인해주세요.");
-//        }
-//    }
 }
