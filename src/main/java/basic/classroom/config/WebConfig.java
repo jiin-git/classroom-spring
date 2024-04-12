@@ -18,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**", "/css/**", "/js/**")
-                .addResourceLocations("classpath:/static/css/", "classpath:/static/img/", "classpath:/static/js/")
+                .addResourceLocations("classpath:/static/css/", "classpath:/static/images/", "classpath:/static/js/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS)
                 .noTransform()
                 .mustRevalidate());
