@@ -20,6 +20,6 @@ public class CreateMemberV2Controller {
 
     @GetMapping("/result")
     public String createMemberResult() {
-        return "login/createMemberResult";
+        return "login/v2/createMemberResult";
     }
 }
