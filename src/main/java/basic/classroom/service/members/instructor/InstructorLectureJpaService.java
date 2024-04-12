@@ -143,11 +143,7 @@ public class InstructorLectureJpaService {
     private void validateUpdateLectureRequest(UpdateLectureRequest updateLectureRequest) {
         Set<ConstraintViolation<UpdateLectureRequest>> violations = validator.validate(updateLectureRequest);
         if (!violations.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ConstraintViolation<UpdateLectureRequest> violation : violations) {
-                stringBuilder.append(violation.getMessage());
-            }
-            throw new ConstraintViolationException("Error : " + stringBuilder.toString(), violations);
+            throw new ConstraintViolationException(violations);
         }
     }
     private void validateLectureStatus(Lecture lecture, LectureStatus updateLectureStatus, int updateRemainingPersonnel) {
