@@ -84,14 +84,6 @@ public class InstructorLectureJpaService {
             throw new ConvertImageException(ErrorCode.FAILED_CONVERT_PROFILE_IMAGE);
         }
     }
-    private void validateImageDataType(MultipartFile imageFile) {
-        String extension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename()).toUpperCase();
-        List<ValidImageType> validImageTypes = Arrays.stream(ValidImageType.values()).toList();
-        boolean validType = validImageTypes.contains(extension);
-        if (!validType) {
-            throw new StoreImageException(ErrorCode.FAILED_STORE_IMAGE);
-        }
-    }
 
     // entity method에 포함되어 있어 굳이 필요 없음
     public Lecture findMyLecture(Instructor instructor, Long lectureId) {
