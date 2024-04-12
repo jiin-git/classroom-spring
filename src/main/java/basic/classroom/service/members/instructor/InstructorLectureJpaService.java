@@ -85,21 +85,19 @@ public class InstructorLectureJpaService {
         }
     }
 
-    // entity method에 포함되어 있어 굳이 필요 없음
-    public Lecture findMyLecture(Instructor instructor, Long lectureId) {
-        return instructor.getLecture(lectureId);
-    }
-    public List<Lecture> findMyAllLectures(Instructor instructor) {
-        return instructor.getAllLectures();
-    }
+    @Transactional(readOnly = true)
+    public Page<InstructorLectureBasicResponse> findMyLecturesByPage(String loginId, Long page) {
+        Instructor instructor = findInstructor(loginId);
+        List<Lecture> myLectures = instructor.getAllLectures();
 
-    public Page<Lecture> findMyLecturesByPage(Long instructorId, Long page) {
         int currentPage = page == null ? 1 : page.intValue();
         int pageSize = 10;
 
         Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
-        Page<Lecture> lectures = instructorJpaRepository.findLecturesById(instructorId, pageable);
-        return lectures;
+        Page<Lecture> lectures = new PageImpl<>(myLectures, pageable, myLectures.size());
+        Page<InstructorLectureBasicResponse> lectureBasicResponses = lectures.map(InstructorLectureBasicResponse::fromLecture);
+
+        return lectureBasicResponses;
     }
     public List<Student> findApplicantsByLectureId(Long lectureId) {
         List<Student> applicants = lectureJpaRepository.findStudentsById(lectureId);
