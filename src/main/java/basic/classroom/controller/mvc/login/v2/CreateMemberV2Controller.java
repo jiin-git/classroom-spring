@@ -1,7 +1,6 @@
 package basic.classroom.controller.mvc.login.v2;
 
 import basic.classroom.domain.MemberStatus;
-import basic.classroom.dto.CreateMember.CreateMemberRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CreateMemberV2Controller {
     @GetMapping("")
     public String createMemberForm(Model model) {
-        model.addAttribute("createMemberForm", new CreateMemberRequest());
         model.addAttribute("student", MemberStatus.STUDENT);
         model.addAttribute("instructor", MemberStatus.INSTRUCTOR);
         return "login/v2/createMemberForm";
