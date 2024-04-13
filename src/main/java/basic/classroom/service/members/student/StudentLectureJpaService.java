@@ -10,6 +10,7 @@ import basic.classroom.repository.dataJpa.LectureStudentMapperJpaRepository;
 import basic.classroom.service.members.MemberJpaServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -74,7 +75,12 @@ public class StudentLectureJpaService {
         applyingLectures.forEach((key, mapper) -> {
             allLectures.add(StudentLectureBasicResponse.fromLecture(mapper.getLecture(), key));
         });
-        Page<StudentLectureBasicResponse> lectures = new PageImpl<>(allLectures, pageable, allLectures.size());
+
+        PagedListHolder pagedListHolder = new PagedListHolder(allLectures);
+        pagedListHolder.setPage(currentPage - 1);
+        pagedListHolder.setPageSize(pageSize);
+        List<StudentLectureBasicResponse> pageList = pagedListHolder.getPageList();
+        Page<StudentLectureBasicResponse> lectures = new PageImpl<>(pageList, pageable, allLectures.size());
 
         return lectures;
     }

@@ -17,6 +17,7 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -99,8 +100,13 @@ public class InstructorLectureJpaService {
         int currentPage = page == null ? 1 : page.intValue();
         int pageSize = 10;
 
+        PagedListHolder pagedListHolder = new PagedListHolder(myLectures);
+        pagedListHolder.setPage(currentPage - 1);
+        pagedListHolder.setPageSize(pageSize);
+        List<Lecture> pageList = pagedListHolder.getPageList();
+
         Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
-        Page<Lecture> lectures = new PageImpl<>(myLectures, pageable, myLectures.size());
+        Page<Lecture> lectures = new PageImpl<>(pageList, pageable, myLectures.size());
         Page<InstructorLectureBasicResponse> lectureBasicResponses = lectures.map(InstructorLectureBasicResponse::fromLecture);
 
         return lectureBasicResponses;
