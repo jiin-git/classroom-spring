@@ -52,12 +52,9 @@ public class WebSecurityConfig {
                 .sessionManagement(sessionManagementConfigurer ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .logout(logout -> logout.logoutUrl("/logout").addLogoutHandler(((request, response, authentication) -> {
-                    for (Cookie cookie : request.getCookies()) {
-                        String cookieName = cookie.getName();
-                        Cookie deleteCookie = new Cookie(cookieName, null);
-                        deleteCookie.setMaxAge(0);
-                        response.addCookie(deleteCookie);
-                    }
+                    Cookie deleteCookie = new Cookie("Authorization", null);
+                    deleteCookie.setMaxAge(0);
+                    response.addCookie(deleteCookie);
                 })))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
