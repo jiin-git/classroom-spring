@@ -49,7 +49,7 @@ public class StudentMyLecturesApi {
     }
 
     @DeleteMapping("/{mapperId}")
-    public ResponseEntity<Void> cancelLecture(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long mapperId) {
+    public ResponseEntity<Void> cancelMyLecture(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long mapperId) {
         String loginId = userDetails.getUsername();
         studentLectureService.cancelLecture(loginId, mapperId);
         return ResponseEntity.noContent().build();
