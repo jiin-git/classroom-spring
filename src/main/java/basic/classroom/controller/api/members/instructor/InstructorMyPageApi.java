@@ -23,7 +23,7 @@ public class InstructorMyPageApi {
     private final MemberJpaServiceV2 memberService;
 
     @GetMapping("")
-    public ResponseEntity<MyPageResponse> getInstructorMyPage(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<MyPageResponse> getMyPage(@AuthenticationPrincipal UserDetails userDetails) {
         String loginId = userDetails.getUsername();
         Instructor instructor = memberService.findInstructorByLoginId(loginId);
         MyPageResponse myPageResponse = MyPageResponse.fromInstructor(instructor);
@@ -31,7 +31,7 @@ public class InstructorMyPageApi {
     }
 
     @PutMapping("")
-    public ResponseEntity<Void> updateInstructorMyPage(@AuthenticationPrincipal UserDetails userDetails, @Validated @ModelAttribute UpdateMyPageRequest updateMyPageRequest) {
+    public ResponseEntity<Void> updateMyPage(@AuthenticationPrincipal UserDetails userDetails, @Validated @ModelAttribute UpdateMyPageRequest updateMyPageRequest) {
         String loginId = userDetails.getUsername();
         Instructor instructor = memberService.findInstructorByLoginId(loginId);
         memberService.update(instructor, updateMyPageRequest);
@@ -39,7 +39,7 @@ public class InstructorMyPageApi {
     }
 
     @PutMapping("/password")
-    public ResponseEntity<Void> updateInstructorPassword(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UpdatePasswordRequest updatePasswordRequest) {
+    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UpdatePasswordRequest updatePasswordRequest) {
         String loginId = userDetails.getUsername();
         Instructor instructor = memberService.findInstructorByLoginId(loginId);
         memberService.updatePassword(instructor, updatePasswordRequest);
@@ -47,7 +47,7 @@ public class InstructorMyPageApi {
     }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<Void> initializeInstructorProfileImage(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Void> initializeProfileImage(@AuthenticationPrincipal UserDetails userDetails) {
         String loginId = userDetails.getUsername();
         Instructor instructor = memberService.findInstructorByLoginId(loginId);
         memberService.initializeProfile(instructor);
