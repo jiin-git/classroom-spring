@@ -23,7 +23,7 @@ public class StudentMyPageApi {
     private final MemberJpaServiceV2 memberService;
 
     @GetMapping("")
-    public ResponseEntity<MyPageResponse> getStudentMyPage(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<MyPageResponse> getMyPage(@AuthenticationPrincipal UserDetails userDetails) {
         String loginId = userDetails.getUsername();
         Student student = memberService.findStudentByLoginId(loginId);
         MyPageResponse myPageResponse = MyPageResponse.fromStudent(student);
@@ -31,7 +31,7 @@ public class StudentMyPageApi {
     }
 
     @PutMapping("")
-    public ResponseEntity<Void> updateStudentMyPage(@AuthenticationPrincipal UserDetails userDetails, @Validated @ModelAttribute UpdateMyPageRequest updateMyPageRequest) {
+    public ResponseEntity<Void> updateMyPage(@AuthenticationPrincipal UserDetails userDetails, @Validated @ModelAttribute UpdateMyPageRequest updateMyPageRequest) {
         String loginId = userDetails.getUsername();
         Student student = memberService.findStudentByLoginId(loginId);
         memberService.update(student, updateMyPageRequest);
@@ -39,7 +39,7 @@ public class StudentMyPageApi {
     }
 
     @PutMapping("/password")
-    public ResponseEntity<Void> updateStudentPassword(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UpdatePasswordRequest updatePasswordRequest) {
+    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UpdatePasswordRequest updatePasswordRequest) {
         String loginId = userDetails.getUsername();
         Student student = memberService.findStudentByLoginId(loginId);
         memberService.updatePassword(student, updatePasswordRequest);
@@ -47,7 +47,7 @@ public class StudentMyPageApi {
     }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<Void> initializeStudentProfileImage(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Void> initializeProfileImage(@AuthenticationPrincipal UserDetails userDetails) {
         String loginId = userDetails.getUsername();
         Student student = memberService.findStudentByLoginId(loginId);
         memberService.initializeProfile(student);
