@@ -34,28 +34,28 @@ public class InstructorMyLecturesApi {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<InstructorLectureBasicResponse>> getInstructorMyLectures(@AuthenticationPrincipal UserDetails userDetails, @RequestParam(required = false) Long page) {
+    public ResponseEntity<Page<InstructorLectureBasicResponse>> getMyLectures(@AuthenticationPrincipal UserDetails userDetails, @RequestParam(required = false) Long page) {
         String loginId = userDetails.getUsername();
         Page<InstructorLectureBasicResponse> lectureBasicResponses = instructorLectureService.findMyLecturesByPage(loginId, page);
         return new ResponseEntity<>(lectureBasicResponses, HttpStatus.OK);
     }
 
     @GetMapping("/{lectureId}")
-    public ResponseEntity<InstructorLectureDetailsResponse> getLectureInfo(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long lectureId) {
+    public ResponseEntity<InstructorLectureDetailsResponse> getMyLectureInfo(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long lectureId) {
         String loginId = userDetails.getUsername();
         InstructorLectureDetailsResponse lectureInfo = instructorLectureService.getLectureInfo(loginId, lectureId);
         return ResponseEntity.ok(lectureInfo);
     }
 
     @GetMapping("/{lectureId}/applicants")
-    public ResponseEntity<List<ApplicantsResponse>> getApplicants(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long lectureId) {
+    public ResponseEntity<List<ApplicantsResponse>> getMyLectureApplicants(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long lectureId) {
         String loginId = userDetails.getUsername();
         List<ApplicantsResponse> applicantsResponse = instructorLectureService.getApplicants(loginId, lectureId);
         return ResponseEntity.ok(applicantsResponse);
     }
 
     @PutMapping("/{lectureId}")
-    public ResponseEntity<Void> updateLecture(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long lectureId, @Valid @ModelAttribute UpdateLectureRequest updateLectureRequest) {
+    public ResponseEntity<Void> updateMyLecture(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long lectureId, @Valid @ModelAttribute UpdateLectureRequest updateLectureRequest) {
         String loginId = userDetails.getUsername();
         instructorLectureService.updateLecture(loginId, lectureId, updateLectureRequest);
         return ResponseEntity.noContent().build();
