@@ -14,6 +14,7 @@ build/
 /src/main/java/basic/classroom/service/jpa/
 /src/main/java/basic/classroom/service/datajpa/
 /src/main/java/basic/classroom/service/etc/
+/src/test/
 
 
 ### STS ###
